@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\DX11Render">
+      <UniqueIdentifier>{95cfee9f-6f4f-4b8a-ba13-d926ffca411a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{1ed34d0a-3803-4be8-b1d0-b437b19cd5ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Axis">
+      <UniqueIdentifier>{339587e6-9b5f-4a6d-99c9-afd86f227381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Grid">
+      <UniqueIdentifier>{dc97d9b2-05c1-42f5-8ea3-5706f58ae3bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Camera">
+      <UniqueIdentifier>{3ad1b6bc-7f72-43ea-9675-a8d81cc82980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Shader&amp;Vertex">
+      <UniqueIdentifier>{68aa9d4b-7cd8-484a-a2b3-b33097580db9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\DllInterface">
+      <UniqueIdentifier>{9e396500-431d-4c2d-a6a3-cff4ca0b000f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Cube">
+      <UniqueIdentifier>{c116090e-80f4-4565-85b2-c07d9a2cabf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Shader&amp;Vertex\Shader">
+      <UniqueIdentifier>{8101fc45-4b8f-40d3-a98a-8037ed429971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Texture">
+      <UniqueIdentifier>{5c625633-9e8b-4fe1-9a33-dd24a13e5b6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Text">
+      <UniqueIdentifier>{d56f7e99-8a28-463b-9457-a4a8d0e9ecd3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DX11Render.h">
+      <Filter>소스 파일\DX11Render</Filter>
+    </ClInclude>
+    <ClInclude Include="IDX11Render.h">
+      <Filter>소스 파일\DllInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>소스 파일\Shader&amp;Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableBase.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Axis.h">
+      <Filter>소스 파일\Object\Axis</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>소스 파일\Object\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>소스 파일\Object\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>소스 파일\Object\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx11effect.h">
+      <Filter>소스 파일\DX11Render</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="ICamera.h">
+      <Filter>소스 파일\Object\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>소스 파일\Text</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DX11Render.cpp">
+      <Filter>소스 파일\DX11Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Axis.cpp">
+      <Filter>소스 파일\Object\Axis</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>소스 파일\Object\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>소스 파일\Object\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일\Object\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>소스 파일\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>소스 파일\Text</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Basic.fx">
+      <Filter>소스 파일\Shader&amp;Vertex\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="BasicTex.fx">
+      <Filter>소스 파일\Shader&amp;Vertex\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="color.fx">
+      <Filter>소스 파일\Shader&amp;Vertex\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="LightHelper.fx">
+      <Filter>소스 파일\Shader&amp;Vertex\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
