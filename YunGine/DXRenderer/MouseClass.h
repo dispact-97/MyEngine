@@ -1,8 +1,7 @@
 #pragma once
 #include <queue>
-class MousePoint;
+#include "MouseEvent.h"
 class MouseEvent;
-
 
 class MouseClass
 {

@@ -1,6 +1,7 @@
 #include "DX11Render.h"
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include <d3dcompiler.h>
 #include <d3dcommon.h>
@@ -10,6 +11,7 @@
 #include "Grid.h"
 #include "Camera.h"
 #include "Font.h"
+
 
 // dll로 부를때 랜더러를 만드는 함수의 주소를 가지고 있는다.
 // return을 포인터로 받아줄 수 있다.
@@ -215,7 +217,7 @@ void DX11Render::DrawObject()
 	m_pGrid->Render();
 	m_pCube->Render();
 
-	m_pFont->RenderText(L"Hello World!", 100.0f, 100.0f);
+	m_pFont->RenderText(L"Hello World!", 0.0f, 0.0f);
 
 	// 레스터라이저 상태 설정 
 	m_p3DDeviceContext->RSSetState(0);
@@ -479,8 +481,12 @@ HRESULT DX11Render::CreateRaster()
 HRESULT DX11Render::CreateObject()
 {
 	HRESULT hr = S_OK;
-
-	m_pFont = new Font(m_p3DDevice.Get(), m_p3DDeviceContext.Get());
+	
+	hr = CreateFont();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
 	hr = CreateCamera();
 	if (FAILED(hr))
@@ -509,6 +515,20 @@ HRESULT DX11Render::CreateObject()
 	return hr;
 }
 
+HRESULT DX11Render::CreateFont()
+{
+	HRESULT hr = S_OK;
+
+	m_pFont = new Font(m_p3DDevice.Get(), m_p3DDeviceContext.Get());
+	if (!m_pFont)
+	{
+		return hr = S_FALSE;
+	}
+
+	return hr;
+
+}
+
 HRESULT DX11Render::CreateCamera()
 {
 	HRESULT hr = S_OK;
@@ -534,6 +554,10 @@ HRESULT DX11Render::CreateCube()
 	HRESULT hr = S_OK;
 
 	m_pCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
+	if (!m_pCube)
+	{
+		return hr = S_FALSE;
+	}
 
 	return S_OK;
 }
@@ -543,6 +567,10 @@ HRESULT DX11Render::CreateGrid()
 	HRESULT hr = S_OK;
 
 	m_pGrid = new Grid(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
+	if (!m_pGrid)
+	{
+		return hr = S_FALSE;
+	}
 
 	return S_OK;
 }
@@ -552,6 +580,10 @@ HRESULT DX11Render::CreateAxis()
 	HRESULT hr = S_OK;
 
 	m_pAxis = new Axis(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
+	if (!m_pAxis)
+	{
+		return hr = S_FALSE;
+	}
 
 	return S_OK;
 }

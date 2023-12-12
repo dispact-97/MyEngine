@@ -3,14 +3,6 @@ cbuffer MatrixBuffer
     matrix worldMatrix;
     matrix viewMatrix;
     matrix projectionMatrix;
-    
-    texture tex;
-};
-
-struct textureInput
-{
-    float4 position : POSITION;
-    float2 uv : TEXCOORD;
 };
 
 struct VertexInputType
@@ -25,19 +17,10 @@ struct PixelInputType
     float4 color : COLOR;
 };
 
-PixelInputType Tex(textureInput i)
-{
-    PixelInputType output;
-    output.color = tex[i.uv.x][i.uv.y];
-    
-    return output;
-}
-
 PixelInputType main(VertexInputType input)
 {
     PixelInputType output;
     
-
     // Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
 

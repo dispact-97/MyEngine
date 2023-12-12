@@ -24,17 +24,11 @@
     <Filter Include="소스 파일\Object\Camera">
       <UniqueIdentifier>{3ad1b6bc-7f72-43ea-9675-a8d81cc82980}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Shader&amp;Vertex">
-      <UniqueIdentifier>{68aa9d4b-7cd8-484a-a2b3-b33097580db9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\DllInterface">
       <UniqueIdentifier>{9e396500-431d-4c2d-a6a3-cff4ca0b000f}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Object\Cube">
       <UniqueIdentifier>{c116090e-80f4-4565-85b2-c07d9a2cabf1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Shader&amp;Vertex\Shader">
-      <UniqueIdentifier>{8101fc45-4b8f-40d3-a98a-8037ed429971}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Texture">
       <UniqueIdentifier>{5c625633-9e8b-4fe1-9a33-dd24a13e5b6e}</UniqueIdentifier>
@@ -54,6 +48,12 @@
     <Filter Include="Shader\HLSL">
       <UniqueIdentifier>{b986a20a-4619-446a-b4f9-6ad88253cec8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Shader">
+      <UniqueIdentifier>{6a2ea7ba-4f4d-45b6-a7d7-19dd407e7b4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Vertex">
+      <UniqueIdentifier>{4fe32dbf-fd52-41d6-8043-bf1ff75ff4ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -61,9 +61,6 @@
     </ClInclude>
     <ClInclude Include="IDX11Render.h">
       <Filter>소스 파일\DllInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="Vertex.h">
-      <Filter>소스 파일\Shader&amp;Vertex</Filter>
     </ClInclude>
     <ClInclude Include="RenderableBase.h">
       <Filter>소스 파일\Object</Filter>
@@ -97,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="MouseClass.h">
       <Filter>소스 파일\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Shader\Vertex</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -138,5 +138,10 @@
     <FxCompile Include="PixelShader.hlsl">
       <Filter>Shader\HLSL</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Texture.hlsl">
+      <Filter>Shader\Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

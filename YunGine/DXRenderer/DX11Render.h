@@ -78,6 +78,7 @@ private:
 
 	// 오브젝트들 생성하기
 	 HRESULT CreateObject();	
+	 HRESULT CreateFont();
 	 HRESULT CreateCamera();
 	 HRESULT CreateCube();
 	 HRESULT CreateGrid();
