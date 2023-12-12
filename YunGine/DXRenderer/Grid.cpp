@@ -157,38 +157,7 @@ void Grid::ObjectSetting()
 		&m_IndexBuffer
 	);
 
-	BuildFX();
 	BuildVertexLayout();
-}
-
-void Grid::BuildFX()
-{
-	HRESULT hr = S_OK;
-	//이펙트를 쓰는부분은 차차 해보자
-
-	/// 컴파일된 파일도 괜찮고
-	/// 컴파일 하는 것도 문제없이 돌아감.
-
-	UINT shaderFlag = D3DCOMPILE_ENABLE_STRICTNESS;	// 쉐이더 컴파일시 엄격한 문법 검사를 수행하도록 하는 컴파일 플래그
-
-#if defined( DEBUG ) || defined( _DEBUG )	// 디버그 모드에서 쉐이더 컴파일시 디버깅에 필요한 정보를 추가
-	shaderFlag |= D3D10_SHADER_DEBUG;		// 최적화 과정을 건너뛰도록 설정하는 역할이다.
-	shaderFlag |= D3D10_SHADER_SKIP_OPTIMIZATION;
-#endif
-	ID3DBlob* compiledShader;
-	ID3DBlob* compilationMsgs;
-
-
-	LPCWSTR shaderFile = L"../fx/color.fx";
-	LPCSTR shaderEntryPoint = "main";
-	LPCSTR shaderTarget = "fx_5_0";
-
-	hr = D3DCompileFromFile(shaderFile, nullptr, nullptr, shaderEntryPoint, shaderTarget, shaderFlag, 0, &compiledShader, &compilationMsgs);
-
-	D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), 0, m_3DDevice.Get(), m_Effect.GetAddressOf());
-
-	m_Technique = m_Effect->GetTechniqueByName("ColorTech");
-	m_MatrixVariable = m_Effect->GetVariableByName("gWorldViewProj")->AsMatrix();
 }
 
 void Grid::BuildVertexLayout()
@@ -201,12 +170,9 @@ void Grid::BuildVertexLayout()
 		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	D3DX11_PASS_DESC passDesc;
-	m_Technique->GetPassByIndex(0)->GetDesc(&passDesc);
-
-	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
-	));
+// 	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
+// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
+// 	));
 
 	if (FAILED(hr))
 	{
@@ -221,9 +187,9 @@ void Grid::Update()
 
 void Grid::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
-	m_World = world;
-	m_View = view;
-	m_Proj = projection;
+	m_world = world;
+	m_view = view;
+	m_proj = projection;
 }
 
 void Grid::Render()
@@ -239,22 +205,8 @@ void Grid::Render()
 	// &m_cubVertexBuffer와 AddressOf차이가 뭐일까-> &는 초기화를 해버린다.
 	m_3DDeviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-	///WVP TM등을 셋팅
-	DirectX::XMMATRIX worldViewProj = m_World * m_View * m_Proj;
-	m_MatrixVariable->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
-
 	//랜더스테이트
 	m_3DDeviceContext->RSSetState(m_RasterState.Get());
 
-	//테크닉
-	D3DX11_TECHNIQUE_DESC techDesc;
-	m_Technique->GetDesc(&techDesc);
-
-	//랜더패스
-	for (UINT p = 0; p < techDesc.Passes; ++p)
-	{
-		m_Technique->GetPassByIndex(p)->Apply(0, m_3DDeviceContext.Get());
-
-		m_3DDeviceContext->DrawIndexed(indexcount, 0, 0);
-	}
+	m_3DDeviceContext->DrawIndexed(indexcount, 0, 0);
 }

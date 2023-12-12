@@ -16,12 +16,6 @@ using namespace std;
 // DXTk
 #pragma  comment(lib, "DirectXTK.lib")
 
-// 이펙트 라이브러리
-#ifdef _DEBUG
-#pragma comment(lib, "..\\Lib\\Effects11d.lib")
-#else
-#pragma  comment(lib, "..\\Lib\\Effects11.lib")
-#endif
 
 /// 릴리즈 모드에서 RuntimeLibrary에 대해 불일치가 검색되었습니다. 에러가 발생중
 /// -23.07.19- 인재원에서

@@ -1,4 +1,7 @@
 #include "Axis.h"
+#include <fstream>
+#include <sstream>
+#include <vector>
 
 Axis::Axis(
 	Microsoft::WRL::ComPtr<ID3D11Device>& pDevice, 
@@ -38,7 +41,7 @@ void Axis::ObjectSetting()
 		{DirectX::XMFLOAT3(0.f,0.f,15.f),DirectX::XMFLOAT4(0.0f,0.0f,1.0f,1.0f)}
 	};
 
-		D3D11_BUFFER_DESC bufferDesc;
+	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.ByteWidth = 6 * sizeof(ColorVertex);
 	bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// 버퍼가 파이프라인에 바인딩되는 방법식별
@@ -92,21 +95,25 @@ void Axis::ObjectSetting()
 		m_IndexBuffer.GetAddressOf()
 	);
 
-	BuildFX();
-	BuildVertexLayout();
+
+	//BuildVertexLayout();
+	CreateShader();
 
 }
 
 void Axis::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
-	m_World = world;
-	m_View = view;
-	m_Proj = projection;
+	m_world = world;
+	m_view = view;
+	m_proj = projection;
 }
 
 
 void Axis::Render()
 {
+	m_3DDeviceContext->VSSetShader(_vertexShader, nullptr, 0);
+	m_3DDeviceContext->PSSetShader(_pixelShader, nullptr, 0);
+
 	// 입력 배치 객체 셋팅
 	m_3DDeviceContext->IASetInputLayout(m_InputLayout.Get());
 	m_3DDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
@@ -118,54 +125,35 @@ void Axis::Render()
 	// &m_axisVertexBuffer와 AddressOf차이가 뭐일까-> &는 초기화를 해버린다.
 	m_3DDeviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-	///WVP TM등을 셋팅
-	DirectX::XMMATRIX worldViewProj = m_World * m_View * m_Proj;
-	m_MatrixVariable->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	MatrixBufferType* dataPtr;
+	unsigned int bufferNumber;
+
+	m_world = DirectX::XMMatrixTranspose(m_world);
+	m_view = DirectX::XMMatrixTranspose(m_view);
+	m_proj = DirectX::XMMatrixTranspose(m_proj);
+
+	HRESULT hr;
+
+	hr = m_3DDeviceContext->Map(_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+
+	dataPtr = (MatrixBufferType*)mappedResource.pData;
+
+	dataPtr->_world = m_world;
+	dataPtr->_view = m_view;
+	dataPtr->_projection = m_proj;
+
+	m_3DDeviceContext->Unmap(_matrixBuffer, 0);
+
+	bufferNumber = 0;
+
+	m_3DDeviceContext->VSSetConstantBuffers(bufferNumber, 1, &_matrixBuffer);
 
 	//랜더스테이트
 	m_3DDeviceContext->RSSetState(m_RasterState.Get());
 
-	//테크닉
-	D3DX11_TECHNIQUE_DESC techDesc;
-	m_Technique->GetDesc(&techDesc);
 
-	//랜더패스
-	for (UINT p = 0; p < techDesc.Passes; ++p)
-	{
-		m_Technique->GetPassByIndex(p)->Apply(0, m_3DDeviceContext.Get());
-
-		m_3DDeviceContext->DrawIndexed(6, 0, 0);
-	}
-}
-
-void Axis::BuildFX()
-{
-	HRESULT hr = S_OK;
-	//이펙트를 쓰는부분은 차차 해보자
-
-	/// 컴파일된 파일도 괜찮고
-	/// 컴파일 하는 것도 문제없이 돌아감.
-
-	UINT shaderFlag = D3DCOMPILE_ENABLE_STRICTNESS;	// 쉐이더 컴파일시 엄격한 문법 검사를 수행하도록 하는 컴파일 플래그
-
-#if defined( DEBUG ) || defined( _DEBUG )	// 디버그 모드에서 쉐이더 컴파일시 디버깅에 필요한 정보를 추가
-	shaderFlag |= D3D10_SHADER_DEBUG;		// 최적화 과정을 건너뛰도록 설정하는 역할이다.
-	shaderFlag |= D3D10_SHADER_SKIP_OPTIMIZATION;
-#endif
-	ID3DBlob* compiledShader;
-	ID3DBlob* compilationMsgs;
-
-
-	LPCWSTR shaderFile = L"../fx/color.fx";
-	LPCSTR shaderEntryPoint = "main";
-	LPCSTR shaderTarget = "fx_5_0";
-
-	hr = D3DCompileFromFile(shaderFile, nullptr, nullptr, shaderEntryPoint, shaderTarget, shaderFlag, 0, &compiledShader, &compilationMsgs);
-
-	D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), 0, m_3DDevice.Get(), m_Effect.GetAddressOf());
-
-	m_Technique = m_Effect->GetTechniqueByName("ColorTech");
-	m_MatrixVariable = m_Effect->GetVariableByName("gWorldViewProj")->AsMatrix();
+	m_3DDeviceContext->DrawIndexed(6, 0, 0);
 }
 
 void Axis::BuildVertexLayout()
@@ -178,17 +166,51 @@ void Axis::BuildVertexLayout()
 		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	// Create the input layout
-	D3DX11_PASS_DESC passDesc;
-	m_Technique->GetPassByIndex(0)->GetDesc(&passDesc);
-
 	/// 그냥 숫자 적혀있는게 불편해서 ARRAYSIZE로 바꿈
 	/// 아무 의미 없긴 함
-	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()));
+// 	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
+// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()));
 
 	if (FAILED(hr))
 	{
 		hr = S_FALSE;
 	}
+}
+
+void Axis::CreateShader()
+{
+	HRESULT hr;
+
+	std::ifstream vsFile("../x64/Debug/VertexShader.cso", std::ios::binary);
+	std::ifstream psFile("../x64/Debug/PixelShader.cso", std::ios::binary);
+
+	std::vector<char> vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
+	std::vector<char> psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
+
+	m_3DDevice->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &_vertexShader);
+	m_3DDevice->CreatePixelShader(psData.data(), psData.size(), nullptr, &_pixelShader);
+
+
+	// 셰이더도 만들어두고 레이아웃도 만들어두고 이런거 저런거 갖다 쓸 수 있게하는게 좋겠지
+	// 이렇게 코드적으로 박아두면 안좋을 것 같다는 얘기를 하는 것 같은데?
+
+	// Create the vertex input layout.
+	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		//{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	D3D11_BUFFER_DESC matrixBufferDesc;
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+
+	hr = m_3DDevice->CreateBuffer(&matrixBufferDesc, NULL, &_matrixBuffer);
+
+	m_3DDevice->CreateInputLayout(vertexDesc, 2, vsData.data(), vsData.size(), &m_InputLayout);
 }

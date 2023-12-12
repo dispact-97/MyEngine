@@ -27,9 +27,9 @@ void Cube::Update()
 
 void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
-	m_World = world;
-	m_View = view;
-	m_Proj = projection;
+	m_world = world;
+	m_view = view;
+	m_proj = projection;
 }
 
 void Cube::Render()
@@ -55,26 +55,13 @@ void Cube::Render()
 
 
 	///WVP TM등을 셋팅
-	DirectX::XMMATRIX worldViewProj = m_World * m_View * m_Proj;
-	m_textureboxMatrixVariable->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
-	m_GworldMatrixVariable->SetMatrix(reinterpret_cast<float*>(&m_World));
-
-	m_DiffuseMap->SetResource(m_DiffuseMapSRV.Get());
+	//DirectX::XMMATRIX worldViewProj = m_World * m_View * m_Proj;
 
 	//랜더스테이트
 	m_3DDeviceContext->RSSetState(m_RasterState.Get());
 
-	//테크닉
-	D3DX11_TECHNIQUE_DESC techDesc;
-	m_textureboxTechnique->GetDesc(&techDesc);
 
-	//랜더패스
-	for (UINT p = 0; p < techDesc.Passes; ++p)
-	{
-		m_textureboxTechnique->GetPassByIndex(p)->Apply(0, m_3DDeviceContext.Get());
-
-		m_3DDeviceContext->DrawIndexed(indexcount, 0, 0);
-	}
+	m_3DDeviceContext->DrawIndexed(indexcount, 0, 0);
 }
 
 void Cube::ObjectSetting()
@@ -195,37 +182,7 @@ void Cube::ObjectSetting()
 	);
 
 	GetTextureFile();
-	BuildFxFromCso(m_3DDevice.Get(), L"../fx/Basic.cso");
 	BuildVertexLayout();
-}
-
-void Cube::BuildFX()
-{
-	HRESULT hr = S_OK;
-	//이펙트를 쓰는부분은 차차 해보자
-
-	/// 컴파일된 파일도 괜찮고
-	/// 컴파일 하는 것도 문제없이 돌아감.
-
-	UINT shaderFlag = D3DCOMPILE_ENABLE_STRICTNESS;	// 쉐이더 컴파일시 엄격한 문법 검사를 수행하도록 하는 컴파일 플래그
-
-#if defined( DEBUG ) || defined( _DEBUG )	// 디버그 모드에서 쉐이더 컴파일시 디버깅에 필요한 정보를 추가
-	shaderFlag |= D3D10_SHADER_DEBUG;		// 최적화 과정을 건너뛰도록 설정하는 역할이다.
-	shaderFlag |= D3D10_SHADER_SKIP_OPTIMIZATION;
-#endif
-	ID3DBlob* compiledShader;
-	ID3DBlob* compilationMsgs;
-
-	LPCWSTR shaderFile = L"../fx/Basic.fx";
-	LPCSTR shaderEntryPoint = "VS";
-	LPCSTR shaderTarget = "fx_5_0";
-
-	hr = D3DCompileFromFile(shaderFile, nullptr, nullptr, shaderEntryPoint, shaderTarget, shaderFlag, 0, &compiledShader, &compilationMsgs);
-
-	//D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), 0, m_3DDevice.Get(), m_textureboxEffect.GetAddressOf());
-
-	m_Technique = m_textureboxEffect->GetTechniqueByName("TextureTech");
-	m_textureboxMatrixVariable = m_textureboxEffect->GetVariableByName("gWorldViewProj")->AsMatrix();
 }
 
 void Cube::BuildVertexLayout()
@@ -240,45 +197,9 @@ void Cube::BuildVertexLayout()
 		{"TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	D3DX11_PASS_DESC passDesc;
-	m_textureboxTechnique->GetPassByIndex(0)->GetDesc(&passDesc);
-
-	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
-	));
-
-	if (FAILED(hr))
-	{
-		hr = S_FALSE;
-	}
-}
-
-void Cube::BuildFxFromCso(ID3D11Device* device, const std::wstring& filename)
-{
-	std::ifstream fin(filename, std::ios::binary);
-
-	fin.seekg(0, std::ios_base::end);
-	int size = (int)fin.tellg();
-	fin.seekg(0, std::ios_base::beg);
-	std::vector<char> compiledShader(size);
-
-	fin.read(&compiledShader[0], size);
-	fin.close();
-
-	HRESULT hr = D3DX11CreateEffectFromMemory(&compiledShader[0], size,
-		0, device, &m_textureboxEffect);
-
-	m_textureboxTechnique = m_textureboxEffect->GetTechniqueByName("TextureTech");
-	m_textureboxMatrixVariable = m_textureboxEffect->GetVariableByName("gWorldViewProj")->AsMatrix();	// 행렬로 쓸꺼야
-	m_GworldMatrixVariable = m_textureboxEffect->GetVariableByName("gWorld")->AsMatrix();	// 행렬로 쓸꺼야
-
-	m_DiffuseMap = m_textureboxEffect->GetVariableByName("gDiffuseMap")->AsShaderResource();
-
-	BOOL res = m_textureboxEffect->IsValid();	// 메모리가 쓰레기값이 아닌지를 확인하는 함수
-	res = m_textureboxTechnique->IsValid();
-	res = m_textureboxMatrixVariable->IsValid();
-	res = m_GworldMatrixVariable->IsValid();
-	res = m_DiffuseMap->IsValid();
+// 	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
+// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
+// 	));
 
 	if (FAILED(hr))
 	{

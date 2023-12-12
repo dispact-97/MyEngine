@@ -48,6 +48,12 @@
     <Filter Include="소스 파일\Mouse">
       <UniqueIdentifier>{8572d712-aacc-418a-9acd-c97075c6892a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{f4957f6d-467b-4230-93ae-f17e779a4bd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\HLSL">
+      <UniqueIdentifier>{b986a20a-4619-446a-b4f9-6ad88253cec8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -73,9 +79,6 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>소스 파일\Object\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dx11effect.h">
-      <Filter>소스 파일\DX11Render</Filter>
     </ClInclude>
     <ClInclude Include="TextureLoader.h">
       <Filter>소스 파일\Texture</Filter>
@@ -129,17 +132,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Basic.fx">
-      <Filter>소스 파일\Shader&amp;Vertex\Shader</Filter>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shader\HLSL</Filter>
     </FxCompile>
-    <FxCompile Include="BasicTex.fx">
-      <Filter>소스 파일\Shader&amp;Vertex\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="color.fx">
-      <Filter>소스 파일\Shader&amp;Vertex\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="LightHelper.fx">
-      <Filter>소스 파일\Shader&amp;Vertex\Shader</Filter>
+    <FxCompile Include="PixelShader.hlsl">
+      <Filter>Shader\HLSL</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

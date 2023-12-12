@@ -172,7 +172,9 @@ void DX11Render::Update(float deltaTime)
 void DX11Render::Render()
 {
 	// 이 안에다가 비긴렌더, 드로우오브젝트, 엔드렌더를 넣는게 효율적인가?
-	// 
+	BeginRender(0, 0, 0, 1);
+	DrawObject();
+	EndRender();
 }
 
 void DX11Render::BeginRender(float red, float green, float blue, float alpha)

@@ -17,7 +17,6 @@ public:
 private:
 	virtual void ObjectSetting() override;
 
-	void BuildFX();
 	void BuildVertexLayout();
 
 	int indexcount = 0;
