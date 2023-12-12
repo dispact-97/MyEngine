@@ -191,7 +191,7 @@ void DX11Render::BeginRender(float red, float green, float blue, float alpha)
 		m_pDepthStencilView.Get()
 	);
 
-	m_pFont->RenderText(L"Hello World!", 10.0f, 10.0f);
+
 
 	// Clear the back buffer.
 	m_p3DDeviceContext->ClearRenderTargetView(m_pRenderTargetView.Get(), color);
@@ -213,6 +213,8 @@ void DX11Render::DrawObject()
 	m_pGrid->Render();
 	m_pCube->Render();
 
+	m_pFont->RenderText(L"Hello World!", 100.0f, 100.0f);
+
 	// 레스터라이저 상태 설정 
 	m_p3DDeviceContext->RSSetState(0);
 }
@@ -231,7 +233,20 @@ HRESULT DX11Render::InitVB()
 
 void DX11Render::Finalize()
 {
-	
+	if (sm_SwapChain)
+	{
+		sm_SwapChain->Release();
+	}
+
+	if (m_pRenderTargetView)
+	{
+		m_pRenderTargetView->Release();
+	}
+
+	if (m_p3DDevice)
+	{
+		m_p3DDevice->Release();
+	}
 }
 
 HRESULT DX11Render::CreateHandleWindow()

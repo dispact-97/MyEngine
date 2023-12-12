@@ -42,6 +42,12 @@
     <Filter Include="소스 파일\Text">
       <UniqueIdentifier>{d56f7e99-8a28-463b-9457-a4a8d0e9ecd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Util">
+      <UniqueIdentifier>{2a57e46a-125f-46c7-95c0-b2690e3b04b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Mouse">
+      <UniqueIdentifier>{8572d712-aacc-418a-9acd-c97075c6892a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -80,6 +86,15 @@
     <ClInclude Include="Font.h">
       <Filter>소스 파일\Text</Filter>
     </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseEvent.h">
+      <Filter>소스 파일\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseClass.h">
+      <Filter>소스 파일\Mouse</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11Render.cpp">
@@ -102,6 +117,15 @@
     </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>소스 파일\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseEvent.cpp">
+      <Filter>소스 파일\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseClass.cpp">
+      <Filter>소스 파일\Mouse</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,19 @@
 #include "Font.h"
 
+#include <iostream>
+
+#include <SimpleMath.h>
+#include <DDSTextureLoader.h>
+
 Font::Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+	: result()
 {
-	spriteBatch = std::make_unique<DirectX::SpriteBatch>(pDeviceContext);
-	spriteFont = std::make_unique<DirectX::SpriteFont>(pDevice, L"Arial.spritefont");
+	//m_SpriteBatch.reset(new DirectX::DX11::SpriteBatch(pDeviceContext));
+	m_SpriteBatch = std::make_unique<DirectX::SpriteBatch>(pDeviceContext);
+	m_SpriteFont = std::make_unique<DirectX::SpriteFont>(pDevice,L"..\\Font\\NotoSansKR.spritefont");
+
+	//result = DirectX::CreateDDSTextureFromFile(pDevice, L"test", nullptr, &texture);
+
 }
 
 Font::~Font()
@@ -15,8 +25,13 @@ void Font::RenderText(const wchar_t* text, float x, float y)
 {
 	DirectX::FXMVECTOR color = DirectX::Colors::White;
 
-	spriteBatch->Begin();
-	spriteFont->DrawString(spriteBatch.get(),text,DirectX::XMFLOAT2(x,y),color);
-	spriteBatch->End();
+
+		// DRAW SPRITES, FONTS, ETC
+		m_SpriteBatch->Begin();
+		m_SpriteFont->DrawString(m_SpriteBatch.get(), text, DirectX::XMFLOAT2(x, y), color);
+		//m_SpriteBatch->Draw(texture, DirectX::SimpleMath::Vector2(100, 100));
+		m_SpriteBatch->End();
+	
+
 }
 

@@ -13,6 +13,8 @@ using namespace std;
 #pragma comment(lib, "dxgi.lib")
 // 셰이더 컴파일링 기능
 #pragma comment(lib, "d3dcompiler.lib") 
+// DXTk
+#pragma  comment(lib, "DirectXTK.lib")
 
 // 이펙트 라이브러리
 #ifdef _DEBUG
@@ -101,7 +103,6 @@ private:
 	 // 메시지 핸들러 (윈도 콜백)
 	 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-
 private:
 	//int mVideoCardMemory;	// 블로그에서는 있지만 어디다가 쓰는걸까?
 	//char mVideoCardDescription[128];
@@ -146,7 +147,6 @@ private:
 	// 버퍼
 	ID3D11Buffer* VertexBuffer;
 	ID3D11Buffer* IndexBuffer;
-
 
 };
 

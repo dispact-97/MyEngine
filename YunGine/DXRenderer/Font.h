@@ -1,8 +1,9 @@
 #pragma once
 #include <d3d11.h>
 #include <DirectXColors.h>
-#include "..\\DXTK\\SpriteBatch.h"
-#include "..\\DXTK\\SpriteFont.h"
+#include "SpriteBatch.h"
+#include "SpriteFont.h"
+
 class Font
 {
 public:
@@ -12,8 +13,11 @@ public:
 	void RenderText(const wchar_t* text, float x, float y);
 
 private:
-	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
-	std::unique_ptr<DirectX::SpriteFont> spriteFont;
-	
+	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch = nullptr;
+	std::unique_ptr<DirectX::SpriteFont> m_SpriteFont = nullptr;
+
+	ID3D11ShaderResourceView* texture = nullptr;
+
+	HRESULT result;
 };
 
