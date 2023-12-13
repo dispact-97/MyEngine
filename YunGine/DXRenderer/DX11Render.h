@@ -32,11 +32,15 @@ using namespace std;
 #include <d3d11_4.h>
 #include <dxgi1_2.h>
 
+#include <vector>
+
 class Axis;
 class Cube;
 class Grid;
 class Camera;
 class Font;
+class MouseClass;
+class RenderableBase;
 
 class DX11Render : public IDX11Render
 {
@@ -54,7 +58,7 @@ public:
 	// bool값으로 만들어서 return false를 반환해야한다.
 	virtual long Initialize() override;	// 그래픽 엔진 초기화
 
-	virtual void Update(float deltaTime) override;
+	virtual void Update(float deltaTime,float fps, float mspf) override;
 	virtual void Render() override;
 	virtual void BeginRender(float red, float green, float blue, float alpha) override;
 	virtual void DrawObject() override;
@@ -63,6 +67,10 @@ public:
 	HRESULT InitVB();
 
 	virtual void Finalize() override;
+
+	// 윈도우 중앙
+	// const int _windowCenterX = _windowWidth / 2;
+	// const int _windowCenterY = _windowHeight / 2;
 
 private:
 	// void OnResize(); 
@@ -77,26 +85,31 @@ private:
 	// HRESULT CreateInputLayout();
 
 	// 오브젝트들 생성하기
-	 HRESULT CreateObject();	
-	 HRESULT CreateFont();
-	 HRESULT CreateCamera();
-	 HRESULT CreateCube();
-	 HRESULT CreateGrid();
-	 HRESULT CreateAxis();
+	HRESULT CreateObject();
+	HRESULT CreateFont();
+	HRESULT CreateCamera();
+	HRESULT CreateCube();
+	HRESULT CreateGrid();
+	HRESULT CreateAxis();
 
-	 // 윈도우 생성
-	 HWND hWnd;
-	 HINSTANCE hInstance;
+	// 윈도우 생성
+	HWND hWnd;
+	HINSTANCE hInstance;
 
-	 // 윈도우 가로,세로
-	 const int _windowWidth = 1800;
-	 const int _windowHeight = 1080;
+	// 윈도우 가로,세로
+	const int _windowWidth = 1800;
+	const int _windowHeight = 1080;
 
-	 // 시간 변수
-	 float m_deltaTime;
+	// 시간 변수
+	float m_deltaTime;
+	float m_fps = 0.0f;
+	float m_mspf = 0.0f;
 
-	 // 메시지 핸들러 (윈도 콜백)
-	 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	// 메시지 핸들러 (윈도 콜백)
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+	// 디버그 텍스트
+	void RenderAllText();
 
 private:
 	//int mVideoCardMemory;	// 블로그에서는 있지만 어디다가 쓰는걸까?
@@ -133,11 +146,23 @@ private:
 	DirectX::XMFLOAT4X4 m_ProjectionMatrix;
 
 	// 오브젝트
-	 Axis* m_pAxis;
-	 Grid* m_pGrid;
-	 Cube* m_pCube;
-	 Camera* m_pCamera;
-	 Font* m_pFont;
+	std::vector<RenderableBase*> objectVector;
+	Axis* m_pAxis;
+	Grid* m_pGrid;
+	Cube* m_pCube;
+	Camera* m_pCamera;
+	Font* m_pFont;
+
+	// 마우스
+	MouseClass* m_pMouse;
+	struct mousePosition
+	{
+		int mousePosX = 0;
+		int mousePosY = 0;
+	};
+	mousePosition Curr;
+	mousePosition Now;
+	bool ignoreMouseMove = false;
 
 	// 버퍼
 	ID3D11Buffer* VertexBuffer;

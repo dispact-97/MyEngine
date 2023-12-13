@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include <DirectXColors.h>
+#include <string>
 #include "SpriteBatch.h"
 #include "SpriteFont.h"
 
@@ -11,6 +12,9 @@ public:
 	~Font();
 
 	void RenderText(const wchar_t* text, float x, float y);
+	void RenderString(const std::string& str, float x, float y);
+	void RenderString(const float floatValue, float x, float y);
+	void RenderString(const int intValue, float x, float y);
 
 private:
 	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch = nullptr;

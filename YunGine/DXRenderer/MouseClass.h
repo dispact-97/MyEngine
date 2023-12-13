@@ -1,7 +1,6 @@
 #pragma once
 #include <queue>
 #include "MouseEvent.h"
-class MouseEvent;
 
 class MouseClass
 {

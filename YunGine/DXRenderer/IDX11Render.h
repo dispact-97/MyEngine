@@ -8,7 +8,7 @@ public:
 
 	virtual long Initialize() abstract;
 
-	virtual void Update(float deltaTime) abstract;
+	virtual void Update(float deltaTime,float fps, float mspf) abstract;
 	virtual void Render() abstract;
 	virtual void BeginRender(float red, float green, float blue, float alpha) abstract;
 	virtual void DrawObject() abstract;

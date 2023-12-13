@@ -41,6 +41,8 @@ private:
 	
 	// 게임 타이머
 	GameTimer* m_pTimer;
+	float m_fps;
+	float m_mspf;
 
 public:
 	// 게임용 윈도 프레임웍을 초기화한다.

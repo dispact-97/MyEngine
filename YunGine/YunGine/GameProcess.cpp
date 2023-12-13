@@ -64,10 +64,10 @@ void GameProcess::Update()
 	{
 		// FPS 계산: 현재까지 누적된 프레임 수를 1초 동안의 시간으로 나누어 계산합니다.
 		float fps = (float)frameCnt; // fps = frameCnt / 1
-
+		m_fps = fps;
 		// MSPF 계산: FPS를 이용하여 1초당 평균 프레임 시간(Milliseconds per Frame)을 계산합니다.
 		float mspf = 1000.0f / fps;
-
+		m_mspf = mspf;
 		// Reset for next average.
 		// 1초 동안의 평균 계산이 완료되면, 다음 1초간의 계산을 위해 누적된 프레임 수와 시간을 초기화합니다.
 		frameCnt = 0;
@@ -75,7 +75,7 @@ void GameProcess::Update()
 	}
 
 	// 일단 대충 해놓음->랜더 update에 float deltatime을 넣음
-	renderer->Update(m_pTimer->DeltaTime());
+	renderer->Update(m_pTimer->DeltaTime(),m_fps,m_mspf);
 }
 
 void GameProcess::Render()

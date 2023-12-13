@@ -16,3 +16,9 @@ bool Util::check_dir_exist(const char* path)
 	}
 	return exist;
 }
+
+std::wstring Util::strtoWstr(const std::string& str,std::wstring& wstr)
+{
+	return wstr = (std::wstring(str.begin(),str.end())).c_str();
+}
+

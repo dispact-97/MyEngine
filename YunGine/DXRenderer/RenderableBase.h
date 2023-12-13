@@ -13,7 +13,7 @@
 class RenderableBase
 {
 	// 업데이트와 랜더는 필요
-protected:
+public:
 	virtual void ObjectSetting() abstract;
 
 	virtual void Update() abstract;

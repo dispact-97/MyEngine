@@ -6,12 +6,20 @@
 #include <d3dcompiler.h>
 #include <d3dcommon.h>
 
+#include "Utility.h"
+
+#include "RenderableBase.h"
 #include "Axis.h"
 #include "Cube.h"
 #include "Grid.h"
 #include "Camera.h"
 #include "Font.h"
+#include "MouseClass.h"
 
+static int static_mouseXpos = 0;
+static int static_mouseYpos = 0;
+static int static_windowWidth = 0;
+static int static_windowHeight = 0;
 
 // dll로 부를때 랜더러를 만드는 함수의 주소를 가지고 있는다.
 // return을 포인터로 받아줄 수 있다.
@@ -38,6 +46,7 @@ DX11Render::DX11Render()
 	m_pAxis(nullptr),
 	m_pCube(nullptr),
 	m_pFont(nullptr),
+	m_pMouse(nullptr),
 	m_WorldMatrix
 	{ 1.0f, 0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f, 0.0f,
@@ -51,7 +60,8 @@ DX11Render::DX11Render()
 
 DX11Render::~DX11Render()
 {
-
+	Curr.mousePosX = 0;
+	Curr.mousePosY = 0;
 }
 
 long DX11Render::Initialize()
@@ -63,7 +73,7 @@ long DX11Render::Initialize()
 	{
 		return false;
 	}
-	
+
 	hr = CreateDevice();
 	if (FAILED(hr))
 	{
@@ -100,75 +110,81 @@ long DX11Render::Initialize()
 	return true;
 }
 
-void DX11Render::Update(float deltaTime)
+void DX11Render::Update(float deltaTime, float fps, float mspf)
 {
-	 m_deltaTime = deltaTime;
-	 
-	 // 카메라
-	 if (GetAsyncKeyState('W') & 0x8000)
-	 {
-	 	m_pCamera->Walk(10.0f * deltaTime);
-	 }
-	 
-	 if (GetAsyncKeyState('S') & 0x8000)
-	 {
-	 	m_pCamera->Walk(-10.0f * deltaTime);
-	 }
-	 
-	 if (GetAsyncKeyState('A') & 0x8000)
-	 {
-	 	m_pCamera->Strafe(-10.0f * deltaTime);
-	 }
-	 
-	 if (GetAsyncKeyState('D') & 0x8000)
-	 {
-	 	m_pCamera->Strafe(10.0f * deltaTime);
-	 }
-	 
-	 if (GetAsyncKeyState('Q') & 0x8000)
-	 {
-		 m_pCamera->WorldUpDown(-10.0f * deltaTime);
-	 }
-	 
-	 if (GetAsyncKeyState('E') & 0x8000)
-	 {
-	 	m_pCamera->WorldUpDown(10.0f * deltaTime);
-	 }
-	 
-	 // 회전
-	 if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	 {
-		 m_pCamera->RotateY(5.0f * deltaTime);
-	 }
+	m_deltaTime = deltaTime;
+	m_fps = fps;
+	m_mspf = mspf;
 
-	 if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-	 {
-		 m_pCamera->RotateY(-5.0f * deltaTime);
-	 }
+	Now.mousePosX = static_mouseXpos;
+	Now.mousePosY = static_mouseYpos;
 
-	 if (GetAsyncKeyState(VK_UP) & 0x8000)
-	 {
-		 m_pCamera->RotateX(-5.0f * deltaTime);
-	 }
+	// 카메라
+	if (GetAsyncKeyState('W') & 0x8000)
+	{
+		m_pCamera->Walk(10.0f * deltaTime);
+	}
 
-	 if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-	 {
-		 m_pCamera->RotateX(5.0f * deltaTime);
-	 }
+	if (GetAsyncKeyState('S') & 0x8000)
+	{
+		m_pCamera->Walk(-10.0f * deltaTime);
+	}
 
+	if (GetAsyncKeyState('A') & 0x8000)
+	{
+		m_pCamera->Strafe(-10.0f * deltaTime);
+	}
 
-	 m_pCamera->UpdateViewMatrix();
+	if (GetAsyncKeyState('D') & 0x8000)
+	{
+		m_pCamera->Strafe(10.0f * deltaTime);
+	}
 
-	 m_pAxis->ObjectUpdate(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
-	 m_pGrid->ObjectUpdate(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
-	 m_pCube->ObjectUpdate(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
+	if (GetAsyncKeyState('Q') & 0x8000)
+	{
+		m_pCamera->WorldUpDown(-10.0f * deltaTime);
+	}
 
-// 	m_pAxis->ObjectUpdate(DirectX::XMMatrixIdentity(), view,proj);
-// 	m_pGrid->ObjectUpdate(DirectX::XMMatrixIdentity(), view,proj);
-// 	m_pCube->ObjectUpdate(DirectX::XMMatrixIdentity(), view,proj);
+	if (GetAsyncKeyState('E') & 0x8000)
+	{
+		m_pCamera->WorldUpDown(10.0f * deltaTime);
+	}
 
+	// 카메라 회전
+	 //m_pCamera->RotateY(1.0f * mousePosY);
 
+	m_pCamera->RotateX(0.3f * deltaTime * (Now.mousePosY - Curr.mousePosY));
+	m_pCamera->RotateY(0.3f * deltaTime * (Now.mousePosX - Curr.mousePosX));
 
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+		m_pCamera->RotateY(3.0f * deltaTime);
+	}
+
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+		m_pCamera->RotateY(-3.0f * deltaTime);
+	}
+
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
+		m_pCamera->RotateX(-3.0f * deltaTime);
+	}
+
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		m_pCamera->RotateX(3.0f * deltaTime);
+	}
+
+	m_pCamera->UpdateViewMatrix();
+
+	for (auto& iter : objectVector)
+	{
+		iter->ObjectUpdate(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
+	}
+
+	Curr.mousePosX = Now.mousePosX;
+	Curr.mousePosY = Now.mousePosY;
 }
 
 void DX11Render::Render()
@@ -195,8 +211,6 @@ void DX11Render::BeginRender(float red, float green, float blue, float alpha)
 		m_pDepthStencilView.Get()
 	);
 
-
-
 	// Clear the back buffer.
 	m_p3DDeviceContext->ClearRenderTargetView(m_pRenderTargetView.Get(), color);
 	// Clear the depth buffer.
@@ -213,11 +227,12 @@ void DX11Render::DrawObject()
 
 	m_p3DDeviceContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
 
-	m_pAxis->Render();
-	m_pGrid->Render();
-	m_pCube->Render();
+	RenderAllText();
 
-	m_pFont->RenderText(L"Hello World!", 0.0f, 0.0f);
+	for (auto& iter : objectVector)
+	{
+		iter->Render();
+	}
 
 	// 레스터라이저 상태 설정 
 	m_p3DDeviceContext->RSSetState(0);
@@ -293,6 +308,9 @@ HRESULT DX11Render::CreateHandleWindow()
 	// 생성된 윈도를 화면에 표시
 	ShowWindow(hWnd, SW_SHOWNORMAL);
 	UpdateWindow(hWnd);
+
+	static_windowWidth = _windowWidth;
+	static_windowHeight = _windowHeight;
 
 	return hr;
 }
@@ -481,7 +499,9 @@ HRESULT DX11Render::CreateRaster()
 HRESULT DX11Render::CreateObject()
 {
 	HRESULT hr = S_OK;
-	
+
+	m_pMouse = new MouseClass();
+
 	hr = CreateFont();
 	if (FAILED(hr))
 	{
@@ -534,17 +554,17 @@ HRESULT DX11Render::CreateCamera()
 	HRESULT hr = S_OK;
 
 	m_pCamera = new Camera();
- 
+
 	// 카메라를 만들고
 	// 세팅을 해준다.
-	 m_pCamera->SetLens(0.25f * 3.1415926535f, 1280.0f / 720.0f, 1.0f,1000.0f);
+	m_pCamera->SetLens(0.25f * 3.1415926535f, 1280.0f / 720.0f, 1.0f, 1000.0f);
 
-	 // LH(Left Hand)방향으로
-	 DirectX::XMMATRIX p = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), 1280.0f / 720.0f, 1.0f, 1000.0f);
-	 DirectX::XMStoreFloat4x4(&m_ProjectionMatrix, p);
+	// LH(Left Hand)방향으로
+	DirectX::XMMATRIX p = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), 1280.0f / 720.0f, 1.0f, 1000.0f);
+	DirectX::XMStoreFloat4x4(&m_ProjectionMatrix, p);
 
-	 // 맨처음에 보는 카메라의 포지션, 쳐다보는 방향,UP벡터 정하기
-	 m_pCamera->LookAt(DirectX::XMFLOAT3(8.0f, 8.0f, -8.0f), DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0, 1.0f, 0));
+	// 맨처음에 보는 카메라의 포지션, 쳐다보는 방향,UP벡터 정하기
+	m_pCamera->LookAt(DirectX::XMFLOAT3(8.0f, 8.0f, -8.0f), DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0, 1.0f, 0));
 
 	return S_OK;
 }
@@ -558,6 +578,7 @@ HRESULT DX11Render::CreateCube()
 	{
 		return hr = S_FALSE;
 	}
+	objectVector.push_back(m_pCube);
 
 	return S_OK;
 }
@@ -571,6 +592,7 @@ HRESULT DX11Render::CreateGrid()
 	{
 		return hr = S_FALSE;
 	}
+	objectVector.push_back(m_pGrid);
 
 	return S_OK;
 }
@@ -582,8 +604,10 @@ HRESULT DX11Render::CreateAxis()
 	m_pAxis = new Axis(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
 	if (!m_pAxis)
 	{
+
 		return hr = S_FALSE;
 	}
+	objectVector.push_back(m_pAxis);
 
 	return S_OK;
 }
@@ -599,14 +623,50 @@ LRESULT CALLBACK DX11Render::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 	switch (message)
 	{
 		case WM_PAINT:
+		{
 			hdc = BeginPaint(hWnd, &ps);
 			EndPaint(hWnd, &ps);
 			break;
+		}
+
+		case WM_MOUSEMOVE:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+
+			static_mouseXpos = x;
+			static_mouseYpos = y;
+
+			if (x < 1 || y < 1 || x >1598 || y>1078)
+			{
+				SetCursorPos(static_windowWidth / 2, static_windowHeight / 2);
+			}
+
+			return 0;
+		}
 
 		case WM_DESTROY:
+		{
 			PostQuitMessage(0);
 			break;
+		}
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+void DX11Render::RenderAllText()
+{
+	m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
+	m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
+
+	m_pFont->RenderString("FPS : ", 0.0f, 18.0f);
+	m_pFont->RenderString(m_fps, 48.0f, 18.0f);
+
+	m_pFont->RenderString("MousePosX : ", 0.0f, 36.0f);
+	m_pFont->RenderString(static_mouseXpos, 120.0f, 36.0f);
+
+	m_pFont->RenderString("MousePosY : ", 0.0f, 54.0f);
+	m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
+
 }
