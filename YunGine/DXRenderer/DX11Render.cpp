@@ -151,8 +151,6 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	}
 
 	// 카메라 회전
-	 //m_pCamera->RotateY(1.0f * mousePosY);
-
 	m_pCamera->RotateX(0.3f * deltaTime * (Now.mousePosY - Curr.mousePosY));
 	m_pCamera->RotateY(0.3f * deltaTime * (Now.mousePosX - Curr.mousePosX));
 
@@ -622,12 +620,12 @@ LRESULT CALLBACK DX11Render::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 
 	switch (message)
 	{
-		case WM_PAINT:
-		{
-			hdc = BeginPaint(hWnd, &ps);
-			EndPaint(hWnd, &ps);
-			break;
-		}
+		//case WM_PAINT:
+		//{
+		//	hdc = BeginPaint(hWnd, &ps);
+		//	EndPaint(hWnd, &ps);
+		//	break;
+		//}
 
 		case WM_MOUSEMOVE:
 		{
@@ -668,5 +666,4 @@ void DX11Render::RenderAllText()
 
 	m_pFont->RenderString("MousePosY : ", 0.0f, 54.0f);
 	m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
-
 }

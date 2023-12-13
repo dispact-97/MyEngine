@@ -36,12 +36,11 @@ void GameProcess::Loop()
 		}
 
 	}
-	}
+}
 
 
 void GameProcess::Update()
 {
-
 	// 매 프레임 시간을 계산한다.
 	m_pTimer->Tick();
 
@@ -59,7 +58,6 @@ void GameProcess::Update()
 
 	frameCnt++;
 
-
 	if ((m_pTimer->TotalTime() - timeElapsed) >= 1.0f)
 	{
 		// FPS 계산: 현재까지 누적된 프레임 수를 1초 동안의 시간으로 나누어 계산합니다.
@@ -75,17 +73,11 @@ void GameProcess::Update()
 	}
 
 	// 일단 대충 해놓음->랜더 update에 float deltatime을 넣음
-	renderer->Update(m_pTimer->DeltaTime(),m_fps,m_mspf);
+	renderer->Update(m_pTimer->DeltaTime(), m_fps, m_mspf);
 }
 
 void GameProcess::Render()
 {
-	/// 그리기를 준비한다.
-	// 그래픽엔진을 아직 붙이지 않았다.
-	// renderer->BeginRender(0, 0, 0, 1);
-	// renderer->DrawObject();
-	// 그리기를 끝낸다.
-	// renderer->EndRender();
 	renderer->Render();
 }
 
@@ -100,10 +92,7 @@ HRESULT GameProcess::CreateGraphicEngine()
 	}
 
 	renderer.reset(reinterpret_cast<IDX11Render * (*)(void)>(GetProcAddress(m_hModule, "CreateRenderer"))());
-
-	// using CreateRenderer = IDX11Render(*)();
-
-	// CreateRenderer createRenderer = reinterpret_cast<CreateRenderer>(GetProcAddress(m_hModule, "CreateRenderer"));
+	
 	if (renderer == nullptr)
 	{
 		// 함수 가져오기 실패 처리
@@ -128,7 +117,7 @@ HRESULT GameProcess::DeleteGraphicEngine()
 	renderer.release();
 
 	FreeLibrary(m_hModule);
-	
+
 	return S_OK;
 }
 
