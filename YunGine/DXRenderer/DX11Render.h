@@ -97,7 +97,7 @@ private:
 	HINSTANCE hInstance;
 
 	// 윈도우 가로,세로
-	const int _windowWidth = 1800;
+	const int _windowWidth = 1600;
 	const int _windowHeight = 1080;
 
 	// 시간 변수

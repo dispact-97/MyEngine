@@ -140,19 +140,22 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 		m_pCamera->Strafe(10.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState('Q') & 0x8000)
+	if (GetAsyncKeyState('C') & 0x8000)
 	{
 		m_pCamera->WorldUpDown(-10.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState('E') & 0x8000)
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
 		m_pCamera->WorldUpDown(10.0f * deltaTime);
 	}
 
 	// 카메라 회전
-	m_pCamera->RotateX(0.3f * deltaTime * (Now.mousePosY - Curr.mousePosY));
-	m_pCamera->RotateY(0.3f * deltaTime * (Now.mousePosX - Curr.mousePosX));
+	if (GetAsyncKeyState(VK_RBUTTON))
+	{
+		m_pCamera->RotateX(0.3f * deltaTime * (Now.mousePosY - Curr.mousePosY));
+		m_pCamera->RotateY(0.3f * deltaTime * (Now.mousePosX - Curr.mousePosX));
+	}
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
@@ -271,7 +274,11 @@ HRESULT DX11Render::CreateHandleWindow()
 	HRESULT hr = S_OK;
 	/// Win32 관련
 	// 윈도 클래스
-	// 
+	
+	DWORD dwStryle = WS_OVERLAPPEDWINDOW;
+	RECT rect = { 0,0,_windowWidth,_windowHeight };
+	AdjustWindowRect(&rect, dwStryle, false);
+
 	// 멀티바이트에서 유니코드로 넘어오면서 char* 에러가 났는데
 	// 이런식으로 형변환을 해도 될까?
 	wchar_t szAppName[] = L"YJD3Ddemo Engine";
@@ -292,13 +299,20 @@ HRESULT DX11Render::CreateHandleWindow()
 	RegisterClass(&wndclass);
 
 	// 윈도 생성
+	//hWnd = CreateWindow(
+	//	// 멀티바이트에서 유니코드로 넘어오면서 char* 에러가 났는데
+	//	// 이런식으로 형변환을 해도 될까?
+	//	szAppName,
+	//	szAppName,
+	//	WS_OVERLAPPEDWINDOW,
+	//	100, 100, _windowWidth, _windowHeight,
+	//	NULL, NULL, hInstance, NULL);
+
 	hWnd = CreateWindow(
-		// 멀티바이트에서 유니코드로 넘어오면서 char* 에러가 났는데
-		// 이런식으로 형변환을 해도 될까?
 		szAppName,
 		szAppName,
-		WS_OVERLAPPEDWINDOW,
-		100, 100, _windowWidth, _windowHeight,
+		dwStryle,
+		CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top,
 		NULL, NULL, hInstance, NULL);
 
 	if (!hWnd) return S_FALSE;
@@ -602,7 +616,6 @@ HRESULT DX11Render::CreateAxis()
 	m_pAxis = new Axis(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
 	if (!m_pAxis)
 	{
-
 		return hr = S_FALSE;
 	}
 	objectVector.push_back(m_pAxis);
@@ -612,32 +625,35 @@ HRESULT DX11Render::CreateAxis()
 
 LRESULT CALLBACK DX11Render::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	HDC         hdc;
-	PAINTSTRUCT ps;
+	// HDC         hdc;
+	// PAINTSTRUCT ps;
 
 	// 윈도우 프로시저에서 객체 포인터 가져오기
 	DX11Render* renderer = reinterpret_cast<DX11Render*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
 	switch (message)
 	{
-		//case WM_PAINT:
-		//{
-		//	hdc = BeginPaint(hWnd, &ps);
-		//	EndPaint(hWnd, &ps);
-		//	break;
-		//}
 
 		case WM_MOUSEMOVE:
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-
+			
 			static_mouseXpos = x;
 			static_mouseYpos = y;
 
-			if (x < 1 || y < 1 || x >1598 || y>1078)
+			if (x < 15 || y < 15 || x > 1585 || y > 1060)
 			{
-				SetCursorPos(static_windowWidth / 2, static_windowHeight / 2);
+				RECT clientRect;
+				GetClientRect(hWnd, &clientRect);
+
+				int clientCenterX = (clientRect.right - clientRect.left) / 2;
+				int clientCenterY = (clientRect.bottom - clientRect.top) / 2;
+
+				POINT clientCenterPoint = { clientCenterX, clientCenterY };
+				ClientToScreen(hWnd, &clientCenterPoint);
+
+				SetCursorPos(clientCenterPoint.x, clientCenterPoint.y);
 			}
 
 			return 0;
