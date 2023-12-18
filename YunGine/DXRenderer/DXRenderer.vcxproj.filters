@@ -54,6 +54,9 @@
     <Filter Include="Shader\Vertex">
       <UniqueIdentifier>{4fe32dbf-fd52-41d6-8043-bf1ff75ff4ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Input">
+      <UniqueIdentifier>{aaacbd76-5e73-45e2-921a-38e416deef16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -98,6 +101,9 @@
     <ClInclude Include="Vertex.h">
       <Filter>Shader\Vertex</Filter>
     </ClInclude>
+    <ClInclude Include="InputClass.h">
+      <Filter>소스 파일\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11Render.cpp">
@@ -129,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="MouseClass.cpp">
       <Filter>소스 파일\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="InputClass.cpp">
+      <Filter>소스 파일\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

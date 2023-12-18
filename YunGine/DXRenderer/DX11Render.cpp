@@ -15,6 +15,7 @@
 #include "Camera.h"
 #include "Font.h"
 #include "MouseClass.h"
+#include "InputClass.h"
 
 static int static_mouseXpos = 0;
 static int static_mouseYpos = 0;
@@ -47,6 +48,7 @@ DX11Render::DX11Render()
 	m_pCube(nullptr),
 	m_pFont(nullptr),
 	m_pMouse(nullptr),
+	m_pInput(nullptr),
 	m_WorldMatrix
 	{ 1.0f, 0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f, 0.0f,
@@ -118,6 +120,8 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 
 	Now.mousePosX = static_mouseXpos;
 	Now.mousePosY = static_mouseYpos;
+
+	m_pInput->Frame();
 
 	// 카메라
 	if (GetAsyncKeyState('W') & 0x8000)
@@ -274,7 +278,7 @@ HRESULT DX11Render::CreateHandleWindow()
 	HRESULT hr = S_OK;
 	/// Win32 관련
 	// 윈도 클래스
-	
+
 	DWORD dwStryle = WS_OVERLAPPEDWINDOW;
 	RECT rect = { 0,0,_windowWidth,_windowHeight };
 	AdjustWindowRect(&rect, dwStryle, false);
@@ -514,6 +518,12 @@ HRESULT DX11Render::CreateObject()
 
 	m_pMouse = new MouseClass();
 
+	hr = CreateInput(hWnd, _windowWidth, _windowHeight);
+	if (FAILED(hr))
+	{
+		return hr = S_FALSE;
+	}
+
 	hr = CreateFont();
 	if (FAILED(hr))
 	{
@@ -559,6 +569,21 @@ HRESULT DX11Render::CreateFont()
 
 	return hr;
 
+}
+
+HRESULT DX11Render::CreateInput(HWND hWnd, int width, int height)
+{
+	HRESULT hr = S_OK;
+	m_pInput = new InputClass;
+	if (m_pInput == nullptr)
+	{
+		return hr = S_FALSE;
+	}
+	else
+	{
+		m_pInput->Initialize(hInstance, hWnd, width, height);
+	}
+	return hr;
 }
 
 HRESULT DX11Render::CreateCamera()
@@ -638,7 +663,7 @@ LRESULT CALLBACK DX11Render::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			
+
 			static_mouseXpos = x;
 			static_mouseYpos = y;
 
@@ -682,4 +707,7 @@ void DX11Render::RenderAllText()
 
 	m_pFont->RenderString("MousePosY : ", 0.0f, 54.0f);
 	m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
+
+	m_pFont->RenderString("Last Pressed Key : ",0.0f,72.0f);
+	m_pFont->RenderString(m_pInput->GetLastPressedKey(), 165.0f, 72.0f);
 }

@@ -7,7 +7,7 @@ GameProcess::~GameProcess()
 
 HRESULT GameProcess::Initialize(HINSTANCE hInstance)
 {
-
+	m_hInstance = hInstance;
 	if (CreateGraphicEngine() == S_FALSE)
 	{
 		return S_FALSE;

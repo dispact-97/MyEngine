@@ -34,7 +34,8 @@ private:
 	// 윈도 관련
 	HWND hWnd;
 	MSG m_Msg;
-	
+	HINSTANCE m_hInstance;
+
 	// 그래픽스 엔진
 	HMODULE m_hModule;
 	std::unique_ptr<IDX11Render> renderer;

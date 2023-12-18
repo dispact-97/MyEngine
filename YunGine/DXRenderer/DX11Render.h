@@ -41,6 +41,7 @@ class Camera;
 class Font;
 class MouseClass;
 class RenderableBase;
+class InputClass;
 
 class DX11Render : public IDX11Render
 {
@@ -87,6 +88,7 @@ private:
 	// 오브젝트들 생성하기
 	HRESULT CreateObject();
 	HRESULT CreateFont();
+	HRESULT CreateInput(HWND hWnd,int width,int height);
 	HRESULT CreateCamera();
 	HRESULT CreateCube();
 	HRESULT CreateGrid();
@@ -145,13 +147,14 @@ private:
 	DirectX::XMFLOAT4X4 m_ViewMatrix;
 	DirectX::XMFLOAT4X4 m_ProjectionMatrix;
 
-	// 오브젝트
+	// 개별 클래스
 	std::vector<RenderableBase*> objectVector;
 	Axis* m_pAxis;
 	Grid* m_pGrid;
 	Cube* m_pCube;
 	Camera* m_pCamera;
 	Font* m_pFont;
+	InputClass* m_pInput;
 
 	// 마우스
 	MouseClass* m_pMouse;
