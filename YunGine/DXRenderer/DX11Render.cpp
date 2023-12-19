@@ -121,62 +121,71 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	Now.mousePosX = static_mouseXpos;
 	Now.mousePosY = static_mouseYpos;
 
-	m_pInput->Frame();
+	m_pInput->Frame();	// Update마다 어떤 키를 눌렀는지 받아옴
 
 	// 카메라
-	if (GetAsyncKeyState('W') & 0x8000)
+
+	if(m_pInput->GetKey(DIK_W))
 	{
 		m_pCamera->Walk(10.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState('S') & 0x8000)
+	if (m_pInput->GetKey(DIK_S))
 	{
 		m_pCamera->Walk(-10.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState('A') & 0x8000)
+	if (m_pInput->GetKey(DIK_A))
 	{
 		m_pCamera->Strafe(-10.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState('D') & 0x8000)
+	if (m_pInput->GetKey(DIK_D))
 	{
 		m_pCamera->Strafe(10.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState('C') & 0x8000)
+	if (m_pInput->GetKey(DIK_C))
 	{
 		m_pCamera->WorldUpDown(-10.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+	if (m_pInput->GetKey(DIK_SPACE))
 	{
 		m_pCamera->WorldUpDown(10.0f * deltaTime);
 	}
 
 	// 카메라 회전
-	if (GetAsyncKeyState(VK_RBUTTON))
+
+
+	if (m_pInput->GetMouseDown(0))
 	{
 		m_pCamera->RotateX(0.3f * deltaTime * (Now.mousePosY - Curr.mousePosY));
 		m_pCamera->RotateY(0.3f * deltaTime * (Now.mousePosX - Curr.mousePosX));
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	//if (GetAsyncKeyState(VK_RBUTTON)& 0x8000)
+	//{
+	//	m_pCamera->RotateX(0.3f * deltaTime * (Now.mousePosY - Curr.mousePosY));
+	//	m_pCamera->RotateY(0.3f * deltaTime * (Now.mousePosX - Curr.mousePosX));
+	//}
+
+	if (m_pInput->GetKey(DIK_RIGHT))
 	{
 		m_pCamera->RotateY(3.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	if (m_pInput->GetKey(DIK_LEFT))
 	{
 		m_pCamera->RotateY(-3.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	if (m_pInput->GetKey(DIK_UP))
 	{
 		m_pCamera->RotateX(-3.0f * deltaTime);
 	}
 
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	if (m_pInput->GetKey(DIK_DOWN))
 	{
 		m_pCamera->RotateX(3.0f * deltaTime);
 	}
@@ -709,5 +718,11 @@ void DX11Render::RenderAllText()
 	m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
 
 	m_pFont->RenderString("Last Pressed Key : ",0.0f,72.0f);
-	m_pFont->RenderString(m_pInput->GetLastPressedKey(), 165.0f, 72.0f);
+	m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
+
+	//테스팅
+	m_pFont->RenderString("Input X : ",0.0f,90.0f);
+	m_pFont->RenderString(m_pInput->GetMouseX(),80.0f,90.0f);
+	m_pFont->RenderString("Input Y : ",0.0f,108.0f);
+	m_pFont->RenderString(m_pInput->GetMouseY(), 80.0f, 108.0f);
 }

@@ -53,4 +53,3 @@ void Font::RenderString(const int intValue, float x, float y)
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), wstr.c_str(), DirectX::XMFLOAT2(x, y), color);
 	m_SpriteBatch->End();
 }
-

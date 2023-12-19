@@ -4,10 +4,11 @@ InputClass::InputClass()
 	:m_directInput(nullptr),
 	m_keyboard(nullptr),
 	m_mouse(nullptr),
-	m_keyboardState(),
+	m_curKeyboardState(),
+	m_prevKeyboardState(),
 	m_mouseState(),
-	lastKey(),
-	lastPressedKey()
+	m_lastKey(),
+	virtualKeyCode()
 {
 
 }
@@ -16,10 +17,11 @@ InputClass::InputClass(const InputClass&)
 	:m_directInput(nullptr),
 	m_keyboard(nullptr),
 	m_mouse(nullptr),
-	m_keyboardState(),
+	m_curKeyboardState(),
+	m_prevKeyboardState(),
 	m_mouseState(),
-	lastKey(),
-	lastPressedKey()
+	m_lastKey(),
+	virtualKeyCode()
 {
 
 }
@@ -31,7 +33,7 @@ InputClass::~InputClass()
 
 bool InputClass::IsEscapePressed()
 {
-	if (m_keyboardState[DIK_ESCAPE] & 0x80)
+	if (m_curKeyboardState[DIK_ESCAPE] & 0x80)
 	{
 		return true;
 	}
@@ -46,11 +48,26 @@ void InputClass::GetMouseLocation(int& mouseX, int& mouseY)
 	return;
 }
 
+int InputClass::GetMouseX()
+{
+	return m_mouseX;
+}
+
+int InputClass::GetMouseY()
+{
+	return m_mouseY;
+}
+
 bool InputClass::ReadKeyBoard()
 {
+	for (int i = 0; i < 256; i++)
+	{
+		m_prevKeyboardState[i] = m_curKeyboardState[i];
+	}
+
 	HRESULT hr;
 
-	hr = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
+	hr = m_keyboard->GetDeviceState(sizeof(m_curKeyboardState), (LPVOID)&m_curKeyboardState);
 	if (FAILED(hr))
 	{
 		if ((hr == DIERR_INPUTLOST) || (hr == DIERR_NOTACQUIRED))
@@ -63,13 +80,14 @@ bool InputClass::ReadKeyBoard()
 		}
 	}
 
-	for (int i = 0; i < 256; i++)
-	{
-		if (m_keyboardState[i] & 0x80)
-		{
-			lastKey = static_cast<char>(i);
-		}
-	}
+ 	for (int i = 0; i < 256; i++)
+ 	{
+ 		if (m_curKeyboardState[i] & 0x80)	
+ 		// keyboardState배열안에 키마다 고유의 번호를 가지고있음
+ 		{
+ 			virtualKeyCode = i;
+ 		}
+ 	}
 
 	return true;
 }
@@ -77,6 +95,9 @@ bool InputClass::ReadKeyBoard()
 bool InputClass::ReadMouse()
 {
 	HRESULT hr;
+
+	m_prevMouseState = m_currMouseState;
+
 	hr = m_mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&m_mouseState);
 	if (FAILED(hr))
 	{
@@ -89,6 +110,14 @@ bool InputClass::ReadMouse()
 			return false;
 		}
 	}
+	else
+	{
+		m_mouseX = m_mouseState.lX;
+		m_mouseY = m_mouseState.lY;
+
+
+	}
+
 	return true;
 }
 
@@ -100,8 +129,15 @@ void InputClass::ProcessInput()
 	if (m_mouseX < 0) { m_mouseX = 0; }
 	if (m_mouseY < 0) { m_mouseY = 0; }
 
-	if (m_mouseX > m_screenWidth) { m_mouseX = m_screenWidth; }
-	if (m_mouseY > m_screenHeight) { m_mouseY = m_screenHeight; }
+	if (m_mouseX > m_screenWidth)
+	{
+		m_mouseX = m_screenWidth; 
+	}
+
+	if (m_mouseY > m_screenHeight)
+	{
+		m_mouseY = m_screenHeight; 
+	}
 
 	return;
 }
@@ -206,19 +242,74 @@ bool InputClass::Frame()
 		return false;
 	}
 
-	ProcessInput();
+	result = ReadMouse();
+	if (!result)
+	{
+		return false;
+	}
+
+	//ProcessInput();
 
 	return true;
 
 }
 
-std::string InputClass::GetLastPressedKey() const
+bool InputClass::GetKeyDown(int keyCode)
 {
-	if (lastKey < 1 || lastKey >26)
+	return m_curKeyboardState[keyCode] && !m_prevKeyboardState[keyCode];
+}
+
+bool InputClass::GetKeyUp(int keyCode)
+{
+	return !m_curKeyboardState[keyCode] && m_prevKeyboardState[keyCode];
+}
+
+bool InputClass::GetKey(int keyCode)
+{
+	return m_curKeyboardState[keyCode] && m_prevKeyboardState[keyCode];
+}
+
+bool InputClass::GetMouseDown(int mouseCode)
+{
+	return m_currMouseState.rgbButtons[mouseCode] && !m_prevMouseState.rgbButtons[mouseCode];
+}
+
+bool InputClass::GetMouseUp(int mouseCode)
+{
+	return m_currMouseState.rgbButtons[mouseCode] && !m_prevMouseState.rgbButtons[mouseCode];
+}
+
+bool InputClass::GetMouse(int mouseCode)
+{
+	return m_currMouseState.rgbButtons[mouseCode] && !m_prevMouseState.rgbButtons[mouseCode];
+}
+
+std::string InputClass::GetLastPressedkey()
+{
+	switch (virtualKeyCode)
 	{
-		//lastPressedKey = lastKey;
-		return lastPressedKey;
+		case 30:
+			m_strLastKey = L'A';
+			return m_strLastKey;
+		case 31:
+			m_strLastKey = L'S';
+			return m_strLastKey;
+		case 32:
+			m_strLastKey = L'D';
+			return m_strLastKey;
+		case 17:
+			m_strLastKey = L'W';
+			return m_strLastKey;
+		case 46:
+			m_strLastKey = L'C';
+			return m_strLastKey;
+		case 57:
+			m_strLastKey = "SPACE";
+			return m_strLastKey;
+		default:
+			return m_strLastKey;
 	}
 
-	return lastPressedKey;
+	return m_strLastKey;
 }
+
