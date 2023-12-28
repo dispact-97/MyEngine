@@ -57,6 +57,12 @@
     <Filter Include="소스 파일\Input">
       <UniqueIdentifier>{aaacbd76-5e73-45e2-921a-38e416deef16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\FbxLoader">
+      <UniqueIdentifier>{18c0c8b6-f073-48fc-92b9-0de096800354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\FbxLoader\Model">
+      <UniqueIdentifier>{c80c4279-2a66-4ecd-a7ca-34e9adccec0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -104,6 +110,12 @@
     <ClInclude Include="InputClass.h">
       <Filter>소스 파일\Input</Filter>
     </ClInclude>
+    <ClInclude Include="FbxLoader.h">
+      <Filter>소스 파일\FbxLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>소스 파일\FbxLoader\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11Render.cpp">
@@ -138,6 +150,12 @@
     </ClCompile>
     <ClCompile Include="InputClass.cpp">
       <Filter>소스 파일\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="FbxLoader.cpp">
+      <Filter>소스 파일\FbxLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>소스 파일\FbxLoader\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
