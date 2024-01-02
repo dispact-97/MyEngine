@@ -570,7 +570,7 @@ HRESULT DX11Render::CreateFont()
 {
 	HRESULT hr = S_OK;
 
-	m_pFont = new Font(m_p3DDevice.Get(), m_p3DDeviceContext.Get());
+	m_pFont = Font::GetInstance(m_p3DDevice.Get(), m_p3DDeviceContext.Get());
 	if (!m_pFont)
 	{
 		return hr = S_FALSE;

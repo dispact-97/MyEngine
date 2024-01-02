@@ -3,6 +3,8 @@
 #include "Cube.h"
 #include "TextureLoader.h"
 
+#include "Font.h"
+
 Cube::Cube(
 	Microsoft::WRL::ComPtr<ID3D11Device>& pDevice, 
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>& pDeviceContext, 
@@ -34,6 +36,8 @@ void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX&
 
 void Cube::Render()
 {
+	Font::GetInstance()->RenderString("Stupid", 500.0f,500.0f);
+
 	// 입력 배치 객체 셋팅
 	m_3DDeviceContext->IASetInputLayout(m_InputLayout.Get());
 	m_3DDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

@@ -8,7 +8,21 @@
 class Font
 {
 public:
-	Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	// 싱글턴 인스턴스에 접근하는 정적 함수
+	static Font* GetInstance(ID3D11Device* pDevice = nullptr,ID3D11DeviceContext* pDeviceContext = nullptr)
+	{
+		// 인스턴스가 없을 경우에만 생성
+		if (!m_pInstance)
+		{
+			m_pInstance = new Font(pDevice, pDeviceContext);
+		}
+		return m_pInstance;
+	}
+
+	// 기존 생성자와 소멸자 삭제
+	Font(const Font&) = delete;
+	Font& operator=(const Font&) = delete;
+	//~Font() = delete;
 	~Font();
 
 	void RenderText(const wchar_t* text, float x, float y);
@@ -17,11 +31,15 @@ public:
 	void RenderString(const int intValue, float x, float y);
 
 private:
-	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch = nullptr;
-	std::unique_ptr<DirectX::SpriteFont> m_SpriteFont = nullptr;
+	Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	//~Font();
+	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch;
+	std::unique_ptr<DirectX::SpriteFont> m_SpriteFont;
 
 	ID3D11ShaderResourceView* texture = nullptr;
 
 	HRESULT result;
+
+	static Font* m_pInstance;
 };
 
