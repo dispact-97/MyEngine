@@ -4,6 +4,10 @@
 
 #include <SimpleMath.h>
 #include <DDSTextureLoader.h>
+#include "RenderableBase.h"
+
+// ½Ì±ÛÅæ ¸â¹ö º¯¼ö ÃÊ±âÈ­
+Font* Font::m_pInstance = nullptr;
 
 // ½Ì±ÛÅæ ¸â¹ö º¯¼ö ÃÊ±âÈ­
 Font* Font::m_pInstance = nullptr;
@@ -54,5 +58,19 @@ void Font::RenderString(const int intValue, float x, float y)
 	std::wstring wstr(str.begin(), str.end());
 	m_SpriteBatch->Begin();
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), wstr.c_str(), DirectX::XMFLOAT2(x, y), color);
+	m_SpriteBatch->End();
+}
+
+void Font::ObjectDebugText(RenderableBase* object)
+{
+	DirectX::FXMVECTOR color = DirectX::Colors::LightPink;
+	std::string x = std::to_string(object->objectXLocation);
+	std::string y = std::to_string(object->objectYLocation);
+	std::string z = std::to_string(object->objectZLocation);
+
+	m_SpriteBatch->Begin();
+	m_SpriteFont->DrawString(m_SpriteBatch.get(),x.c_str(), DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation),color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(),y.c_str(), DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation+18),color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(),z.c_str(), DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation+36),color);
 	m_SpriteBatch->End();
 }

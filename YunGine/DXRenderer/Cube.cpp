@@ -1,4 +1,4 @@
-#include <fstream>
+ï»¿#include <fstream>
 #include <vector>
 #include "Cube.h"
 #include "TextureLoader.h"
@@ -6,8 +6,8 @@
 #include "Font.h"
 
 Cube::Cube(
-	Microsoft::WRL::ComPtr<ID3D11Device>& pDevice, 
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext>& pDeviceContext, 
+	Microsoft::WRL::ComPtr<ID3D11Device>& pDevice,
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext>& pDeviceContext,
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState>& pRasterState)
 {
 	pDevice.CopyTo(m_3DDevice.GetAddressOf());
@@ -36,34 +36,27 @@ void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX&
 
 void Cube::Render()
 {
+<<<<<<< Updated upstream
 	Font::GetInstance()->RenderString("Stupid", 500.0f,500.0f);
 
 	// ÀÔ·Â ¹èÄ¡ °´Ã¼ ¼ÂÆÃ
+=======
+	//m_3DDeviceContext->OMSetDepthStencilState(nullptr, 0);
+	Font::GetInstance()->ObjectDebugText(this);
+
+>>>>>>> Stashed changes
 	m_3DDeviceContext->IASetInputLayout(m_InputLayout.Get());
 	m_3DDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// ÀÎµ¦½º¹öÆÛ¿Í ¹öÅØ½º ¹öÆÛ ¼ÂÆÃ
+	// ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½Ø½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	UINT stride = sizeof(TexVertex);
 	UINT offset = 0;
 
 	m_3DDeviceContext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
-	// &m_cubVertexBuffer¿Í AddressOfÂ÷ÀÌ°¡ ¹¹ÀÏ±î-> &´Â ÃÊ±âÈ­¸¦ ÇØ¹ö¸°´Ù.
+
 	m_3DDeviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-	///[TW] ÅØ½ºÃÄ ÀÓ½Ã È®ÀÎ¿ë È¸Àü.
-	// DirectX::XMMATRIX tw_local = DirectX::XMMatrixRotationX(remainderf(tw_rot1, 360.0f));
-	// m_World = DirectX::XMMatrixMultiply(tw_local, m_World);
-	// 
-	// tw_local = DirectX::XMMatrixRotationY(remainderf(tw_rot2, 360.0f));
-	// m_World = DirectX::XMMatrixMultiply(tw_local, m_World);
-
-
-	///WVP TMµîÀ» ¼ÂÆÃ
-	//DirectX::XMMATRIX worldViewProj = m_World * m_View * m_Proj;
-
-	//·£´õ½ºÅ×ÀÌÆ®
 	m_3DDeviceContext->RSSetState(m_RasterState.Get());
-
 
 	m_3DDeviceContext->DrawIndexed(indexcount, 0, 0);
 }
@@ -72,62 +65,100 @@ void Cube::ObjectSetting()
 {
 	HRESULT hr = S_OK;
 
+	// ì‚´ì§ ë¹„ì¼œë‚˜ê²Œ
+	//TexVertex boxVertex[] =
+	//{
+
+	//	{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 0	// ï¿½Ü¼ï¿½ï¿½ï¿½ ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½ ï¿½È´ï¿½-> ï¿½ï¿½î°¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½
+	//	{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 1	// ï¿½×·ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½î°¥ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½Æ´Ï¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	//	{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 2	// ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½.
+	//	{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 3
+
+	//				
+	//	{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 4
+	//	{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 5
+	//	{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 6
+	//	{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 7
+
+	//	// top
+	//	{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 8
+	//	{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 9
+	//	{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 10
+	//	{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 11
+
+	//	// bottom
+	//	{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 12
+	//	{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 13
+	//	{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 14
+	//	{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 15
+
+	//	// left
+	//	{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 16
+	//	{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 17
+	//	{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 18
+	//	{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 19
+
+	//	// right
+	//	{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 20
+	//	{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 21
+	//	{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 22
+	//	{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 23
+	//};
+
+	// ì •ì¤‘ì•™
 	TexVertex boxVertex[] =
 	{
-		// Æ÷Áö¼Ç, ÅØ½ºÄÚµå
-		// ¾Õ¸é
-		{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 0	// ´Ü¼øÈ÷ ±Ü¾î¿À¸é ¾È´ï-> µé¾î°¡´Â °ªÀº ¿©ÀüÈ÷ ÄÃ·¯°ª
-		{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 1	// ±×·¸´Ù¸é µé¾î°¥¶§ ÀÌ ¼ýÀÚ°¡ ÄÃ·¯°¡ ¾Æ´Ï¶ó´Â °ÍÀ»
-		{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 2	// ¾Ë·ÁÁà¾ß ÇÑ´Ù.
-		{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 3
+		// ì•žë©´
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)}, // 0
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},  // 1
+		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},   // 2
+		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},  // 3
 
-		// µÞ¸é							
-		{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 4
-		{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 5
-		{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 6
-		{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 7
+		// ë’·ë©´
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},  // 4
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},   // 5
+		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},    // 6
+		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},   // 7
 
 		// top
-		{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 8
-		{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 9
-		{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 10
-		{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 11
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},  // 8
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},   // 9
+		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},    // 10
+		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},   // 11
 
 		// bottom
-		{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 12
-		{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 13
-		{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 14
-		{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 15
+		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},  // 12
+		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},   // 13
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},  // 14
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)}, // 15
 
 		// left
-		{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 16
-		{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 17
-		{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 18
-		{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 19
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},   // 16
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},    // 17
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},   // 18
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},  // 19
 
 		// right
-		{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 20
-		{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 21
-		{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 22
-		{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 23
+		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},  // 20
+		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},   // 21
+		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},    // 22
+		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},   // 23
 	};
 
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.ByteWidth = 24 * sizeof(TexVertex);
 	bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// ¹öÆÛ°¡ ÆÄÀÌÇÁ¶óÀÎ¿¡ ¹ÙÀÎµùµÇ´Â ¹æ¹ý½Äº°
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// ï¿½ï¿½ï¿½Û°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½Îµï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½Äºï¿½
 	bufferDesc.CPUAccessFlags = 0;
 	bufferDesc.MiscFlags = 0;
 	bufferDesc.StructureByteStride = 0;
 
-	// ¹öÆÛ ÃÊ±âÈ­´Â ¿£Áø¿¡¼­->D3Dµð¹ÙÀÌ½º¸¦ ¿£Áø¿¡¼­ µé°íÀÖ±â ¶§¹®¿¡ Á¤º¸¸¸ ³Ñ°ÜÁØ´Ù.
-	// ÅØ½ºÃ³ ÇÒ¶§ »ç¿ëÇÑ´Ù.
 	D3D11_SUBRESOURCE_DATA InitData;
-	InitData.pSysMem = boxVertex;	// const ¹«È¿-> ÃÊ±âÈ­ µ¥ÀÌÅÍ¿¡ ´ëÇÑ Æ÷ÀÎÅÍÀÌ´Ù.
-	InitData.SysMemPitch = 0;		// ÅØ½ºÃ³ ÇÑ ÁÙ ½ÃÀÛ ºÎºÐ¿¡¼­ ´ÙÀ½ÁÙ ±îÁöÀÇ °Å¸®(byte)
-	InitData.SysMemSlicePitch = 0;	// ÇÑ ±íÀÌ ¼öÁØÀÇ ½ÃÀÛºÎÅÍ ´ÙÀ½ ¼öÁØ±îÁöÀÇ °Å¸®(byte)
+	InitData.pSysMem = boxVertex;	// const ï¿½ï¿½È¿-> ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½.
+	InitData.SysMemPitch = 0;		// ï¿½Ø½ï¿½Ã³ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ÎºÐ¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½(byte)
+	InitData.SysMemSlicePitch = 0;	// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ûºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½(byte)
 
-	//D3D¿£Áø¿¡¼­ µð¹ÙÀÌ½º¸¦ ¿©±â¼­ ³Ñ°ÜÁà¾ßÇÏ³ª?
+
 	hr = m_3DDevice->CreateBuffer
 	(
 		&bufferDesc,
@@ -168,7 +199,7 @@ void Cube::ObjectSetting()
 	D3D11_BUFFER_DESC indexBufferDesc;
 	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	indexBufferDesc.ByteWidth = boxindexcount * sizeof(UINT);
-	//indexBufferDesc.ByteWidth = sizeof(indices); // Â÷ÀÌ°¡ ¾ø´Ù
+	//indexBufferDesc.ByteWidth = sizeof(indices); // ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
@@ -201,9 +232,9 @@ void Cube::BuildVertexLayout()
 		{"TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-// 	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
-// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
-// 	));
+	// 	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
+	// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
+	// 	));
 
 	if (FAILED(hr))
 	{
@@ -215,10 +246,8 @@ void Cube::GetTextureFile()
 {
 	HRESULT hr = S_OK;
 
-	Microsoft::WRL::ComPtr<ID3D11Resource> texResource = nullptr;	// Release¸¦ Á¦´ë·Î ÇÒ ¼ö ÀÖÀ»±î?
+	Microsoft::WRL::ComPtr<ID3D11Resource> texResource = nullptr;	// Releaseï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 	DirectX::CreateDDSTextureFromFile(m_3DDevice.Get(), L"../Textures/WoodCrate01.dds", &texResource, &m_DiffuseMapSRV);
-	// effect ¶óÀÌºê·¯¸® ¸¦ Ãß°¡ÇØ¾ßÇÔ
-	// ¶óÀÌºê·¯¸® Ãß°¡ÈÄ ³»¿ëÀ» ÀÐ¾î ¿ÀÁö ¸øÇØ¼­ ¿£ÁøÀÖ´Â °÷¿¡ TextureLoader¸¦ °¡Á®¿ÔÀ½
 
 	if (FAILED(hr))
 	{

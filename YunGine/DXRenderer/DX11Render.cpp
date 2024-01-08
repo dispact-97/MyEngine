@@ -705,6 +705,7 @@ LRESULT CALLBACK DX11Render::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 
 void DX11Render::RenderAllText()
 {
+	//Font::GetInstance()->RenderString("Stupid",1000.0f,1000.0f);
 	m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
 	m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
 

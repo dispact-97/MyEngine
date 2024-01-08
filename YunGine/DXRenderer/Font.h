@@ -5,6 +5,8 @@
 #include "SpriteBatch.h"
 #include "SpriteFont.h"
 
+class RenderableBase;
+
 class Font
 {
 public:
@@ -22,17 +24,24 @@ public:
 	// 기존 생성자와 소멸자 삭제
 	Font(const Font&) = delete;
 	Font& operator=(const Font&) = delete;
+<<<<<<< Updated upstream
 	//~Font() = delete;
+=======
+>>>>>>> Stashed changes
 	~Font();
 
 	void RenderText(const wchar_t* text, float x, float y);
 	void RenderString(const std::string& str, float x, float y);
 	void RenderString(const float floatValue, float x, float y);
 	void RenderString(const int intValue, float x, float y);
+	void ObjectDebugText(RenderableBase* object);
 
 private:
 	Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+<<<<<<< Updated upstream
 	//~Font();
+=======
+>>>>>>> Stashed changes
 	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch;
 	std::unique_ptr<DirectX::SpriteFont> m_SpriteFont;
 
