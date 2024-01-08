@@ -121,43 +121,77 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	Now.mousePosX = static_mouseXpos;
 	Now.mousePosY = static_mouseYpos;
 
+	if (m_pInput->GetKeyDown(DIK_TAB) && switchObejct == true)
+	{
+		switchObejct = false;
+	}
+	else if (m_pInput->GetKeyDown(DIK_TAB) && switchObejct == false)
+	{
+		switchObejct = true;
+	}
+
 	m_pInput->Frame();	// Update마다 어떤 키를 눌렀는지 받아옴
 
 	// 카메라
-
-	if(m_pInput->GetKey(DIK_W))
+	if (m_pInput->GetKey(DIK_W) && switchObejct == true)
 	{
 		m_pCamera->Walk(10.0f * deltaTime);
 	}
+	else if (m_pInput->GetKey(DIK_W) && switchObejct == false)
+	{
+		m_pCube->Move(0.0f, 0.0f, 10.0f * deltaTime);
+	}
 
-	if (m_pInput->GetKey(DIK_S))
+	if (m_pInput->GetKey(DIK_S) && switchObejct == true)
 	{
 		m_pCamera->Walk(-10.0f * deltaTime);
 	}
+	else if (m_pInput->GetKey(DIK_S) && switchObejct == false)
+	{
+		m_pCube->Move(0.0f, 0.0f, -10.0f * deltaTime);
+	}
 
-	if (m_pInput->GetKey(DIK_A))
+	if (m_pInput->GetKey(DIK_A) && switchObejct == true)
 	{
 		m_pCamera->Strafe(-10.0f * deltaTime);
 	}
+	else if (m_pInput->GetKey(DIK_A) && switchObejct == false)
+	{
+		m_pCube->Move(-10.0f * deltaTime, 0.0f, 0.0f);
 
-	if (m_pInput->GetKey(DIK_D))
+	}
+
+	if (m_pInput->GetKey(DIK_D) && switchObejct == true)
 	{
 		m_pCamera->Strafe(10.0f * deltaTime);
 	}
+	else if (m_pInput->GetKey(DIK_D) && switchObejct == false)
+	{
+		m_pCube->Move(10.0f * deltaTime, 0.0f, 0.0f);
 
-	if (m_pInput->GetKey(DIK_C))
+	}
+
+	if (m_pInput->GetKey(DIK_C) && switchObejct == true)
 	{
 		m_pCamera->WorldUpDown(-10.0f * deltaTime);
 	}
+	else if (m_pInput->GetKey(DIK_C) && switchObejct == false)
+	{
+		m_pCube->Move(0.0f, -10.0f * deltaTime, 0.0f);
 
-	if (m_pInput->GetKey(DIK_SPACE))
+	}
+
+	if (m_pInput->GetKey(DIK_SPACE) && switchObejct == true)
 	{
 		m_pCamera->WorldUpDown(10.0f * deltaTime);
 	}
+	else if (m_pInput->GetKey(DIK_SPACE) && switchObejct == false)
+	{
+		m_pCube->Move(0.0f, 10.0f * deltaTime, 0.0f);
+
+	}
 
 	// 카메라 회전
-
-
 	if (m_pInput->GetMouseDown(0))
 	{
 		m_pCamera->RotateX(0.3f * deltaTime * (Now.mousePosY - Curr.mousePosY));
@@ -235,7 +269,8 @@ void DX11Render::BeginRender(float red, float green, float blue, float alpha)
 
 void DX11Render::DrawObject()
 {
-	DirectX::XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
+	//DirectX::XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
+	DirectX::XMMATRIX worldMatrix = m_pCube->m_world;
 	DirectX::XMMATRIX viewMatrix = XMLoadFloat4x4(&m_ViewMatrix);
 	DirectX::XMMATRIX projMatrix = XMLoadFloat4x4(&m_ProjectionMatrix);
 
@@ -705,25 +740,32 @@ LRESULT CALLBACK DX11Render::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 
 void DX11Render::RenderAllText()
 {
-	//Font::GetInstance()->RenderString("Stupid",1000.0f,1000.0f);
-	m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
-	m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
+	if (switchObejct == true)
+	{
+		Font::GetInstance()->RenderString("Camera", 1500.0f, 0.0f);
+	}
+	else
+	{
+		Font::GetInstance()->RenderString("Cube", 1500.0f, 0.0f);
+	}
+	//m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
+	//m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
 
-	m_pFont->RenderString("FPS : ", 0.0f, 18.0f);
-	m_pFont->RenderString(m_fps, 48.0f, 18.0f);
+	//m_pFont->RenderString("FPS : ", 0.0f, 18.0f);
+	//m_pFont->RenderString(m_fps, 48.0f, 18.0f);
 
-	m_pFont->RenderString("MousePosX : ", 0.0f, 36.0f);
-	m_pFont->RenderString(static_mouseXpos, 120.0f, 36.0f);
+	//m_pFont->RenderString("MousePosX : ", 0.0f, 36.0f);
+	//m_pFont->RenderString(static_mouseXpos, 120.0f, 36.0f);
 
-	m_pFont->RenderString("MousePosY : ", 0.0f, 54.0f);
-	m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
+	//m_pFont->RenderString("MousePosY : ", 0.0f, 54.0f);
+	//m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
 
-	m_pFont->RenderString("Last Pressed Key : ",0.0f,72.0f);
-	m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
+	//m_pFont->RenderString("Last Pressed Key : ",0.0f,72.0f);
+	//m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
 
-	//테스팅
-	m_pFont->RenderString("Input X : ",0.0f,90.0f);
-	m_pFont->RenderString(m_pInput->GetMouseX(),80.0f,90.0f);
-	m_pFont->RenderString("Input Y : ",0.0f,108.0f);
-	m_pFont->RenderString(m_pInput->GetMouseY(), 80.0f, 108.0f);
+	////테스팅
+	//m_pFont->RenderString("Input X : ",0.0f,90.0f);
+	//m_pFont->RenderString(m_pInput->GetMouseX(),80.0f,90.0f);
+	//m_pFont->RenderString("Input Y : ",0.0f,108.0f);
+	//m_pFont->RenderString(m_pInput->GetMouseY(), 80.0f, 108.0f);
 }

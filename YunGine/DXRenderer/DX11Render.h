@@ -60,6 +60,8 @@ public:
 	virtual long Initialize() override;	// 그래픽 엔진 초기화
 
 	virtual void Update(float deltaTime,float fps, float mspf) override;
+	// 움직임 테스트
+
 	virtual void Render() override;
 	virtual void BeginRender(float red, float green, float blue, float alpha) override;
 	virtual void DrawObject() override;
@@ -166,6 +168,9 @@ private:
 	mousePosition Curr;
 	mousePosition Now;
 	bool ignoreMouseMove = false;
+	// TAB으로 카메라랑 오브젝트 바꾸기
+	bool switchObejct = true;
+
 
 	// 버퍼
 	ID3D11Buffer* VertexBuffer;

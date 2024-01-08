@@ -33,6 +33,14 @@ public:
 		DirectX::XMMATRIX _projection;		// 투영 변환 행렬 (원근 / 직교)
 	};
 
+	struct ConstantBufferData
+	{
+		DirectX::XMMATRIX _worldViewProjection;
+	};
+	// 상수버퍼 테스트
+	Microsoft::WRL::ComPtr<ID3D11Buffer> _constantBuffer;
+
+
 	MatrixBufferType* dataptr;
 
 	Microsoft::WRL::ComPtr<ID3D11Device>				m_3DDevice;
@@ -55,8 +63,8 @@ public:
 	ID3D10Blob* compiledShader = 0;
 	ID3D10Blob* compilationMsgs = 0;
 
-	// 디버깅용 테스트 변수
 	float objectXLocation = 0.0f;
 	float objectYLocation = 0.0f;
 	float objectZLocation = 0.0f;
 };
+

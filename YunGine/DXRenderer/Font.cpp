@@ -9,8 +9,6 @@
 // 싱글톤 멤버 변수 초기화
 Font* Font::m_pInstance = nullptr;
 
-// 싱글톤 멤버 변수 초기화
-Font* Font::m_pInstance = nullptr;
 
 Font::Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: result()

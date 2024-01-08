@@ -27,30 +27,45 @@ void Cube::Update()
 
 }
 
+void Cube::Move(float x, float y, float z)
+{
+	objectPosition.x += x;
+	objectPosition.y += y;
+	objectPosition.z += z;
+}
+
+void Cube::LocationTo2D()
+{
+	objectXLocation = objectPosition.x;
+	objectYLocation = objectPosition.y;
+	objectZLocation = objectPosition.z;
+}
+
 void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
-	m_world = world;
+	DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(objectPosition.x,objectPosition.y,objectPosition.z);
+	m_world = traslation * world;
 	m_view = view;
 	m_proj = projection;
+
+	LocationTo2D();
 }
 
 void Cube::Render()
 {
-<<<<<<< Updated upstream
-	Font::GetInstance()->RenderString("Stupid", 500.0f,500.0f);
-
-	// �Է� ��ġ ��ü ����
-=======
-	//m_3DDeviceContext->OMSetDepthStencilState(nullptr, 0);
-	Font::GetInstance()->ObjectDebugText(this);
-
->>>>>>> Stashed changes
 	m_3DDeviceContext->IASetInputLayout(m_InputLayout.Get());
 	m_3DDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// �ε������ۿ� ���ؽ� ���� ����
 	UINT stride = sizeof(TexVertex);
 	UINT offset = 0;
+
+	ConstantBufferData cbData;
+	cbData._worldViewProjection = m_world * m_view * m_proj;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	m_3DDeviceContext->Map(_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	memcpy(mappedResource.pData,&cbData,sizeof(ConstantBuffer));
+	m_3DDeviceContext->Unmap(_constantBuffer.Get(), 0);
+	m_3DDeviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
 
 	m_3DDeviceContext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
 
@@ -59,51 +74,16 @@ void Cube::Render()
 	m_3DDeviceContext->RSSetState(m_RasterState.Get());
 
 	m_3DDeviceContext->DrawIndexed(indexcount, 0, 0);
+
+	Font::GetInstance()->ObjectDebugText(this);	
+	// 마지막에 넣으면 큐브도 나오고 텍스트도 나온다.
 }
 
 void Cube::ObjectSetting()
 {
+	// 위치 초기화
+	objectPosition = { 0.0f,0.0f,0.0f };
 	HRESULT hr = S_OK;
-
-	// 살짝 비켜나게
-	//TexVertex boxVertex[] =
-	//{
-
-	//	{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 0	// �ܼ��� �ܾ���� �ȴ�-> ���� ���� ������ �÷���
-	//	{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 1	// �׷��ٸ� ���� �� ���ڰ� �÷��� �ƴ϶�� ����
-	//	{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 2	// �˷���� �Ѵ�.
-	//	{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 3
-
-	//				
-	//	{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 4
-	//	{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 5
-	//	{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 6
-	//	{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 7
-
-	//	// top
-	//	{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 8
-	//	{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 9
-	//	{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 10
-	//	{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 11
-
-	//	// bottom
-	//	{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 12
-	//	{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 13
-	//	{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 14
-	//	{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 15
-
-	//	// left
-	//	{DirectX::XMFLOAT3(1.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 16
-	//	{DirectX::XMFLOAT3(1.f,2.f,-3.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 17
-	//	{DirectX::XMFLOAT3(1.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 18
-	//	{DirectX::XMFLOAT3(1.f,1.f,-4.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 19
-
-	//	// right
-	//	{DirectX::XMFLOAT3(2.f,1.f,-4.f),DirectX::XMFLOAT2(0.0f, 1.0f)},	// 20
-	//	{DirectX::XMFLOAT3(2.f,2.f,-4.f),DirectX::XMFLOAT2(0.0f, 0.0f)},	// 21
-	//	{DirectX::XMFLOAT3(2.f,2.f,-3.f),DirectX::XMFLOAT2(1.0f, 0.0f)},	// 22
-	//	{DirectX::XMFLOAT3(2.f,1.f,-3.f),DirectX::XMFLOAT2(1.0f, 1.0f)},	// 23
-	//};
 
 	// 정중앙
 	TexVertex boxVertex[] =
@@ -215,6 +195,17 @@ void Cube::ObjectSetting()
 		&indexInit,
 		&m_IndexBuffer
 	);
+
+	// 테스트
+	D3D11_BUFFER_DESC _constantBufferDesc;
+	_constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	_constantBufferDesc.ByteWidth = sizeof(ConstantBufferData);
+	_constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	_constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	_constantBufferDesc.MiscFlags = 0;
+	_constantBufferDesc.StructureByteStride = 0;
+
+	hr = m_3DDevice->CreateBuffer(&_constantBufferDesc, nullptr, _constantBuffer.GetAddressOf());
 
 	GetTextureFile();
 	BuildVertexLayout();
