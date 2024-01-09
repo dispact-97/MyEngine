@@ -37,6 +37,7 @@ public:
 	{
 		DirectX::XMMATRIX _worldViewProjection;
 	};
+
 	// 상수버퍼 테스트
 	Microsoft::WRL::ComPtr<ID3D11Buffer> _constantBuffer;
 

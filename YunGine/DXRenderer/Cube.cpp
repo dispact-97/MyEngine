@@ -218,8 +218,6 @@ void Cube::BuildVertexLayout()
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		//{"NORMAL",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		//{"TANGENT",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
@@ -227,6 +225,10 @@ void Cube::BuildVertexLayout()
 	// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
 	// 	));
 
+	//hr = m_3DDevice->CreateInputLayout(vertexDesc,ARRAYSIZE(vertexDesc),)
+	
+	//hr = m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), &m_InputLayout);
+	
 	if (FAILED(hr))
 	{
 		hr = S_FALSE;
