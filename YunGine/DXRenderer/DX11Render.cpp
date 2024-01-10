@@ -16,6 +16,7 @@
 #include "Font.h"
 #include "MouseClass.h"
 #include "InputClass.h"
+#include "IngameImage.h"
 
 static int static_mouseXpos = 0;
 static int static_mouseYpos = 0;
@@ -568,6 +569,12 @@ HRESULT DX11Render::CreateObject()
 		return hr = S_FALSE;
 	}
 
+	hr = CreateUI();
+	if (FAILED(hr))
+	{
+		return hr = S_FALSE;
+	}
+
 	hr = CreateFont();
 	if (FAILED(hr))
 	{
@@ -692,6 +699,20 @@ HRESULT DX11Render::CreateAxis()
 	return S_OK;
 }
 
+HRESULT DX11Render::CreateUI()
+{
+	HRESULT hr = S_OK;
+
+	//m_IngameImage = IngameImage::GetInstance(m_p3DDevice.Get(), m_p3DDeviceContext.Get());
+	m_IngameImage = new IngameImage(m_p3DDevice.Get(), m_p3DDeviceContext.Get());
+	if (!m_IngameImage)
+	{
+		return hr = S_FALSE;
+	}
+
+	return hr;
+}
+
 LRESULT CALLBACK DX11Render::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	// HDC         hdc;
@@ -748,6 +769,11 @@ void DX11Render::RenderAllText()
 	{
 		Font::GetInstance()->RenderString("Cube", 1500.0f, 0.0f);
 	}
+
+	//IngameImage::GetInstance()->RenderImage(L);
+	m_IngameImage->RenderImage("..\\Resources\\abcd.jpg",DirectX::XMFLOAT2(500.0f,500.0f));
+
+
 	//m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
 	//m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
 

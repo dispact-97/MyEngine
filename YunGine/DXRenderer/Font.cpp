@@ -9,7 +9,6 @@
 // ½Ì±ÛÅæ ¸â¹ö º¯¼ö ÃÊ±âÈ­
 Font* Font::m_pInstance = nullptr;
 
-
 Font::Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: result()
 {

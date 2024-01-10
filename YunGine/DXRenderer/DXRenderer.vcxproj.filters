@@ -63,6 +63,9 @@
     <Filter Include="소스 파일\FbxLoader\Model">
       <UniqueIdentifier>{c80c4279-2a66-4ecd-a7ca-34e9adccec0c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Image">
+      <UniqueIdentifier>{5c8960e8-210d-42be-9cf7-957a25c2f85c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -116,6 +119,9 @@
     <ClInclude Include="Model.h">
       <Filter>소스 파일\FbxLoader\Model</Filter>
     </ClInclude>
+    <ClInclude Include="IngameImage.h">
+      <Filter>소스 파일\Image</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11Render.cpp">
@@ -156,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>소스 파일\FbxLoader\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="IngameImage.cpp">
+      <Filter>소스 파일\Image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

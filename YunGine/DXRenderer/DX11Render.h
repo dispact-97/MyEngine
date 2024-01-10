@@ -42,6 +42,7 @@ class Font;
 class MouseClass;
 class RenderableBase;
 class InputClass;
+class IngameImage;
 
 class DX11Render : public IDX11Render
 {
@@ -95,6 +96,7 @@ private:
 	HRESULT CreateCube();
 	HRESULT CreateGrid();
 	HRESULT CreateAxis();
+	HRESULT CreateUI();
 
 	// 扩档快 积己
 	HWND hWnd;
@@ -157,6 +159,7 @@ private:
 	Camera* m_pCamera;
 	Font* m_pFont;
 	InputClass* m_pInput;
+	IngameImage* m_IngameImage;
 
 	// 付快胶
 	MouseClass* m_pMouse;
