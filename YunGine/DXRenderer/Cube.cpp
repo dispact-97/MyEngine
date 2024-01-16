@@ -43,10 +43,14 @@ void Cube::LocationTo2D()
 
 void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
-	DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(objectPosition.x,objectPosition.y,objectPosition.z);
+	DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
 	m_world = traslation * world;
 	m_view = view;
 	m_proj = projection;
+
+	m_cbdata._world = m_world;
+	m_cbdata._view = m_view;
+	m_cbdata._projection = m_proj;
 
 	LocationTo2D();
 }
@@ -59,23 +63,26 @@ void Cube::Render()
 	UINT stride = sizeof(TexVertex);
 	UINT offset = 0;
 
-	ConstantBufferData cbData;
-	cbData._worldViewProjection = m_world * m_view * m_proj;
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	m_3DDeviceContext->Map(_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	memcpy(mappedResource.pData,&cbData,sizeof(ConstantBuffer));
-	m_3DDeviceContext->Unmap(_constantBuffer.Get(), 0);
-	m_3DDeviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
+	//D3D11_MAPPED_SUBRESOURCE mappedResource;
+	//m_3DDeviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//memcpy(mappedResource.pData, &m_cbdata, sizeof(MatrixBufferType));
+	//m_3DDeviceContext->Unmap(m_constantBuffer.Get(), 0);
 
-	m_3DDeviceContext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
+	m_3DDeviceContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &m_cbdata, 0, 0);
 
-	m_3DDeviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	m_3DDeviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+
+	if (m_VertexBuffer && m_IndexBuffer)
+	{
+		m_3DDeviceContext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
+		m_3DDeviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	}
 
 	m_3DDeviceContext->RSSetState(m_RasterState.Get());
 
 	m_3DDeviceContext->DrawIndexed(indexcount, 0, 0);
 
-	Font::GetInstance()->ObjectDebugText(this);	
+	Font::GetInstance()->ObjectDebugText(this);
 	// 마지막에 넣으면 큐브도 나오고 텍스트도 나온다.
 }
 
@@ -199,14 +206,15 @@ void Cube::ObjectSetting()
 	// 테스트
 	D3D11_BUFFER_DESC _constantBufferDesc;
 	_constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	_constantBufferDesc.ByteWidth = sizeof(ConstantBufferData);
+	_constantBufferDesc.ByteWidth = sizeof(MatrixBufferType);
 	_constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	_constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	_constantBufferDesc.MiscFlags = 0;
 	_constantBufferDesc.StructureByteStride = 0;
 
-	hr = m_3DDevice->CreateBuffer(&_constantBufferDesc, nullptr, _constantBuffer.GetAddressOf());
+	hr = m_3DDevice->CreateBuffer(&_constantBufferDesc, nullptr, m_constantBuffer.GetAddressOf());
 
+	//SetWorldTM();
 	GetTextureFile();
 	BuildVertexLayout();
 }
@@ -221,14 +229,14 @@ void Cube::BuildVertexLayout()
 		{"TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	// 	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
-	// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
-	// 	));
+	//hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
+	//	passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
+	//));
 
-	//hr = m_3DDevice->CreateInputLayout(vertexDesc,ARRAYSIZE(vertexDesc),)
-	
-	//hr = m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), &m_InputLayout);
-	
+//hr = m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), )
+
+//hr = m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), &m_InputLayout);
+
 	if (FAILED(hr))
 	{
 		hr = S_FALSE;

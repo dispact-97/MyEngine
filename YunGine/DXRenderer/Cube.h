@@ -29,7 +29,13 @@ private:
 	/// 텍스처를 위한 멤버변수
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>	m_DiffuseMapSRV;
 
+	// 상수 버퍼를 담기위한 변수
+	Microsoft::WRL::ComPtr<ID3D11Buffer> m_constantBuffer;
+	MatrixBufferType m_cbdata;
+
 	// 디버깅용 테스트 변수
 	DirectX::XMFLOAT3 objectPosition;
+
+	DirectX::XMMATRIX _worldTM;
 };
 

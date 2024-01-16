@@ -159,7 +159,6 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	else if (m_pInput->GetKey(DIK_A) && switchObejct == false)
 	{
 		m_pCube->Move(-10.0f * deltaTime, 0.0f, 0.0f);
-
 	}
 
 	if (m_pInput->GetKey(DIK_D) && switchObejct == true)
@@ -169,7 +168,6 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	else if (m_pInput->GetKey(DIK_D) && switchObejct == false)
 	{
 		m_pCube->Move(10.0f * deltaTime, 0.0f, 0.0f);
-
 	}
 
 	if (m_pInput->GetKey(DIK_C) && switchObejct == true)
@@ -179,7 +177,6 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	else if (m_pInput->GetKey(DIK_C) && switchObejct == false)
 	{
 		m_pCube->Move(0.0f, -10.0f * deltaTime, 0.0f);
-
 	}
 
 	if (m_pInput->GetKey(DIK_SPACE) && switchObejct == true)
@@ -189,7 +186,6 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	else if (m_pInput->GetKey(DIK_SPACE) && switchObejct == false)
 	{
 		m_pCube->Move(0.0f, 10.0f * deltaTime, 0.0f);
-
 	}
 
 	// 카메라 회전
@@ -232,6 +228,7 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 		iter->ObjectUpdate(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
 	}
 
+
 	Curr.mousePosX = Now.mousePosX;
 	Curr.mousePosY = Now.mousePosY;
 }
@@ -270,8 +267,8 @@ void DX11Render::BeginRender(float red, float green, float blue, float alpha)
 
 void DX11Render::DrawObject()
 {
-	//DirectX::XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
-	DirectX::XMMATRIX worldMatrix = m_pCube->m_world;
+	//DirectX::XMMATRIX worldMatrix = m_pCube->m_world;
+	DirectX::XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
 	DirectX::XMMATRIX viewMatrix = XMLoadFloat4x4(&m_ViewMatrix);
 	DirectX::XMMATRIX projMatrix = XMLoadFloat4x4(&m_ProjectionMatrix);
 
@@ -645,11 +642,12 @@ HRESULT DX11Render::CreateCamera()
 
 	// 카메라를 만들고
 	// 세팅을 해준다.
+	//	시야각 및 프로스텀 크기?
 	m_pCamera->SetLens(0.25f * 3.1415926535f, 1280.0f / 720.0f, 1.0f, 1000.0f);
 
 	// LH(Left Hand)방향으로
 	DirectX::XMMATRIX p = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), 1280.0f / 720.0f, 1.0f, 1000.0f);
-	DirectX::XMStoreFloat4x4(&m_ProjectionMatrix, p);
+	DirectX::XMStoreFloat4x4(&m_ProjectionMatrix, DirectX::XMMatrixTranspose(p));
 
 	// 맨처음에 보는 카메라의 포지션, 쳐다보는 방향,UP벡터 정하기
 	m_pCamera->LookAt(DirectX::XMFLOAT3(8.0f, 8.0f, -8.0f), DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0, 1.0f, 0));
@@ -771,7 +769,7 @@ void DX11Render::RenderAllText()
 	}
 
 	//IngameImage::GetInstance()->RenderImage(L);
-	m_IngameImage->RenderImage("..\\Resources\\abcd.jpg",DirectX::XMFLOAT2(500.0f,500.0f));
+	//m_IngameImage->RenderImage("..\\Resources\\abcd.jpg", DirectX::XMFLOAT2(500.0f, 500.0f));
 
 
 	//m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
