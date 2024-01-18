@@ -140,7 +140,6 @@ void Grid::ObjectSetting()
 	D3D11_BUFFER_DESC indexBufferDesc;
 	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	indexBufferDesc.ByteWidth = Gridindexcount * sizeof(UINT);	// 차이가 없다
-	//indexBufferDesc.ByteWidth = sizeof(indices); 
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
@@ -157,9 +156,102 @@ void Grid::ObjectSetting()
 		&m_IndexBuffer
 	);
 
-	BuildVertexLayout();
+	CreateShader();
+	//BuildVertexLayout();
 }
 
+HRESULT Grid::CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut)
+{
+	HRESULT hr = S_OK;
+
+	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )
+	shaderFlags |= D3DCOMPILE_DEBUG;
+#endif
+
+	ID3DBlob* errorBlob = nullptr;
+	hr = D3DCompileFromFile(filename, nullptr, nullptr, entryPoint, shaderModel,
+		shaderFlags, 0, blobOut, &errorBlob);
+
+	if (FAILED(hr))
+	{
+		if (errorBlob)
+		{
+			// 에러 출력 혹은 기록
+			OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+			errorBlob->Release();
+		}
+		return hr;
+	}
+
+	if (errorBlob)
+	{
+		errorBlob->Release();
+	}
+
+	return hr;
+}
+
+void Grid::CreateShader()
+{
+	HRESULT hr = S_OK;
+	ID3D10Blob* vertexShaderBuffer = nullptr;
+	hr = CompileShaderFromFile(L"VertexShader.hlsl", "main", "vs_5_0", &vertexShaderBuffer);
+	if (FAILED(hr))
+	{
+		return;
+	}
+
+	hr = m_3DDevice->CreateVertexShader(
+		vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(),
+		nullptr,
+		&_vertexShader);
+
+	if (FAILED(hr))
+	{
+		if (vertexShaderBuffer)
+		{
+			vertexShaderBuffer->Release();
+		}
+		return;
+	}
+
+	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	hr = m_3DDevice->CreateInputLayout(
+		vertexDesc,
+		ARRAYSIZE(vertexDesc),
+		vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(),
+		&m_InputLayout);
+
+	if (FAILED(hr))
+	{
+		// 오류 처리 및 버퍼 해제
+		if (vertexShaderBuffer)
+		{
+			vertexShaderBuffer->Release();
+		}
+
+		// 정점 쉐이더 해제
+		//if (*_vertexShader)
+		//{
+		//	(*_vertexShader)->Release();
+		//	*vertexShader = nullptr;
+		//}
+
+		if (vertexShaderBuffer)
+		{
+			vertexShaderBuffer->Release();
+		}
+	}
+
+}
 void Grid::BuildVertexLayout()
 {
 	HRESULT hr = S_OK;
@@ -170,9 +262,7 @@ void Grid::BuildVertexLayout()
 		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-// 	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
-// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
-// 	));
+	hr = m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), nullptr, NULL, &m_InputLayout);
 
 	if (FAILED(hr))
 	{
