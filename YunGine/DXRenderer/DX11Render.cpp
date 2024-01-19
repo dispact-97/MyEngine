@@ -659,7 +659,7 @@ HRESULT DX11Render::CreateCube()
 {
 	HRESULT hr = S_OK;
 
-	m_pCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
+	m_pCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
 	if (!m_pCube)
 	{
 		return hr = S_FALSE;

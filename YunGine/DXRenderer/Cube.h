@@ -21,6 +21,8 @@ public:
 private:
 	virtual void ObjectSetting() override;
 
+	HRESULT CreateShader();
+	HRESULT CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut);
 	void BuildVertexLayout();
 	void GetTextureFile();
 

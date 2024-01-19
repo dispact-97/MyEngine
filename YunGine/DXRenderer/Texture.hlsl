@@ -18,7 +18,7 @@ struct VertexInputType
 struct PixelInputType
 {
 	float4 position : SV_POSITION;
-	float tex : TEXCOORD0;
+	float2 tex : TEXCOORD0;
 };
 
 // Vertex Shader
@@ -29,29 +29,11 @@ PixelInputType TextureVertexShader(VertexInputType input)
 	
 	input.position.w = 1.0f;
 	
-	output.position - mul(input.position, worldMatrix);
-	output.position - mul(input.position, viewMatrix);
-	output.position - mul(input.position, projectionMatrix);
+	output.position = mul(input.position, worldMatrix);
+	output.position = mul(input.position, viewMatrix);
+	output.position = mul(input.position, projectionMatrix);
 	
 	output.tex = input.tex;
 	
 	return output;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Filename: texture.ps
-////////////////////////////////////////////////////////////////////////////////
-
-texture2D shaderTexture;
-SamplerState SampleType;
-
-// Pixel Shader
-float4 TexturePixelShaer(PixelInputType input) : SV_TARGET
-{
-	float4 textureColor;
-	    // Sample the pixel color from the texture using the sampler at this texture coordinate location.
-	textureColor = shaderTexture.Sample(SampleType, input.tex);
-
-	
-	return textureColor;
 }

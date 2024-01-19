@@ -63,12 +63,26 @@ void Cube::Render()
 	UINT stride = sizeof(TexVertex);
 	UINT offset = 0;
 
-	//D3D11_MAPPED_SUBRESOURCE mappedResource;
-	//m_3DDeviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	//memcpy(mappedResource.pData, &m_cbdata, sizeof(MatrixBufferType));
-	//m_3DDeviceContext->Unmap(m_constantBuffer.Get(), 0);
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	MatrixBufferType* dataPtr;
 
-	m_3DDeviceContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &m_cbdata, 0, 0);
+
+	m_world = DirectX::XMMatrixTranspose(m_world);
+	m_view = DirectX::XMMatrixTranspose(m_view);
+	m_proj = DirectX::XMMatrixTranspose(m_proj);
+
+	m_3DDeviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//memcpy(mappedResource.pData, &m_cbdata, sizeof(MatrixBufferType));
+
+	dataPtr = (MatrixBufferType*)mappedResource.pData;
+
+	dataPtr->_world = m_world;
+	dataPtr->_view = m_view;
+	dataPtr->_projection = m_proj;
+
+	m_3DDeviceContext->Unmap(m_constantBuffer.Get(), 0);
+
+	//m_3DDeviceContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &m_cbdata, 0, 0);
 
 	m_3DDeviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 
@@ -215,8 +229,85 @@ void Cube::ObjectSetting()
 	hr = m_3DDevice->CreateBuffer(&_constantBufferDesc, nullptr, m_constantBuffer.GetAddressOf());
 
 	//SetWorldTM();
+	CreateShader();
 	GetTextureFile();
-	BuildVertexLayout();
+	//BuildVertexLayout();
+}
+
+HRESULT Cube::CreateShader()
+{
+	HRESULT hr = S_OK;
+	ID3DBlob* vertexShaderBuffer = nullptr;
+	hr = CompileShaderFromFile(L"..\\Shaders\\VertexShader.hlsl", "main", "vs_5_0", &vertexShaderBuffer);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	hr = m_3DDevice->CreateVertexShader(
+		vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(),
+		nullptr,
+		&_vertexShader);
+
+	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	hr = m_3DDevice->CreateInputLayout(
+		vertexDesc,
+		ARRAYSIZE(vertexDesc),
+		vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(),
+		&m_InputLayout);
+
+	if (FAILED(hr))
+	{
+		// 오류 처리 및 버퍼 해제
+		if (vertexShaderBuffer)
+		{
+			vertexShaderBuffer->Release();
+		}
+
+		if (vertexShaderBuffer)
+		{
+			vertexShaderBuffer->Release();
+		}
+	}
+}
+
+HRESULT Cube::CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut)
+{
+	HRESULT hr = S_OK;
+
+	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )
+	shaderFlags |= D3DCOMPILE_DEBUG;
+#endif
+
+	ID3DBlob* errorBlob = nullptr;
+	hr = D3DCompileFromFile(filename, nullptr, nullptr, entryPoint, shaderModel,
+		shaderFlags, 0, blobOut, &errorBlob);
+
+	if (FAILED(hr))
+	{
+		if (errorBlob)
+		{
+			// 에러 출력 혹은 기록
+			OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+			errorBlob->Release();
+		}
+		return hr;
+	}
+
+	if (errorBlob)
+	{
+		errorBlob->Release();
+	}
+
+	return hr;
 }
 
 void Cube::BuildVertexLayout()
@@ -228,14 +319,6 @@ void Cube::BuildVertexLayout()
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
-
-	//hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
-	//	passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()
-	//));
-
-//hr = m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), )
-
-//hr = m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), &m_InputLayout);
 
 	if (FAILED(hr))
 	{

@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include <string>
 
 Grid::Grid(
 	Microsoft::WRL::ComPtr<ID3D11Device>& pDevice,
@@ -156,6 +157,7 @@ void Grid::ObjectSetting()
 		&m_IndexBuffer
 	);
 
+	// cso읽어와서 
 	CreateShader();
 	//BuildVertexLayout();
 }
@@ -196,7 +198,7 @@ void Grid::CreateShader()
 {
 	HRESULT hr = S_OK;
 	ID3D10Blob* vertexShaderBuffer = nullptr;
-	hr = CompileShaderFromFile(L"VertexShader.hlsl", "main", "vs_5_0", &vertexShaderBuffer);
+	hr = CompileShaderFromFile(L"..\\Shaders\\VertexShader.hlsl", "main", "vs_5_0", &vertexShaderBuffer);
 	if (FAILED(hr))
 	{
 		return;
@@ -287,6 +289,9 @@ void Grid::Render()
 	// 입력 배치 객체 셋팅
 	m_3DDeviceContext->IASetInputLayout(m_InputLayout.Get());
 	m_3DDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+
+	//m_3DDeviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 
 	// 인덱스버퍼와 버텍스 버퍼 셋팅
 	UINT stride = sizeof(ColorVertex);

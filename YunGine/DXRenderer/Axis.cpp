@@ -95,10 +95,7 @@ void Axis::ObjectSetting()
 		m_IndexBuffer.GetAddressOf()
 	);
 
-
-	//BuildVertexLayout();
 	CreateShader();
-
 }
 
 void Axis::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
@@ -127,7 +124,6 @@ void Axis::Render()
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
-	unsigned int bufferNumber;
 
 	m_world = DirectX::XMMatrixTranspose(m_world);
 	m_view = DirectX::XMMatrixTranspose(m_view);
@@ -145,9 +141,7 @@ void Axis::Render()
 
 	m_3DDeviceContext->Unmap(_matrixBuffer, 0);
 
-	bufferNumber = 0;
-
-	m_3DDeviceContext->VSSetConstantBuffers(bufferNumber, 1, &_matrixBuffer);
+	m_3DDeviceContext->VSSetConstantBuffers(0, 1, &_matrixBuffer);
 
 	//랜더스테이트
 	m_3DDeviceContext->RSSetState(m_RasterState.Get());
