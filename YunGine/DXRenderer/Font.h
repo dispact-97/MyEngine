@@ -24,7 +24,6 @@ public:
 	// 기존 생성자와 소멸자 삭제
 	Font(const Font&) = delete;
 	Font& operator=(const Font&) = delete;
-	//~Font() = delete;
 
 	~Font();
 
@@ -36,8 +35,6 @@ public:
 
 private:
 	Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-
-	//~Font();
 
 	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch;
 	std::unique_ptr<DirectX::SpriteFont> m_SpriteFont;

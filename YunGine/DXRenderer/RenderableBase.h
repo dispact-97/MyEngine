@@ -64,8 +64,13 @@ public:
 	ID3D10Blob* compiledShader = 0;
 	ID3D10Blob* compilationMsgs = 0;
 
+	// 디버깅용 포지션 변수
+	DirectX::XMFLOAT3 objectPosition;
+
 	float objectXLocation = 0.0f;
 	float objectYLocation = 0.0f;
 	float objectZLocation = 0.0f;
+
+
 };
 

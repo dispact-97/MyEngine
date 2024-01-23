@@ -772,20 +772,20 @@ void DX11Render::RenderAllText()
 	//m_IngameImage->RenderImage("..\\Resources\\abcd.jpg", DirectX::XMFLOAT2(500.0f, 500.0f));
 
 
-	//m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
-	//m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
+	m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
+	m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
 
-	//m_pFont->RenderString("FPS : ", 0.0f, 18.0f);
-	//m_pFont->RenderString(m_fps, 48.0f, 18.0f);
+	m_pFont->RenderString("FPS : ", 0.0f, 18.0f);
+	m_pFont->RenderString(m_fps, 48.0f, 18.0f);
 
-	//m_pFont->RenderString("MousePosX : ", 0.0f, 36.0f);
-	//m_pFont->RenderString(static_mouseXpos, 120.0f, 36.0f);
+	m_pFont->RenderString("MousePosX : ", 0.0f, 36.0f);
+	m_pFont->RenderString(static_mouseXpos, 120.0f, 36.0f);
 
-	//m_pFont->RenderString("MousePosY : ", 0.0f, 54.0f);
-	//m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
+	m_pFont->RenderString("MousePosY : ", 0.0f, 54.0f);
+	m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
 
-	//m_pFont->RenderString("Last Pressed Key : ",0.0f,72.0f);
-	//m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
+	m_pFont->RenderString("Last Pressed Key : ", 0.0f, 72.0f);
+	m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
 
 	////Å×½ºÆÃ
 	//m_pFont->RenderString("Input X : ",0.0f,90.0f);

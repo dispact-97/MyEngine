@@ -36,9 +36,36 @@ void Cube::Move(float x, float y, float z)
 
 void Cube::LocationTo2D()
 {
-	objectXLocation = objectPosition.x;
-	objectYLocation = objectPosition.y;
-	objectZLocation = objectPosition.z;
+	//DirectX::XMVECTOR worldPosition = DirectX::XMVectorSet(objectPosition.x, objectPosition.y, objectPosition.z, 1.0f);
+	////DirectX::XMVECTOR screenPosition = XMVector3Project(worldPosition, 0, 0, _windowWidth, _windowHeight, 0.0f, 1.0f, m_proj, m_view, m_world);
+	//DirectX::XMVECTOR screenPosition = XMVector3Project(worldPosition, 0, 0, 1600, 1080, 0.0f, 1.0f, m_proj, m_view, m_world);
+
+	//// screenPosition에서 스크린 좌표를 추출하여 저장
+	//// 텍스트를 그릴위치
+	//objectXLocation = DirectX::XMVectorGetX(screenPosition);
+	//objectYLocation = DirectX::XMVectorGetY(screenPosition);
+	//objectZLocation = DirectX::XMVectorGetZ(screenPosition);
+
+	// Cube의 월드 행렬을 사용하여 화면 좌표로 변환
+	DirectX::XMFLOAT4 screenPosition;
+	DirectX::XMVECTOR worldPosition = DirectX::XMLoadFloat3(&objectPosition);
+	DirectX::XMVECTOR projectedPosition =
+		DirectX::XMVector3Project(
+			worldPosition,
+			0,								// 스크린 왼쪽 모서리 x
+			0,								// 스크린 왼쪽 모서리 y
+			1600,							// 스크린 영역 너비
+			1080,							// 스크린 영역 높이
+			0.0f,							// 깊이 버퍼 최소값
+			1.0f,							// 깊이 버퍼 최대값
+			m_proj, m_view, m_world);
+
+	DirectX::XMStoreFloat4(&screenPosition, projectedPosition);
+
+	// 변환된 좌표를 멤버 변수에 할당
+	objectXLocation = screenPosition.x;
+	objectYLocation = screenPosition.y;
+	objectZLocation = screenPosition.z;
 }
 
 void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
@@ -47,10 +74,6 @@ void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX&
 	m_world = traslation * world;
 	m_view = view;
 	m_proj = projection;
-
-	m_cbdata._world = m_world;
-	m_cbdata._view = m_view;
-	m_cbdata._projection = m_proj;
 
 	LocationTo2D();
 }
@@ -65,7 +88,6 @@ void Cube::Render()
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
-
 
 	m_world = DirectX::XMMatrixTranspose(m_world);
 	m_view = DirectX::XMMatrixTranspose(m_view);
@@ -103,7 +125,7 @@ void Cube::Render()
 void Cube::ObjectSetting()
 {
 	// 위치 초기화
-	objectPosition = { 0.0f,0.0f,0.0f };
+	objectPosition = { 2.0f,0.0f,2.0f };
 	HRESULT hr = S_OK;
 
 	// 정중앙
@@ -200,7 +222,6 @@ void Cube::ObjectSetting()
 	D3D11_BUFFER_DESC indexBufferDesc;
 	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	indexBufferDesc.ByteWidth = boxindexcount * sizeof(UINT);
-	//indexBufferDesc.ByteWidth = sizeof(indices); // ���̰� ����
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
@@ -228,10 +249,9 @@ void Cube::ObjectSetting()
 
 	hr = m_3DDevice->CreateBuffer(&_constantBufferDesc, nullptr, m_constantBuffer.GetAddressOf());
 
-	//SetWorldTM();
 	CreateShader();
 	GetTextureFile();
-	//BuildVertexLayout();
+
 }
 
 HRESULT Cube::CreateShader()

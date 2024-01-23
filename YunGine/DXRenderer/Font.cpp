@@ -61,13 +61,20 @@ void Font::RenderString(const int intValue, float x, float y)
 void Font::ObjectDebugText(RenderableBase* object)
 {
 	DirectX::FXMVECTOR color = DirectX::Colors::LightPink;
-	std::string x = std::to_string(object->objectXLocation);
-	std::string y = std::to_string(object->objectYLocation);
-	std::string z = std::to_string(object->objectZLocation);
+	//std::string x = std::to_string(object->objectXLocation);
+	//std::string y = std::to_string(object->objectYLocation);
+	//std::string z = std::to_string(object->objectZLocation);
+
+	std::string x = std::to_string(object->objectPosition.x);
+	std::string y = std::to_string(object->objectPosition.y);
+	std::string z = std::to_string(object->objectPosition.z);
 
 	m_SpriteBatch->Begin();
-	m_SpriteFont->DrawString(m_SpriteBatch.get(),x.c_str(), DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation),color);
-	m_SpriteFont->DrawString(m_SpriteBatch.get(),y.c_str(), DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation+18),color);
-	m_SpriteFont->DrawString(m_SpriteBatch.get(),z.c_str(), DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation+36),color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Xpos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), x.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Ypos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation + 18), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), y.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 18), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Zpos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation + 36), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), z.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 36), color);
 	m_SpriteBatch->End();
 }
