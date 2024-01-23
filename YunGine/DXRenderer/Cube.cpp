@@ -54,8 +54,8 @@ void Cube::LocationTo2D()
 			worldPosition,
 			0,								// 스크린 왼쪽 모서리 x
 			0,								// 스크린 왼쪽 모서리 y
-			1600,							// 스크린 영역 너비
-			1080,							// 스크린 영역 높이
+			1600,							// 스크린 영역 너비	_windowWidth
+			1080,							// 스크린 영역 높이	_windowHeight
 			0.0f,							// 깊이 버퍼 최소값
 			1.0f,							// 깊이 버퍼 최대값
 			m_proj, m_view, m_world);

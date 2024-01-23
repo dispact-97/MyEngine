@@ -787,6 +787,7 @@ void DX11Render::RenderAllText()
 	m_pFont->RenderString("Last Pressed Key : ", 0.0f, 72.0f);
 	m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
 
+
 	////Å×½ºÆÃ
 	//m_pFont->RenderString("Input X : ",0.0f,90.0f);
 	//m_pFont->RenderString(m_pInput->GetMouseX(),80.0f,90.0f);
