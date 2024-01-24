@@ -36,36 +36,31 @@ void Cube::Move(float x, float y, float z)
 
 void Cube::LocationTo2D()
 {
-	//DirectX::XMVECTOR worldPosition = DirectX::XMVectorSet(objectPosition.x, objectPosition.y, objectPosition.z, 1.0f);
-	////DirectX::XMVECTOR screenPosition = XMVector3Project(worldPosition, 0, 0, _windowWidth, _windowHeight, 0.0f, 1.0f, m_proj, m_view, m_world);
-	//DirectX::XMVECTOR screenPosition = XMVector3Project(worldPosition, 0, 0, 1600, 1080, 0.0f, 1.0f, m_proj, m_view, m_world);
+	DirectX::XMVECTOR worldPosition = DirectX::XMVectorSet(objectPosition.x, objectPosition.y, objectPosition.z, 1.0f);
 
-	//// screenPosition에서 스크린 좌표를 추출하여 저장
-	//// 텍스트를 그릴위치
-	//objectXLocation = DirectX::XMVectorGetX(screenPosition);
-	//objectYLocation = DirectX::XMVectorGetY(screenPosition);
-	//objectZLocation = DirectX::XMVectorGetZ(screenPosition);
+	//DirectX::XMMatrixScaling(0.5f,0.5f,0.5f);
 
-	// Cube의 월드 행렬을 사용하여 화면 좌표로 변환
-	DirectX::XMFLOAT4 screenPosition;
-	DirectX::XMVECTOR worldPosition = DirectX::XMLoadFloat3(&objectPosition);
-	DirectX::XMVECTOR projectedPosition =
-		DirectX::XMVector3Project(
-			worldPosition,
-			0,								// 스크린 왼쪽 모서리 x
-			0,								// 스크린 왼쪽 모서리 y
-			1600,							// 스크린 영역 너비	_windowWidth
-			1080,							// 스크린 영역 높이	_windowHeight
-			0.0f,							// 깊이 버퍼 최소값
-			1.0f,							// 깊이 버퍼 최대값
-			m_proj, m_view, m_world);
+	DirectX::XMVECTOR screenPosition = XMVector3Project(
+		worldPosition,
+		0,							// 스크린 왼쪽 모서리 x
+		0,							// 스크린 왼쪽 모서리 y
+		1600,						// 스크린 영역 너비	_windowWidth
+		1040,						// 스크린 영역 높이	_windowHeight
+		0.0f,						// 깊이 버퍼 최소값
+		1.0f,						// 깊이 버퍼 최대값
+		m_proj, m_view, DirectX::XMMatrixIdentity());
+	// 카메라 정보만
+	
+	// 0.5짜리 스케일행렬 곱셈
+	// 원근 투영>?
 
-	DirectX::XMStoreFloat4(&screenPosition, projectedPosition);
+	// screenPosition에서 스크린 좌표를 추출하여 저장
+	// 텍스트를 그릴위치
+	// 2D
+	objectXLocation = DirectX::XMVectorGetX(screenPosition);
+	objectYLocation = DirectX::XMVectorGetY(screenPosition);
+	//objectZLocation = DirectX::XMVectorGetZ(screenPosition);		// z좌표는 지금 그렇게 필요하지는 않다
 
-	// 변환된 좌표를 멤버 변수에 할당
-	objectXLocation = screenPosition.x;
-	objectYLocation = screenPosition.y;
-	objectZLocation = screenPosition.z;
 }
 
 void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
@@ -125,7 +120,8 @@ void Cube::Render()
 void Cube::ObjectSetting()
 {
 	// 위치 초기화
-	objectPosition = { 2.0f,0.0f,2.0f };
+	objectPosition = { 0.0f,0.0f,0.0f };
+
 	HRESULT hr = S_OK;
 
 	// 정중앙

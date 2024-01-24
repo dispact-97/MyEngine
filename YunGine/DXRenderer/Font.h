@@ -32,6 +32,7 @@ public:
 	void RenderString(const float floatValue, float x, float y);
 	void RenderString(const int intValue, float x, float y);
 	void ObjectDebugText(RenderableBase* object);
+	void ObjectDebugText(RenderableBase* object,float width,float height, const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection);
 
 private:
 	Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

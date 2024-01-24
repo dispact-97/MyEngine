@@ -172,8 +172,8 @@ private:
 	mousePosition Now;
 	bool ignoreMouseMove = false;
 	// TAB으로 카메라랑 오브젝트 바꾸기
-	bool switchObejct = true;
 
+	bool switchObejct = true;
 
 	// 버퍼
 	ID3D11Buffer* VertexBuffer;

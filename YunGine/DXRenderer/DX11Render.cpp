@@ -122,6 +122,8 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	Now.mousePosX = static_mouseXpos;
 	Now.mousePosY = static_mouseYpos;
 
+	m_pInput->Frame();	// Update마다 어떤 키를 눌렀는지 받아옴
+
 	if (m_pInput->GetKeyDown(DIK_TAB) && switchObejct == true)
 	{
 		switchObejct = false;
@@ -130,8 +132,6 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	{
 		switchObejct = true;
 	}
-
-	m_pInput->Frame();	// Update마다 어떤 키를 눌렀는지 받아옴
 
 	// 카메라
 	if (m_pInput->GetKey(DIK_W) && switchObejct == true)
@@ -643,14 +643,14 @@ HRESULT DX11Render::CreateCamera()
 	// 카메라를 만들고
 	// 세팅을 해준다.
 	//	시야각 및 프로스텀 크기?
-	m_pCamera->SetLens(0.25f * 3.1415926535f, 1280.0f / 720.0f, 1.0f, 1000.0f);
+	m_pCamera->SetLens(0.25f * 3.1415926535f, 1600.0f / 1080.0f, 1.0f, 1000.0f);
 
 	// LH(Left Hand)방향으로
 	DirectX::XMMATRIX p = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), 1280.0f / 720.0f, 1.0f, 1000.0f);
 	DirectX::XMStoreFloat4x4(&m_ProjectionMatrix, DirectX::XMMatrixTranspose(p));
 
 	// 맨처음에 보는 카메라의 포지션, 쳐다보는 방향,UP벡터 정하기
-	m_pCamera->LookAt(DirectX::XMFLOAT3(8.0f, 8.0f, -8.0f), DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0, 1.0f, 0));
+	m_pCamera->LookAt(DirectX::XMFLOAT3(0.0f, 8.0f, -8.0f), DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0, 1.0f, 0));
 
 	return S_OK;
 }
@@ -786,7 +786,6 @@ void DX11Render::RenderAllText()
 
 	m_pFont->RenderString("Last Pressed Key : ", 0.0f, 72.0f);
 	m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
-
 
 	////테스팅
 	//m_pFont->RenderString("Input X : ",0.0f,90.0f);

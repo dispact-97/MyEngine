@@ -114,8 +114,6 @@ bool InputClass::ReadMouse()
 	{
 		m_mouseX = m_mouseState.lX;
 		m_mouseY = m_mouseState.lY;
-
-
 	}
 
 	return true;

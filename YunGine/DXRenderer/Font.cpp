@@ -60,10 +60,39 @@ void Font::RenderString(const int intValue, float x, float y)
 
 void Font::ObjectDebugText(RenderableBase* object)
 {
-	DirectX::FXMVECTOR color = DirectX::Colors::LightPink;
+	DirectX::FXMVECTOR color = DirectX::Colors::Crimson;
 	//std::string x = std::to_string(object->objectXLocation);
 	//std::string y = std::to_string(object->objectYLocation);
 	//std::string z = std::to_string(object->objectZLocation);
+
+	std::string x = std::to_string(object->objectPosition.x);
+	std::string y = std::to_string(object->objectPosition.y);
+	std::string z = std::to_string(object->objectPosition.z);
+
+	m_SpriteBatch->Begin();
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Xpos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), x.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Ypos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation + 18), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), y.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 18), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Zpos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation + 36), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), z.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 36), color);
+	m_SpriteBatch->End();
+}
+
+void Font::ObjectDebugText(RenderableBase* object, float width, float height, const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
+{
+	DirectX::FXMVECTOR color = DirectX::Colors::Crimson;
+
+	DirectX::XMVECTOR worldPosition = DirectX::XMVectorSet(object->objectPosition.x, object->objectPosition.y, object->objectPosition.z, 1.0f);
+	DirectX::XMVECTOR screenPosition = XMVector3Project(
+		worldPosition,
+		0,							// 스크린 왼쪽 모서리 x
+		0,							// 스크린 왼쪽 모서리 y
+		1600,						// 스크린 영역 너비	_windowWidth
+		1080,						// 스크린 영역 높이	_windowHeight
+		0.0f,						// 깊이 버퍼 최소값
+		1.0f,						// 깊이 버퍼 최대값
+		projection, view, world);
 
 	std::string x = std::to_string(object->objectPosition.x);
 	std::string y = std::to_string(object->objectPosition.y);
