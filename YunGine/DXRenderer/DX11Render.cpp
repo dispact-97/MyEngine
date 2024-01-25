@@ -584,11 +584,11 @@ HRESULT DX11Render::CreateObject()
 		return hr;
 	}
 
-	hr = CreateAxis();
-	if (FAILED(hr))
-	{
-		return hr;
-	}
+	//hr = CreateAxis();
+	//if (FAILED(hr))
+	//{
+	//	return hr;
+	//}
 
 	//hr = CreateGrid();
 	//if (FAILED(hr))
@@ -596,11 +596,11 @@ HRESULT DX11Render::CreateObject()
 	//	return hr;
 	//}
 
-	//hr = CreateCube();
-	//if (FAILED(hr))
-	//{
-	//	return hr;
-	//}
+	hr = CreateCube();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
 	return hr;
 }
@@ -667,14 +667,14 @@ HRESULT DX11Render::CreateCube()
 	}
 	objectVector.push_back(m_pCube);
 
-	m_pSecCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
-	m_pSecCube->SetPosition(3.0f, 0.0f, 3.0f);
-	if (!m_pSecCube)
-	{
-		delete m_pSecCube;
-		return hr = S_FALSE;
-	}
-	objectVector.push_back(m_pSecCube);
+	//m_pSecCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
+	//m_pSecCube->SetPosition(3.0f, 0.0f, 3.0f);
+	//if (!m_pSecCube)
+	//{
+	//	delete m_pSecCube;
+	//	return hr = S_FALSE;
+	//}
+	//objectVector.push_back(m_pSecCube);
 
 
 	return S_OK;

@@ -2,38 +2,38 @@
 // Filename: texture.vs
 ////////////////////////////////////////////////////////////////////////////////
 
-cbuffer MatrixBuffer
-{
-	matrix worldMatrix;
-	matrix viewMatrix;
-	matrix projectionMatrix;
-}
+//cbuffer MatrixBuffer
+//{
+//	matrix worldMatrix;
+//	matrix viewMatrix;
+//	matrix projectionMatrix;
+//}
 
-struct VertexInputType
-{
-	float4 position : POSITIONT;
-	float2 tex : TEXCOORD0;
-};
+//struct VertexInputType
+//{
+//	float4 position : POSITIONT;
+//	float2 tex : TEXCOORD0;
+//};
 
-struct PixelInputType
-{
-	float4 position : SV_POSITION;
-	float2 tex : TEXCOORD0;
-};
+//struct PixelInputType
+//{
+//	float4 position : SV_POSITION;
+//	float2 tex : TEXCOORD0;
+//};
 
-// Vertex Shader
+//// Vertex Shader
 
-PixelInputType TextureVertexShader(VertexInputType input)
-{
-	PixelInputType output;
+//PixelInputType TextureVertexShader(VertexInputType input)
+//{
+//	PixelInputType output;
 	
-	input.position.w = 1.0f;
+//	input.position.w = 1.0f;
 	
-	output.position = mul(input.position, worldMatrix);
-	output.position = mul(output.position, viewMatrix);
-	output.position = mul(output.position, projectionMatrix);
+//	output.position = mul(input.position, worldMatrix);
+//	output.position = mul(output.position, viewMatrix);
+//	output.position = mul(output.position, projectionMatrix);
 	
-	output.tex = input.tex;
+//	output.tex = input.tex;
 	
-	return output;
-}
+//	return output;
+//}

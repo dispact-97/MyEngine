@@ -56,14 +56,12 @@ void Axis::ObjectSetting()
 	InitData.SysMemPitch = 0;		// 텍스처 한 줄 시작 부분에서 다음줄 까지의 거리(byte)
 	InitData.SysMemSlicePitch = 0;	// 한 깊이 수준의 시작부터 다음 수준까지의 거리(byte)
 
-	//D3D엔진에서 디바이스를 여기서 넘겨줘야하나?
 	hr = m_3DDevice->CreateBuffer
 	(
 		&bufferDesc,
 		&InitData,
-		m_VertexBuffer.GetAddressOf()
+		&m_VertexBuffer
 	);
-
 
 	UINT indices[] =
 	{
@@ -75,8 +73,10 @@ void Axis::ObjectSetting()
 	};
 
 	UINT axiscount = ARRAYSIZE(indices);
+	indexCount = ARRAYSIZE(indices);
 
 	D3D11_BUFFER_DESC indexBufferDesc;
+
 	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	indexBufferDesc.ByteWidth = axiscount * sizeof(UINT);
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -95,6 +95,17 @@ void Axis::ObjectSetting()
 		m_IndexBuffer.GetAddressOf()
 	);
 
+	// 테스트
+	D3D11_BUFFER_DESC _constantBufferDesc;
+	_constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	_constantBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+	_constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	_constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	_constantBufferDesc.MiscFlags = 0;
+	_constantBufferDesc.StructureByteStride = 0;
+
+	hr = m_3DDevice->CreateBuffer(&_constantBufferDesc, nullptr, m_constantBuffer.GetAddressOf());
+
 	CreateShader();
 }
 
@@ -108,8 +119,7 @@ void Axis::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX&
 
 void Axis::Render()
 {
-	m_3DDeviceContext->VSSetShader(_vertexShader, nullptr, 0);
-	m_3DDeviceContext->PSSetShader(_pixelShader, nullptr, 0);
+	HRESULT hr;
 
 	// 입력 배치 객체 셋팅
 	m_3DDeviceContext->IASetInputLayout(m_InputLayout.Get());
@@ -129,9 +139,7 @@ void Axis::Render()
 	m_view = DirectX::XMMatrixTranspose(m_view);
 	m_proj = DirectX::XMMatrixTranspose(m_proj);
 
-	HRESULT hr;
-
-	hr = m_3DDeviceContext->Map(_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	m_3DDeviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
@@ -139,15 +147,20 @@ void Axis::Render()
 	dataPtr->_view = m_view;
 	dataPtr->_projection = m_proj;
 
-	m_3DDeviceContext->Unmap(_matrixBuffer, 0);
+	m_3DDeviceContext->Unmap(m_constantBuffer.Get(), 0);
 
 	m_3DDeviceContext->VSSetConstantBuffers(0, 1, &_matrixBuffer);
+
+	if (m_VertexBuffer && m_IndexBuffer)
+	{
+		m_3DDeviceContext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
+		m_3DDeviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	}
 
 	//랜더스테이트
 	m_3DDeviceContext->RSSetState(m_RasterState.Get());
 
-
-	m_3DDeviceContext->DrawIndexed(6, 0, 0);
+	m_3DDeviceContext->DrawIndexed(indexCount, 0, 0);
 }
 
 HRESULT Axis::CreateShader()
@@ -167,36 +180,71 @@ HRESULT Axis::CreateShader()
 		nullptr,
 		&_vertexShader);
 
-
-	std::ifstream vsFile("../x64/Debug/VertexShader.cso", std::ios::binary);
-	std::ifstream psFile("../x64/Debug/PixelShader.cso", std::ios::binary);
-
-	std::vector<char> vsData = { std::istreambuf_iterator<char>(vsFile), std::istreambuf_iterator<char>() };
-	std::vector<char> psData = { std::istreambuf_iterator<char>(psFile), std::istreambuf_iterator<char>() };
-
-	m_3DDevice->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &_vertexShader);
-	m_3DDevice->CreatePixelShader(psData.data(), psData.size(), nullptr, &_pixelShader);
-
-	// 셰이더도 만들어두고 레이아웃도 만들어두고 이런거 저런거 갖다 쓸 수 있게하는게 좋겠지
-	// 이렇게 코드적으로 박아두면 안좋을 것 같다는 얘기를 하는 것 같은데?
-
 	// Create the vertex input layout.
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
-		//{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	D3D11_BUFFER_DESC matrixBufferDesc;
-	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
-	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	matrixBufferDesc.MiscFlags = 0;
-	matrixBufferDesc.StructureByteStride = 0;
+	hr = m_3DDevice->CreateInputLayout(
+		vertexDesc,
+		ARRAYSIZE(vertexDesc),
+		vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(),
+		&m_InputLayout);
 
-	hr = m_3DDevice->CreateBuffer(&matrixBufferDesc, NULL, &_matrixBuffer);
+	if (FAILED(hr))
+	{
+		// 오류 처리 및 버퍼 해제
+		if (vertexShaderBuffer)
+		{
+			vertexShaderBuffer->Release();
+		}
+	}
 
-	m_3DDevice->CreateInputLayout(vertexDesc, 2, vsData.data(), vsData.size(), &m_InputLayout);
+}
+
+HRESULT Axis::CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut)
+{
+	HRESULT hr = S_OK;
+
+	DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )
+	shaderFlags |= D3DCOMPILE_DEBUG;
+#endif
+
+	ID3DBlob* errorBlob = nullptr;
+
+	hr = D3DCompileFromFile(
+		filename,							 // 쉐이더 파일 경로
+		nullptr,                             // 매크로 정의 (일반적으로 nullptr 사용)
+		nullptr,                             // include 인터페이스 (일반적으로 nullptr 사용)
+		entryPoint,                          // 쉐이더 진입점 함수 이름
+		shaderModel,                         // 쉐이더 프로파일
+		shaderFlags,						 // 컴파일 옵션 (디버그 정보 포함)
+		0,                                   // 추가적인 플래그 (일반적으로 0 사용)
+		blobOut,							 // 컴파일된 결과를 저장할 ID3DBlob 포인터
+		&errorBlob                           // 컴파일 오류 정보를 저장할 ID3DBlob 포인터
+	);
+
+	// 지금은 cso파일을 따로 저장하고 있지는 않지만 blobOut부분을 따로 저장하는 부분을 만들어야 한다.
+
+	if (FAILED(hr))
+	{
+		if (errorBlob)
+		{
+			// 에러 출력 혹은 기록
+			OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+			errorBlob->Release();
+		}
+		return hr;
+	}
+
+	if (errorBlob)
+	{
+		errorBlob->Release();
+	}
+
+	return hr;
 }

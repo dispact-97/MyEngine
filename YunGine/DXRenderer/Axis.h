@@ -17,9 +17,13 @@ public:
 private:
 	virtual void ObjectSetting() override;
 
+	int indexCount = 0;
+
+	// 상수 버퍼를 담기위한 변수
+	Microsoft::WRL::ComPtr<ID3D11Buffer> m_constantBuffer;
+
 	HRESULT CreateShader();
 	HRESULT CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut);
-
 	//void CreateShader();
 
 };

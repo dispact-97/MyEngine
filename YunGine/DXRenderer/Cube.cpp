@@ -58,6 +58,7 @@ void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX&
 	DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(objectPosition.x, objectPosition.y, objectPosition.z);
 	m_world = traslation * world;
 	m_view = view;
+
 	m_proj = projection;
 
 	LocationTo2D();
@@ -103,7 +104,7 @@ void Cube::Render()
 
 	m_3DDeviceContext->DrawIndexed(indexcount, 0, 0);
 
-	Font::GetInstance()->ObjectDebugText(this);
+	//Font::GetInstance()->ObjectDebugText(this);
 	// 마지막에 넣으면 큐브도 나오고 텍스트도 나온다.
 }
 
@@ -122,47 +123,47 @@ void Cube::ObjectSetting()
 	HRESULT hr = S_OK;
 
 	// 정중앙
-	TexVertex boxVertex[] =
+	Vertex boxVertex[] =
 	{
 		// 앞면
-		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)}, // 0
-		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},  // 1
-		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},   // 2
-		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},  // 3
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)}, // 0
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)},  // 1
+		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},   // 2
+		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)},  // 3
 
 		// 뒷면
-		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},  // 4
-		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},   // 5
-		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},    // 6
-		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},   // 7
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)},  // 4
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)},   // 5
+		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)},    // 6
+		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},   // 7
 
 		// top
-		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},  // 8
-		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},   // 9
-		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},    // 10
-		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},   // 11
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)},  // 8
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)},   // 9
+		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},    // 10
+		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)},   // 11
 
 		// bottom
-		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},  // 12
-		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},   // 13
-		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},  // 14
-		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)}, // 15
+		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},  // 12
+		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)},   // 13
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)},  // 14
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)}, // 15
 
 		// left
-		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},   // 16
-		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},    // 17
-		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},   // 18
-		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},  // 19
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},   // 16
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)},    // 17
+		{DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)},   // 18
+		{DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)},  // 19
 
 		// right
-		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 1.0f)},  // 20
-		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT2(0.0f, 0.0f)},   // 21
-		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 0.0f)},    // 22
-		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT2(1.0f, 1.0f)},   // 23
+		{DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)},  // 20
+		{DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f), DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f)},   // 21
+		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},    // 22
+		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)}   // 23
 	};
 
 	D3D11_BUFFER_DESC bufferDesc;
-	bufferDesc.ByteWidth = 24 * sizeof(TexVertex);
+	bufferDesc.ByteWidth = 24 * sizeof(Vertex);
 	bufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;	// ���۰� ���������ο� ���ε��Ǵ� ����ĺ�
 	bufferDesc.CPUAccessFlags = 0;
@@ -181,6 +182,10 @@ void Cube::ObjectSetting()
 		&InitData,
 		&m_VertexBuffer
 	);
+	if (FAILED(hr))
+	{
+		return;
+	}
 
 	UINT indices[] =
 	{
@@ -230,6 +235,10 @@ void Cube::ObjectSetting()
 		&indexInit,
 		&m_IndexBuffer
 	);
+	if (FAILED(hr))
+	{
+		return;
+	}
 
 	// 테스트
 	D3D11_BUFFER_DESC _constantBufferDesc;
@@ -241,6 +250,10 @@ void Cube::ObjectSetting()
 	_constantBufferDesc.StructureByteStride = 0;
 
 	hr = m_3DDevice->CreateBuffer(&_constantBufferDesc, nullptr, m_constantBuffer.GetAddressOf());
+	if (FAILED(hr))
+	{
+		return;
+	}
 
 	CreateShader();
 	GetTextureFile();
@@ -249,6 +262,9 @@ void Cube::ObjectSetting()
 HRESULT Cube::CreateShader()
 {
 	HRESULT hr = S_OK;
+
+	// VertexShader
+
 	ID3DBlob* vertexShaderBuffer = nullptr;
 	hr = CompileShaderFromFile(L"..\\Shaders\\VertexShader.hlsl", "main", "vs_5_0", &vertexShaderBuffer);
 	if (FAILED(hr))
@@ -261,6 +277,26 @@ HRESULT Cube::CreateShader()
 		vertexShaderBuffer->GetBufferSize(),
 		nullptr,
 		&_vertexShader);
+
+	//ID3D11ShaderReflection* shaderReflection = nullptr;
+	//D3DReflect(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) & shaderReflection);
+
+	//D3D11_SHADER_DESC shaderDesc;
+	//shaderReflection->GetDesc(&shaderDesc);
+
+	//for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
+	//{
+	//	D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
+	//	shaderReflection->GetInputParameterDesc(i, &paramDesc);
+
+	//	std::cout << "Semantic Name: " << paramDesc.SemanticName << std::endl;
+	//	std::cout << "Semantic Index: " << paramDesc.SemanticIndex << std::endl;
+	//	std::cout << "System Value Type: " << paramDesc.SystemValueType << std::endl;
+	//	std::cout << "Component Type: " << paramDesc.ComponentType << std::endl;
+	//	std::cout << "Mask: " << paramDesc.Mask << std::endl;
+	//	std::cout << "Read/Write Mask: " << paramDesc.ReadWriteMask << std::endl;
+	//	std::cout << "Stream: " << paramDesc.Stream << std::endl;
+	//}
 
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
@@ -283,6 +319,34 @@ HRESULT Cube::CreateShader()
 			vertexShaderBuffer->Release();
 		}
 	}
+
+	// PixelShader
+
+	ID3DBlob* pixelShaderBuffer = nullptr;
+	hr = CompileShaderFromFile(L"..\\Shaders\\PixelShader.hlsl", "main", "ps_5_0", &pixelShaderBuffer);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	hr = m_3DDevice->CreatePixelShader(
+		pixelShaderBuffer->GetBufferPointer(),
+		pixelShaderBuffer->GetBufferSize(),
+		nullptr,
+		&_pixelShader
+	);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	if (pixelShaderBuffer)
+	{
+		pixelShaderBuffer->Release();
+	}
+
+	return hr;
+
 }
 
 HRESULT Cube::CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut)
