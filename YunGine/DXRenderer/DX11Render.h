@@ -86,7 +86,6 @@ private:
 	HRESULT CreateSwapChain(HWND hWnd);
 	HRESULT CreateBackBuffer();
 	HRESULT CreateRaster();
-	// HRESULT CreateInputLayout();
 
 	// 오브젝트들 생성하기
 	HRESULT CreateObject();
@@ -118,11 +117,6 @@ private:
 	void RenderAllText();
 
 private:
-	//int mVideoCardMemory;	// 블로그에서는 있지만 어디다가 쓰는걸까?
-	//char mVideoCardDescription[128];
-	// 
-	// sm_SwapChain에서 Preset할 때 필요했던 변수 하지만 굳이?
-	//bool bVsyncEnabled = false;
 	Microsoft::WRL::ComPtr<ID3D11Device> m_p3DDevice;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_p3DDeviceContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_pRenderTargetView;
@@ -156,6 +150,7 @@ private:
 	Axis* m_pAxis;
 	Grid* m_pGrid;
 	Cube* m_pCube;
+	Cube* m_pSecCube;
 	Camera* m_pCamera;
 	Font* m_pFont;
 	InputClass* m_pInput;

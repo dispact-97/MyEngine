@@ -150,30 +150,23 @@ void Axis::Render()
 	m_3DDeviceContext->DrawIndexed(6, 0, 0);
 }
 
-void Axis::BuildVertexLayout()
-{
-	HRESULT hr = S_OK;
-
-	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
-	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
-	};
-
-	/// 그냥 숫자 적혀있는게 불편해서 ARRAYSIZE로 바꿈
-	/// 아무 의미 없긴 함
-// 	hr = (m_3DDevice->CreateInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature,
-// 		passDesc.IAInputSignatureSize, m_InputLayout.GetAddressOf()));
-
-	if (FAILED(hr))
-	{
-		hr = S_FALSE;
-	}
-}
-
-void Axis::CreateShader()
+HRESULT Axis::CreateShader()
 {
 	HRESULT hr;
+	ID3D10Blob* vertexShaderBuffer = nullptr;
+
+	hr = CompileShaderFromFile(L"..\\Shaders\\VertexShader.hlsl", "main", "vs_5_0", &vertexShaderBuffer);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	hr = m_3DDevice->CreateVertexShader(
+		vertexShaderBuffer->GetBufferPointer(),
+		vertexShaderBuffer->GetBufferSize(),
+		nullptr,
+		&_vertexShader);
+
 
 	std::ifstream vsFile("../x64/Debug/VertexShader.cso", std::ios::binary);
 	std::ifstream psFile("../x64/Debug/PixelShader.cso", std::ios::binary);
@@ -184,7 +177,6 @@ void Axis::CreateShader()
 	m_3DDevice->CreateVertexShader(vsData.data(), vsData.size(), nullptr, &_vertexShader);
 	m_3DDevice->CreatePixelShader(psData.data(), psData.size(), nullptr, &_pixelShader);
 
-
 	// 셰이더도 만들어두고 레이아웃도 만들어두고 이런거 저런거 갖다 쓸 수 있게하는게 좋겠지
 	// 이렇게 코드적으로 박아두면 안좋을 것 같다는 얘기를 하는 것 같은데?
 
@@ -192,8 +184,8 @@ void Axis::CreateShader()
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		//{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
-		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		//{"COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	D3D11_BUFFER_DESC matrixBufferDesc;

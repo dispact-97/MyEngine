@@ -268,9 +268,9 @@ void DX11Render::BeginRender(float red, float green, float blue, float alpha)
 void DX11Render::DrawObject()
 {
 	//DirectX::XMMATRIX worldMatrix = m_pCube->m_world;
-	DirectX::XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
-	DirectX::XMMATRIX viewMatrix = XMLoadFloat4x4(&m_ViewMatrix);
-	DirectX::XMMATRIX projMatrix = XMLoadFloat4x4(&m_ProjectionMatrix);
+	//DirectX::XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
+	//DirectX::XMMATRIX viewMatrix = XMLoadFloat4x4(&m_ViewMatrix);
+	//DirectX::XMMATRIX projMatrix = XMLoadFloat4x4(&m_ProjectionMatrix);
 
 	m_p3DDeviceContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
 
@@ -590,17 +590,17 @@ HRESULT DX11Render::CreateObject()
 		return hr;
 	}
 
-	hr = CreateGrid();
-	if (FAILED(hr))
-	{
-		return hr;
-	}
+	//hr = CreateGrid();
+	//if (FAILED(hr))
+	//{
+	//	return hr;
+	//}
 
-	hr = CreateCube();
-	if (FAILED(hr))
-	{
-		return hr;
-	}
+	//hr = CreateCube();
+	//if (FAILED(hr))
+	//{
+	//	return hr;
+	//}
 
 	return hr;
 }
@@ -662,9 +662,20 @@ HRESULT DX11Render::CreateCube()
 	m_pCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
 	if (!m_pCube)
 	{
+		delete m_pCube;
 		return hr = S_FALSE;
 	}
 	objectVector.push_back(m_pCube);
+
+	m_pSecCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
+	m_pSecCube->SetPosition(3.0f, 0.0f, 3.0f);
+	if (!m_pSecCube)
+	{
+		delete m_pSecCube;
+		return hr = S_FALSE;
+	}
+	objectVector.push_back(m_pSecCube);
+
 
 	return S_OK;
 }
@@ -771,7 +782,6 @@ void DX11Render::RenderAllText()
 	//IngameImage::GetInstance()->RenderImage(L);
 	//m_IngameImage->RenderImage("..\\Resources\\abcd.jpg", DirectX::XMFLOAT2(500.0f, 500.0f));
 
-
 	m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
 	m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
 
@@ -787,9 +797,4 @@ void DX11Render::RenderAllText()
 	m_pFont->RenderString("Last Pressed Key : ", 0.0f, 72.0f);
 	m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
 
-	////Å×½ºÆÃ
-	//m_pFont->RenderString("Input X : ",0.0f,90.0f);
-	//m_pFont->RenderString(m_pInput->GetMouseX(),80.0f,90.0f);
-	//m_pFont->RenderString("Input Y : ",0.0f,108.0f);
-	//m_pFont->RenderString(m_pInput->GetMouseY(), 80.0f, 108.0f);
 }

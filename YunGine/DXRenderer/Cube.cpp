@@ -38,8 +38,6 @@ void Cube::LocationTo2D()
 {
 	DirectX::XMVECTOR worldPosition = DirectX::XMVectorSet(objectPosition.x, objectPosition.y, objectPosition.z, 1.0f);
 
-	//DirectX::XMMatrixScaling(0.5f,0.5f,0.5f);
-
 	DirectX::XMVECTOR screenPosition = XMVector3Project(
 		worldPosition,
 		0,							// 스크린 왼쪽 모서리 x
@@ -49,18 +47,10 @@ void Cube::LocationTo2D()
 		0.0f,						// 깊이 버퍼 최소값
 		1.0f,						// 깊이 버퍼 최대값
 		m_proj, m_view, DirectX::XMMatrixIdentity());
-	// 카메라 정보만
-	
-	// 0.5짜리 스케일행렬 곱셈
-	// 원근 투영>?
 
-	// screenPosition에서 스크린 좌표를 추출하여 저장
-	// 텍스트를 그릴위치
-	// 2D
 	objectXLocation = DirectX::XMVectorGetX(screenPosition);
 	objectYLocation = DirectX::XMVectorGetY(screenPosition);
 	//objectZLocation = DirectX::XMVectorGetZ(screenPosition);		// z좌표는 지금 그렇게 필요하지는 않다
-
 }
 
 void Cube::ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
@@ -115,6 +105,13 @@ void Cube::Render()
 
 	Font::GetInstance()->ObjectDebugText(this);
 	// 마지막에 넣으면 큐브도 나오고 텍스트도 나온다.
+}
+
+void Cube::SetPosition(float x, float y, float z)
+{
+	objectPosition.x = x;
+	objectPosition.y = y;
+	objectPosition.z = z;
 }
 
 void Cube::ObjectSetting()
@@ -247,7 +244,6 @@ void Cube::ObjectSetting()
 
 	CreateShader();
 	GetTextureFile();
-
 }
 
 HRESULT Cube::CreateShader()
@@ -286,11 +282,6 @@ HRESULT Cube::CreateShader()
 		{
 			vertexShaderBuffer->Release();
 		}
-
-		if (vertexShaderBuffer)
-		{
-			vertexShaderBuffer->Release();
-		}
 	}
 }
 
@@ -304,8 +295,20 @@ HRESULT Cube::CompileShaderFromFile(const wchar_t* filename, const char* entryPo
 #endif
 
 	ID3DBlob* errorBlob = nullptr;
-	hr = D3DCompileFromFile(filename, nullptr, nullptr, entryPoint, shaderModel,
-		shaderFlags, 0, blobOut, &errorBlob);
+
+	hr = D3DCompileFromFile(
+		filename,							 // 쉐이더 파일 경로
+		nullptr,                             // 매크로 정의 (일반적으로 nullptr 사용)
+		nullptr,                             // include 인터페이스 (일반적으로 nullptr 사용)
+		entryPoint,                          // 쉐이더 진입점 함수 이름
+		shaderModel,                         // 쉐이더 프로파일
+		shaderFlags,						 // 컴파일 옵션 (디버그 정보 포함)
+		0,                                   // 추가적인 플래그 (일반적으로 0 사용)
+		blobOut,							 // 컴파일된 결과를 저장할 ID3DBlob 포인터
+		&errorBlob                           // 컴파일 오류 정보를 저장할 ID3DBlob 포인터
+	);
+
+	// 지금은 cso파일을 따로 저장하고 있지는 않지만 blobOut부분을 따로 저장하는 부분을 만들어야 한다.
 
 	if (FAILED(hr))
 	{
@@ -326,27 +329,11 @@ HRESULT Cube::CompileShaderFromFile(const wchar_t* filename, const char* entryPo
 	return hr;
 }
 
-void Cube::BuildVertexLayout()
-{
-	HRESULT hr = S_OK;
-
-	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
-	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD",    0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
-	};
-
-	if (FAILED(hr))
-	{
-		hr = S_FALSE;
-	}
-}
-
 void Cube::GetTextureFile()
 {
 	HRESULT hr = S_OK;
 
-	Microsoft::WRL::ComPtr<ID3D11Resource> texResource = nullptr;	// Release�� ����� �� �� ������?
+	Microsoft::WRL::ComPtr<ID3D11Resource> texResource = nullptr;
 	DirectX::CreateDDSTextureFromFile(m_3DDevice.Get(), L"../Textures/WoodCrate01.dds", &texResource, &m_DiffuseMapSRV);
 
 	if (FAILED(hr))

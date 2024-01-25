@@ -66,6 +66,9 @@
     <Filter Include="소스 파일\Image">
       <UniqueIdentifier>{5c8960e8-210d-42be-9cf7-957a25c2f85c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\BoundingBox">
+      <UniqueIdentifier>{44350802-11e0-44ad-95e4-de43b5c2ee20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -122,6 +125,9 @@
     <ClInclude Include="IngameImage.h">
       <Filter>소스 파일\Image</Filter>
     </ClInclude>
+    <ClInclude Include="BoundingBox.h">
+      <Filter>소스 파일\BoundingBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11Render.cpp">
@@ -165,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="IngameImage.cpp">
       <Filter>소스 파일\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>소스 파일\BoundingBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

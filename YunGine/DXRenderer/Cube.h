@@ -18,12 +18,13 @@ public:
 	virtual void ObjectUpdate(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection) override;
 	virtual void Render() override;
 
+	void SetPosition(float x, float y, float z);
+
 private:
 	virtual void ObjectSetting() override;
 
 	HRESULT CreateShader();
 	HRESULT CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut);
-	void BuildVertexLayout();
 	void GetTextureFile();
 
 	int indexcount = 0;
