@@ -10,6 +10,12 @@ struct ColorVertex
 	DirectX::XMFLOAT4 COLOR;		// 12바이트	
 };
 
+struct Vertex
+{
+	DirectX::XMFLOAT3 Pos;
+	DirectX::XMFLOAT4 Color;
+};
+
 // 텍스처를 위한 버텍스 자료형 만들었
 typedef struct UvVertex
 {
@@ -22,18 +28,12 @@ struct UvNormalVertex
 	DirectX::XMFLOAT3 position;	// 소문자로 하는이유?-> 이름이 겹치면 헷갈릴 수 도 있음
 	DirectX::XMFLOAT3 normal;
 	DirectX::XMFLOAT2 texcoord;
-	// 텍스처를 띄우는데 굳이 필요하지는 않지만 조명과 물체 표면간의 각도를 계산하는데 필요함
-	//float3 PosL : POSITION;
-	//float3 NormalL : NORMAL;
-	//float2 Tex : TEXCOORD;
 };
 
 struct TexVertex
 {
-	DirectX::XMFLOAT3 position;		// 0바이트 오프셋
-	//DirectX::XMFLOAT3 normal;		// 12바이트 오프셋
-	//DirectX::XMFLOAT3 tangent;		// 24바이트 오프셋
-	DirectX::XMFLOAT2 texc;			// 36바이트 오프셋
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT2 texc;
 };
 
 struct ConstantBuffer
@@ -43,3 +43,14 @@ struct ConstantBuffer
 	DirectX::XMMATRIX Proj;
 };
 
+struct MatrixBufferType					// 상수 버퍼
+{
+	DirectX::XMMATRIX _world;			// 월드 변환 행렬 (로컬 -> 월드)
+	DirectX::XMMATRIX _view;			// 시야 변환 행렬 (카메라 뷰)
+	DirectX::XMMATRIX _projection;		// 투영 변환 행렬 (원근 / 직교)
+};
+
+struct ConstantBufferData
+{
+	DirectX::XMMATRIX _worldViewProjection;
+};

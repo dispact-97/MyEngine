@@ -11,6 +11,7 @@
 #include "RenderableBase.h"
 #include "Axis.h"
 #include "Cube.h"
+#include "NewCube.h"
 #include "Grid.h"
 #include "Camera.h"
 #include "Font.h"
@@ -46,7 +47,7 @@ DX11Render::DX11Render()
 	m_pCamera(nullptr),
 	m_pGrid(nullptr),
 	m_pAxis(nullptr),
-	m_pCube(nullptr),
+	m_pNewCube(nullptr),
 	m_pFont(nullptr),
 	m_pMouse(nullptr),
 	m_pInput(nullptr),
@@ -140,7 +141,7 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	}
 	else if (m_pInput->GetKey(DIK_W) && switchObejct == false)
 	{
-		m_pCube->Move(0.0f, 0.0f, 10.0f * deltaTime);
+		m_pNewCube->Move(0.0f, 0.0f, 10.0f * deltaTime);
 	}
 
 	if (m_pInput->GetKey(DIK_S) && switchObejct == true)
@@ -149,7 +150,7 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	}
 	else if (m_pInput->GetKey(DIK_S) && switchObejct == false)
 	{
-		m_pCube->Move(0.0f, 0.0f, -10.0f * deltaTime);
+		m_pNewCube->Move(0.0f, 0.0f, -10.0f * deltaTime);
 	}
 
 	if (m_pInput->GetKey(DIK_A) && switchObejct == true)
@@ -158,7 +159,7 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	}
 	else if (m_pInput->GetKey(DIK_A) && switchObejct == false)
 	{
-		m_pCube->Move(-10.0f * deltaTime, 0.0f, 0.0f);
+		m_pNewCube->Move(-10.0f * deltaTime, 0.0f, 0.0f);
 	}
 
 	if (m_pInput->GetKey(DIK_D) && switchObejct == true)
@@ -167,7 +168,7 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	}
 	else if (m_pInput->GetKey(DIK_D) && switchObejct == false)
 	{
-		m_pCube->Move(10.0f * deltaTime, 0.0f, 0.0f);
+		m_pNewCube->Move(10.0f * deltaTime, 0.0f, 0.0f);
 	}
 
 	if (m_pInput->GetKey(DIK_C) && switchObejct == true)
@@ -176,7 +177,7 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	}
 	else if (m_pInput->GetKey(DIK_C) && switchObejct == false)
 	{
-		m_pCube->Move(0.0f, -10.0f * deltaTime, 0.0f);
+		m_pNewCube->Move(0.0f, -10.0f * deltaTime, 0.0f);
 	}
 
 	if (m_pInput->GetKey(DIK_SPACE) && switchObejct == true)
@@ -185,7 +186,7 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	}
 	else if (m_pInput->GetKey(DIK_SPACE) && switchObejct == false)
 	{
-		m_pCube->Move(0.0f, 10.0f * deltaTime, 0.0f);
+		m_pNewCube->Move(0.0f, 10.0f * deltaTime, 0.0f);
 	}
 
 	// 카메라 회전
@@ -223,10 +224,12 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 
 	m_pCamera->UpdateViewMatrix();
 
-	for (auto& iter : objectVector)
-	{
-		iter->ObjectUpdate(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
-	}
+	m_pNewCube->Update(DirectX::XMMatrixIdentity(),m_pCamera->View(),m_pCamera->Proj());
+
+	//for (auto& iter : objectVector)
+	//{
+	//	iter->ObjectUpdate(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
+	//}
 
 
 	Curr.mousePosX = Now.mousePosX;
@@ -267,7 +270,7 @@ void DX11Render::BeginRender(float red, float green, float blue, float alpha)
 
 void DX11Render::DrawObject()
 {
-	//DirectX::XMMATRIX worldMatrix = m_pCube->m_world;
+	//DirectX::XMMATRIX worldMatrix = m_pNewCube->m_world;
 	//DirectX::XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
 	//DirectX::XMMATRIX viewMatrix = XMLoadFloat4x4(&m_ViewMatrix);
 	//DirectX::XMMATRIX projMatrix = XMLoadFloat4x4(&m_ProjectionMatrix);
@@ -276,10 +279,12 @@ void DX11Render::DrawObject()
 
 	RenderAllText();
 
-	for (auto& iter : objectVector)
-	{
-		iter->Render();
-	}
+	m_pNewCube->Render();
+
+	//for (auto& iter : objectVector)
+	//{
+	//	iter->Render();
+	//}
 
 	// 레스터라이저 상태 설정 
 	m_p3DDeviceContext->RSSetState(0);
@@ -395,16 +400,16 @@ HRESULT DX11Render::CreateDevice()
 #endif
 
 	HRESULT hr = D3D11CreateDevice(
-		nullptr,                    // 기본 어댑터를 사용하려면 nullptr을 지정하십시오.
-		D3D_DRIVER_TYPE_HARDWARE,   // 하드웨어 그래픽 드라이버를 사용하여 장치를 생성합니다.
-		nullptr,                       // 드라이버가 D3D_DRIVER_TYPE_SOFTWARE가 아닌 한 0이어야 합니다.
-		deviceFlags,                // 디버그 및 Direct2D 호환성 플래그를 설정합니다.
-		levels,                     // 이 앱이 지원할 수 있는 기능 수준 목록입니다.
-		ARRAYSIZE(levels),          // 위 목록의 크기입니다.
-		D3D11_SDK_VERSION,          // Windows Store 앱의 경우 항상 D3D11_SDK_VERSION으로 설정하십시오.
-		&m_p3DDevice,   // 생성된 Direct3D 장치를 반환합니다.
-		&FeatureLevels,             // 생성된 디바이스의 피쳐 수준을 반환합니다.
-		&m_p3DDeviceContext			        // 장치 즉시 컨텍스트를 반환합니다.
+		nullptr,						// 기본 어댑터를 사용하려면 nullptr을 지정하십시오.
+		D3D_DRIVER_TYPE_HARDWARE,		// 하드웨어 그래픽 드라이버를 사용하여 장치를 생성합니다.
+		nullptr,						// 드라이버가 D3D_DRIVER_TYPE_SOFTWARE가 아닌 한 0이어야 합니다.
+		deviceFlags,					// 디버그 및 Direct2D 호환성 플래그를 설정합니다.
+		levels,							// 이 앱이 지원할 수 있는 기능 수준 목록입니다.
+		ARRAYSIZE(levels),				// 위 목록의 크기입니다.
+		D3D11_SDK_VERSION,				// Windows Store 앱의 경우 항상 D3D11_SDK_VERSION으로 설정하십시오.
+		&m_p3DDevice,					// 생성된 Direct3D 장치를 반환합니다.
+		&FeatureLevels,					// 생성된 디바이스의 피쳐 수준을 반환합니다.
+		&m_p3DDeviceContext			    // 장치 즉시 컨텍스트를 반환합니다.
 	);
 
 	return hr;
@@ -659,23 +664,13 @@ HRESULT DX11Render::CreateCube()
 {
 	HRESULT hr = S_OK;
 
-	m_pCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
-	if (!m_pCube)
+	m_pNewCube = new NewCube();
+	m_pNewCube->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
+	m_pNewCube->SetPosition(3.0f, 0.0f, 3.0f);
+	if (!m_pNewCube)
 	{
-		delete m_pCube;
-		return hr = S_FALSE;
+		return S_FALSE;
 	}
-	objectVector.push_back(m_pCube);
-
-	//m_pSecCube = new Cube(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
-	//m_pSecCube->SetPosition(3.0f, 0.0f, 3.0f);
-	//if (!m_pSecCube)
-	//{
-	//	delete m_pSecCube;
-	//	return hr = S_FALSE;
-	//}
-	//objectVector.push_back(m_pSecCube);
-
 
 	return S_OK;
 }
@@ -684,12 +679,12 @@ HRESULT DX11Render::CreateGrid()
 {
 	HRESULT hr = S_OK;
 
-	m_pGrid = new Grid(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
-	if (!m_pGrid)
-	{
-		return hr = S_FALSE;
-	}
-	objectVector.push_back(m_pGrid);
+	//m_pGrid = new Grid(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
+	//if (!m_pGrid)
+	//{
+	//	return hr = S_FALSE;
+	//}
+	//objectVector.push_back(m_pGrid);
 
 	return S_OK;
 }
@@ -698,12 +693,12 @@ HRESULT DX11Render::CreateAxis()
 {
 	HRESULT hr = S_OK;
 
-	m_pAxis = new Axis(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
-	if (!m_pAxis)
-	{
-		return hr = S_FALSE;
-	}
-	objectVector.push_back(m_pAxis);
+	//m_pAxis = new Axis(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
+	//if (!m_pAxis)
+	//{
+	//	return hr = S_FALSE;
+	//}
+	//objectVector.push_back(m_pAxis);
 
 	return S_OK;
 }

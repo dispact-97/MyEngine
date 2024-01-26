@@ -5,6 +5,7 @@
 #include <SimpleMath.h>
 #include <DDSTextureLoader.h>
 #include "RenderableBase.h"
+#include "NewCube.h"
 
 // ½Ì±ÛÅæ ¸â¹ö º¯¼ö ÃÊ±âÈ­
 Font* Font::m_pInstance = nullptr;
@@ -76,6 +77,24 @@ void Font::ObjectDebugText(RenderableBase* object)
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), y.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 18), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Zpos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation + 36), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), z.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 36), color);
+	m_SpriteBatch->End();
+}
+
+void Font::ObjectDebugText(NewCube* object)
+{
+	DirectX::FXMVECTOR color = DirectX::Colors::Crimson;
+
+	std::string x = std::to_string(object->GetPosition().x);
+	std::string y = std::to_string(object->GetPosition().y);
+	std::string z = std::to_string(object->GetPosition().z);
+
+	m_SpriteBatch->Begin();
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Xpos : ", DirectX::XMFLOAT2(object->_objectScreenLocation.x, object->_objectScreenLocation.y), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), x.c_str(), DirectX::XMFLOAT2(object->_objectScreenLocation.x + 60, object->_objectScreenLocation.y), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Ypos : ", DirectX::XMFLOAT2(object->_objectScreenLocation.x, object->_objectScreenLocation.y + 18), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), y.c_str(), DirectX::XMFLOAT2(object->_objectScreenLocation.x + 60, object->_objectScreenLocation.y + 18), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Zpos : ", DirectX::XMFLOAT2(object->_objectScreenLocation.x, object->_objectScreenLocation.y + 36), color);
+	m_SpriteFont->DrawString(m_SpriteBatch.get(), z.c_str(), DirectX::XMFLOAT2(object->_objectScreenLocation.x + 60, object->_objectScreenLocation.y + 36), color);
 	m_SpriteBatch->End();
 }
 

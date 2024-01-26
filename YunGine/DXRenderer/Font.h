@@ -6,6 +6,7 @@
 #include "SpriteFont.h"
 
 class RenderableBase;
+class NewCube;
 
 class Font
 {
@@ -32,6 +33,7 @@ public:
 	void RenderString(const float floatValue, float x, float y);
 	void RenderString(const int intValue, float x, float y);
 	void ObjectDebugText(RenderableBase* object);
+	void ObjectDebugText(NewCube* object);
 	void ObjectDebugText(RenderableBase* object,float width,float height, const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection);
 
 private:

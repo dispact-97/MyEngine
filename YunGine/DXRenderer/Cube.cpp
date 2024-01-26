@@ -278,25 +278,27 @@ HRESULT Cube::CreateShader()
 		nullptr,
 		&_vertexShader);
 
-	//ID3D11ShaderReflection* shaderReflection = nullptr;
-	//D3DReflect(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) & shaderReflection);
+	// Debugging
+	ID3D11ShaderReflection* shaderReflection = nullptr;
+	D3DReflect(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), IID_ID3D11ShaderReflection, (void**) & shaderReflection);
 
-	//D3D11_SHADER_DESC shaderDesc;
-	//shaderReflection->GetDesc(&shaderDesc);
+	D3D11_SHADER_DESC shaderDesc;
+	shaderReflection->GetDesc(&shaderDesc);
 
-	//for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
-	//{
-	//	D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
-	//	shaderReflection->GetInputParameterDesc(i, &paramDesc);
+	for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
+	{
+		D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
+		shaderReflection->GetInputParameterDesc(i, &paramDesc);
 
-	//	std::cout << "Semantic Name: " << paramDesc.SemanticName << std::endl;
-	//	std::cout << "Semantic Index: " << paramDesc.SemanticIndex << std::endl;
-	//	std::cout << "System Value Type: " << paramDesc.SystemValueType << std::endl;
-	//	std::cout << "Component Type: " << paramDesc.ComponentType << std::endl;
-	//	std::cout << "Mask: " << paramDesc.Mask << std::endl;
-	//	std::cout << "Read/Write Mask: " << paramDesc.ReadWriteMask << std::endl;
-	//	std::cout << "Stream: " << paramDesc.Stream << std::endl;
-	//}
+		std::cout << "Semantic Name: " << paramDesc.SemanticName << std::endl;
+		std::cout << "Semantic Index: " << paramDesc.SemanticIndex << std::endl;
+		std::cout << "System Value Type: " << paramDesc.SystemValueType << std::endl;
+		std::cout << "Component Type: " << paramDesc.ComponentType << std::endl;
+		std::cout << "Mask: " << paramDesc.Mask << std::endl;
+		std::cout << "Read/Write Mask: " << paramDesc.ReadWriteMask << std::endl;
+		std::cout << "Stream: " << paramDesc.Stream << std::endl;
+	}
+	// Debugging
 
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{

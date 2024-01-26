@@ -44,6 +44,10 @@ class RenderableBase;
 class InputClass;
 class IngameImage;
 
+//test
+class NewCube;
+
+
 class DX11Render : public IDX11Render
 {
 public:
@@ -150,6 +154,8 @@ private:
 	Axis* m_pAxis;
 	Grid* m_pGrid;
 	Cube* m_pCube;
+	//Å×½ºÆÃ
+	NewCube* m_pNewCube;
 	Cube* m_pSecCube;
 	Camera* m_pCamera;
 	Font* m_pFont;

@@ -226,12 +226,14 @@
     <ClInclude Include="Model.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="ModelInterface.h" />
     <ClInclude Include="MouseClass.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="MouseEvent.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="NewCube.h" />
     <ClInclude Include="RenderableBase.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Utility.h" />
@@ -276,6 +278,7 @@
     <ClCompile Include="MouseEvent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="NewCube.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>

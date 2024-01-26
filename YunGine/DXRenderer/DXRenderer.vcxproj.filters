@@ -69,6 +69,9 @@
     <Filter Include="소스 파일\BoundingBox">
       <UniqueIdentifier>{44350802-11e0-44ad-95e4-de43b5c2ee20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Object\NewCube">
+      <UniqueIdentifier>{d896098b-1ccb-4216-9946-5547daa51923}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -128,6 +131,12 @@
     <ClInclude Include="BoundingBox.h">
       <Filter>소스 파일\BoundingBox</Filter>
     </ClInclude>
+    <ClInclude Include="NewCube.h">
+      <Filter>소스 파일\Object\NewCube</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelInterface.h">
+      <Filter>소스 파일\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11Render.cpp">
@@ -174,6 +183,9 @@
     </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
       <Filter>소스 파일\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="NewCube.cpp">
+      <Filter>소스 파일\Object\NewCube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
