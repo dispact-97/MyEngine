@@ -1,7 +1,5 @@
 #pragma once
 
-//#include "Vertex.h"
-//#include "RenderableBase.h"
 #include "ModelInterface.h"
 
 class NewCube final : public ModelInterface
@@ -10,10 +8,10 @@ public:
 	NewCube();
 	~NewCube();
 
-	HRESULT Initialize(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState);
-	void Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)override;
-	void Render() override;
-	void Finalzie();
+	virtual HRESULT Initialize(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState) override;
+	virtual void Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)override;
+	virtual void Render() override;
+	virtual void Finalzie() override;
 
 	void Move(float x, float, float z);
 	void SetPosition(float x, float y, float z);

@@ -36,6 +36,9 @@ public:
 	void ObjectDebugText(NewCube* object);
 	void ObjectDebugText(RenderableBase* object,float width,float height, const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection);
 
+	// Testing
+	void MeasureTextSize(std::string* str);
+
 private:
 	Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 

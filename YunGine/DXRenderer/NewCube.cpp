@@ -324,8 +324,6 @@ HRESULT NewCube::SetShader()
 		return result;
 	}
 
-
-
 	ID3DBlob* PixelShaderBuffer = nullptr;
 	result = CompileShaderFromFile(L"..\\Shaders\\PixelShader.hlsl", "main", "ps_5_0", &PixelShaderBuffer);
 	if (FAILED(result))
@@ -345,7 +343,6 @@ HRESULT NewCube::SetShader()
 		return result;
 	}
 
-
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -362,8 +359,6 @@ HRESULT NewCube::SetShader()
 	if (FAILED(result))
 	{
 		return result;
-
-
 	}
 
 	//메모리 해제

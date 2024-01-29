@@ -126,3 +126,11 @@ void Font::ObjectDebugText(RenderableBase* object, float width, float height, co
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), z.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 36), color);
 	m_SpriteBatch->End();
 }
+
+void Font::MeasureTextSize(std::string str)
+{
+	//std::wstring wstr(str.begin(), str.end());
+	//_size = _font->MeasureString(wstr.c_str());
+	//_width = DirectX::XMVectorGetX(_size);
+	//_height = DirectX::XMVectorGetY(_size);
+}

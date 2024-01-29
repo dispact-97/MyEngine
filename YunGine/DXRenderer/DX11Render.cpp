@@ -224,7 +224,12 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 
 	m_pCamera->UpdateViewMatrix();
 
-	m_pNewCube->Update(DirectX::XMMatrixIdentity(),m_pCamera->View(),m_pCamera->Proj());
+	for (auto& iter : modelVector)
+	{
+		iter->Update(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
+	}
+
+	//m_pNewCube->Update(DirectX::XMMatrixIdentity(),m_pCamera->View(),m_pCamera->Proj());
 
 	//for (auto& iter : objectVector)
 	//{
@@ -279,12 +284,10 @@ void DX11Render::DrawObject()
 
 	RenderAllText();
 
-	m_pNewCube->Render();
-
-	//for (auto& iter : objectVector)
-	//{
-	//	iter->Render();
-	//}
+	for (auto& iter : modelVector)
+	{
+		iter->Render();
+	}
 
 	// 레스터라이저 상태 설정 
 	m_p3DDeviceContext->RSSetState(0);
@@ -589,17 +592,17 @@ HRESULT DX11Render::CreateObject()
 		return hr;
 	}
 
-	//hr = CreateAxis();
-	//if (FAILED(hr))
-	//{
-	//	return hr;
-	//}
+	hr = CreateAxis();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
-	//hr = CreateGrid();
-	//if (FAILED(hr))
-	//{
-	//	return hr;
-	//}
+	hr = CreateGrid();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
 	hr = CreateCube();
 	if (FAILED(hr))
@@ -671,6 +674,7 @@ HRESULT DX11Render::CreateCube()
 	{
 		return S_FALSE;
 	}
+	modelVector.push_back(m_pNewCube);
 
 	return S_OK;
 }
@@ -679,12 +683,13 @@ HRESULT DX11Render::CreateGrid()
 {
 	HRESULT hr = S_OK;
 
-	//m_pGrid = new Grid(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
-	//if (!m_pGrid)
-	//{
-	//	return hr = S_FALSE;
-	//}
-	//objectVector.push_back(m_pGrid);
+	m_pGrid = new Grid();
+	m_pGrid->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
+	if (!m_pGrid)
+	{
+		return hr = S_FALSE;
+	}
+	modelVector.push_back(m_pGrid);
 
 	return S_OK;
 }
@@ -693,12 +698,13 @@ HRESULT DX11Render::CreateAxis()
 {
 	HRESULT hr = S_OK;
 
-	//m_pAxis = new Axis(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
-	//if (!m_pAxis)
-	//{
-	//	return hr = S_FALSE;
-	//}
-	//objectVector.push_back(m_pAxis);
+	m_pAxis = new Axis();
+	m_pAxis->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pWireRasterState);
+	if (!m_pAxis)
+	{
+		return hr = S_FALSE;
+	}
+	modelVector.push_back(m_pAxis);
 
 	return S_OK;
 }

@@ -41,6 +41,7 @@ class Camera;
 class Font;
 class MouseClass;
 class RenderableBase;
+class ModelInterface;
 class InputClass;
 class IngameImage;
 
@@ -151,6 +152,7 @@ private:
 
 	// 개별 클래스
 	std::vector<RenderableBase*> objectVector;
+	std::vector<ModelInterface*> modelVector;
 	Axis* m_pAxis;
 	Grid* m_pGrid;
 	Cube* m_pCube;

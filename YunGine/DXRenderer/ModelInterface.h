@@ -9,8 +9,8 @@
 class ModelInterface
 {
 public:
-
+	virtual HRESULT Initialize(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState) abstract;
 	virtual void Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection) abstract;
 	virtual void Render() abstract;
-
+	virtual void Finalzie() abstract;
 };
