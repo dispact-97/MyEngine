@@ -7,6 +7,7 @@
 
 class RenderableBase;
 class NewCube;
+class ModelInterface;
 
 class Font
 {
@@ -33,11 +34,11 @@ public:
 	void RenderString(const float floatValue, float x, float y);
 	void RenderString(const int intValue, float x, float y);
 	void ObjectDebugText(RenderableBase* object);
-	void ObjectDebugText(NewCube* object);
+	void ObjectDebugText(ModelInterface* object);
 	void ObjectDebugText(RenderableBase* object,float width,float height, const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection);
 
 	// Testing
-	void MeasureTextSize(std::string* str);
+	void MeasureTextSize(std::string str,float& x, float& y);
 
 private:
 	Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -50,5 +51,9 @@ private:
 	HRESULT result;
 
 	static Font* m_pInstance;
+
+	DirectX::XMVECTOR _size;
+	float _width = 0.0f;
+	float _height = 0.0f;
 };
 

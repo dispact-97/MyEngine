@@ -80,7 +80,7 @@ void Font::ObjectDebugText(RenderableBase* object)
 	m_SpriteBatch->End();
 }
 
-void Font::ObjectDebugText(NewCube* object)
+void Font::ObjectDebugText(ModelInterface* object)
 {
 	DirectX::FXMVECTOR color = DirectX::Colors::Crimson;
 
@@ -117,6 +117,10 @@ void Font::ObjectDebugText(RenderableBase* object, float width, float height, co
 	std::string y = std::to_string(object->objectPosition.y);
 	std::string z = std::to_string(object->objectPosition.z);
 
+	MeasureTextSize(x, object->objectXLocation, object->objectYLocation);	// 여기서 뭔가 바꾸면 될거같은데
+	MeasureTextSize(y, object->objectXLocation, object->objectYLocation);
+	MeasureTextSize(z, object->objectXLocation, object->objectYLocation);
+
 	m_SpriteBatch->Begin();
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Xpos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), x.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation), color);
@@ -127,10 +131,14 @@ void Font::ObjectDebugText(RenderableBase* object, float width, float height, co
 	m_SpriteBatch->End();
 }
 
-void Font::MeasureTextSize(std::string str)
+void Font::MeasureTextSize(std::string str,float& x, float& y)
 {
-	//std::wstring wstr(str.begin(), str.end());
-	//_size = _font->MeasureString(wstr.c_str());
-	//_width = DirectX::XMVectorGetX(_size);
-	//_height = DirectX::XMVectorGetY(_size);
+	std::wstring wstr(str.begin(), str.end());
+	_size = m_SpriteFont->MeasureString(wstr.c_str());
+	_width = DirectX::XMVectorGetX(_size);
+	_height = DirectX::XMVectorGetY(_size);
+
+	x -= _width * 0.5f;
+	y -= _height * 0.5f;
+	
 }
