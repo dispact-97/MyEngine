@@ -151,7 +151,6 @@ private:
 	DirectX::XMFLOAT4X4 m_ProjectionMatrix;
 
 	// 개별 클래스
-	std::vector<RenderableBase*> objectVector;
 	std::vector<ModelInterface*> modelVector;
 	Axis* m_pAxis;
 	Grid* m_pGrid;

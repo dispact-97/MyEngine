@@ -7,7 +7,7 @@
 #include "RenderableBase.h"
 #include "NewCube.h"
 
-// ½Ì±ÛÅæ ¸â¹ö º¯¼ö ÃÊ±âÈ­
+// ï¿½Ì±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 Font* Font::m_pInstance = nullptr;
 
 Font::Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -62,21 +62,20 @@ void Font::RenderString(const int intValue, float x, float y)
 void Font::ObjectDebugText(RenderableBase* object)
 {
 	DirectX::FXMVECTOR color = DirectX::Colors::Crimson;
-	//std::string x = std::to_string(object->objectXLocation);
-	//std::string y = std::to_string(object->objectYLocation);
-	//std::string z = std::to_string(object->objectZLocation);
 
 	std::string x = std::to_string(object->objectPosition.x);
 	std::string y = std::to_string(object->objectPosition.y);
 	std::string z = std::to_string(object->objectPosition.z);
 
 	m_SpriteBatch->Begin();
+
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Xpos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), x.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Ypos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation + 18), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), y.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 18), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Zpos : ", DirectX::XMFLOAT2(object->objectXLocation, object->objectYLocation + 36), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), z.c_str(), DirectX::XMFLOAT2(object->objectXLocation + 60, object->objectYLocation + 36), color);
+
 	m_SpriteBatch->End();
 }
 
@@ -105,19 +104,19 @@ void Font::ObjectDebugText(RenderableBase* object, float width, float height, co
 	DirectX::XMVECTOR worldPosition = DirectX::XMVectorSet(object->objectPosition.x, object->objectPosition.y, object->objectPosition.z, 1.0f);
 	DirectX::XMVECTOR screenPosition = XMVector3Project(
 		worldPosition,
-		0,							// ½ºÅ©¸° ¿ÞÂÊ ¸ð¼­¸® x
-		0,							// ½ºÅ©¸° ¿ÞÂÊ ¸ð¼­¸® y
-		1600,						// ½ºÅ©¸° ¿µ¿ª ³Êºñ	_windowWidth
-		1080,						// ½ºÅ©¸° ¿µ¿ª ³ôÀÌ	_windowHeight
-		0.0f,						// ±íÀÌ ¹öÆÛ ÃÖ¼Ò°ª
-		1.0f,						// ±íÀÌ ¹öÆÛ ÃÖ´ë°ª
+		0,							// ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ð¼­¸ï¿½ x
+		0,							// ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ð¼­¸ï¿½ y
+		1600,						// ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Êºï¿½	_windowWidth
+		1080,						// ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½	_windowHeight
+		0.0f,						// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼Ò°ï¿½
+		1.0f,						// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ë°ª
 		projection, view, world);
 
 	std::string x = std::to_string(object->objectPosition.x);
 	std::string y = std::to_string(object->objectPosition.y);
 	std::string z = std::to_string(object->objectPosition.z);
 
-	MeasureTextSize(x, object->objectXLocation, object->objectYLocation);	// ¿©±â¼­ ¹º°¡ ¹Ù²Ù¸é µÉ°Å°°Àºµ¥
+	MeasureTextSize(x, object->objectXLocation, object->objectYLocation);	// ï¿½ï¿½ï¿½â¼­ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²Ù¸ï¿½ ï¿½É°Å°ï¿½ï¿½ï¿½ï¿½ï¿½
 	MeasureTextSize(y, object->objectXLocation, object->objectYLocation);
 	MeasureTextSize(z, object->objectXLocation, object->objectYLocation);
 

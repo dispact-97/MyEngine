@@ -62,7 +62,7 @@ void Grid::Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view,
 void Grid::Render()
 {
 	_pDeviceContext->IASetInputLayout(_inputLayout.Get());
-	_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);		// ¼±À¸·Î ±¸¼ºÇÒ¶§ ÀÌºÎºÐÀ» LINELIST·Î
+	_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ ï¿½ÌºÎºï¿½ï¿½ï¿½ LINELISTï¿½ï¿½
 
 	_pDeviceContext->VSSetShader(_vertexShader.Get(), nullptr, 0);
 	_pDeviceContext->PSSetShader(_pixelShader.Get(), nullptr, 0);
@@ -98,7 +98,7 @@ void Grid::Render()
 
 	_pDeviceContext->DrawIndexed(indexCount, 0, 0);
 
-	// ±×¸®µå´Â µð¹ö±ëÅØ½ºÆ® ºÒÇÊ¿ä
+	// ï¿½×¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½Ê¿ï¿½
 }
 
 void Grid::Finalzie()
@@ -128,7 +128,7 @@ HRESULT Grid::SetVertexBuffer()
 
 ColorVertex GridVertex[] =
 {
-    // ¹öÅØ½º ¹è¿­
+    // ï¿½ï¿½ï¿½Ø½ï¿½ ï¿½è¿­
     {DirectX::XMFLOAT3(-5.f,0.f,-5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 0
     {DirectX::XMFLOAT3(-4.f,0.f,-5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 1
     {DirectX::XMFLOAT3(-3.f,0.f,-5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 2
@@ -141,7 +141,7 @@ ColorVertex GridVertex[] =
     {DirectX::XMFLOAT3(4.f,0.f,-5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 9
     {DirectX::XMFLOAT3(5.f,0.f,-5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 10
 
-	// ¹öÅØ½º ¹è¿­
+	// ï¿½ï¿½ï¿½Ø½ï¿½ ï¿½è¿­
 	{DirectX::XMFLOAT3(-5.f,0.f,5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 11
 	{DirectX::XMFLOAT3(-4.f,0.f,5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 12
 	{DirectX::XMFLOAT3(-3.f,0.f,5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 13
@@ -154,7 +154,7 @@ ColorVertex GridVertex[] =
 	{DirectX::XMFLOAT3(4.f,0.f,5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 20
 	{DirectX::XMFLOAT3(5.f,0.f,5.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 21
 
-	// ¹öÅØ½º ¹è¿­
+	// ï¿½ï¿½ï¿½Ø½ï¿½ ï¿½è¿­
 	{DirectX::XMFLOAT3(-5.f,0.f,-4.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 22
 	{DirectX::XMFLOAT3(-5.f,0.f,-3.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 23
 	{DirectX::XMFLOAT3(-5.f,0.f,-2.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 24
@@ -165,7 +165,7 @@ ColorVertex GridVertex[] =
 	{DirectX::XMFLOAT3(-5.f,0.f,3.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 29
 	{DirectX::XMFLOAT3(-5.f,0.f,4.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 30
 
-	// ¹öÅØ½º ¹è¿­
+	// ï¿½ï¿½ï¿½Ø½ï¿½ ï¿½è¿­
 	{DirectX::XMFLOAT3(5.f,0.f,-4.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 31
 	{DirectX::XMFLOAT3(5.f,0.f,-3.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 32
 	{DirectX::XMFLOAT3(5.f,0.f,-2.f), DirectX::XMFLOAT4(1.0f,1.0f,1.0f,1.0f)},	// 33
@@ -210,7 +210,7 @@ HRESULT Grid::SetIndexBuffer()
 
 	UINT indices[] =
 	{
-		// x -5¿¡¼­ 5±îÁö °¡·Î¼±
+		// x -5ï¿½ï¿½ï¿½ï¿½ 5ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½
 		0,11,
 		1,12,
 		2,13,
@@ -248,7 +248,7 @@ HRESULT Grid::SetIndexBuffer()
 	indexBufferDesc.StructureByteStride = 0;
 
 	D3D11_SUBRESOURCE_DATA indexInit;
-	indexInit.pSysMem = indices;		//½ÃÀÛ ÁÖ¼Ò¸¦ ³Ö´Â´Ù
+	indexInit.pSysMem = indices;		//ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼Ò¸ï¿½ ï¿½Ö´Â´ï¿½
 	indexInit.SysMemPitch = 0;
 	indexInit.SysMemSlicePitch = 0;
 
@@ -347,7 +347,7 @@ HRESULT Grid::SetShader()
 		return result;
 	}
 
-	//¸Þ¸ð¸® ÇØÁ¦
+	//ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 	PixelShaderBuffer->Release();
 	vertexShaderBuffer->Release();
 
@@ -366,24 +366,24 @@ HRESULT Grid::CompileShaderFromFile(const wchar_t* filename, const char* entryPo
 	ID3DBlob* errorBlob = nullptr;
 
 	hr = D3DCompileFromFile(
-		filename,							 // ½¦ÀÌ´õ ÆÄÀÏ °æ·Î
-		nullptr,                             // ¸ÅÅ©·Î Á¤ÀÇ (ÀÏ¹ÝÀûÀ¸·Î nullptr »ç¿ë)
-		nullptr,                             // include ÀÎÅÍÆäÀÌ½º (ÀÏ¹ÝÀûÀ¸·Î nullptr »ç¿ë)
-		entryPoint,                          // ½¦ÀÌ´õ ÁøÀÔÁ¡ ÇÔ¼ö ÀÌ¸§
-		shaderModel,                         // ½¦ÀÌ´õ ÇÁ·ÎÆÄÀÏ
-		shaderFlags,						 // ÄÄÆÄÀÏ ¿É¼Ç (µð¹ö±× Á¤º¸ Æ÷ÇÔ)
-		0,                                   // Ãß°¡ÀûÀÎ ÇÃ·¡±× (ÀÏ¹ÝÀûÀ¸·Î 0 »ç¿ë)
-		blobOut,							 // ÄÄÆÄÀÏµÈ °á°ú¸¦ ÀúÀåÇÒ ID3DBlob Æ÷ÀÎÅÍ
-		&errorBlob                           // ÄÄÆÄÀÏ ¿À·ù Á¤º¸¸¦ ÀúÀåÇÒ ID3DBlob Æ÷ÀÎÅÍ
+		filename,							 // ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+		nullptr,                             // ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Ï¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ nullptr ï¿½ï¿½ï¿½)
+		nullptr,                             // include ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ (ï¿½Ï¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ nullptr ï¿½ï¿½ï¿½)
+		entryPoint,                          // ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½Ì¸ï¿½
+		shaderModel,                         // ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		shaderFlags,						 // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½É¼ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+		0,                                   // ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ (ï¿½Ï¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0 ï¿½ï¿½ï¿½)
+		blobOut,							 // ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ID3DBlob ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		&errorBlob                           // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ID3DBlob ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	);
 
-	// Áö±ÝÀº csoÆÄÀÏÀ» µû·Î ÀúÀåÇÏ°í ÀÖÁö´Â ¾ÊÁö¸¸ blobOutºÎºÐÀ» µû·Î ÀúÀåÇÏ´Â ºÎºÐÀ» ¸¸µé¾î¾ß ÇÑ´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ csoï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ blobOutï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½.
 
 	if (FAILED(hr))
 	{
 		if (errorBlob)
 		{
-			// ¿¡·¯ Ãâ·Â È¤Àº ±â·Ï
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ È¤ï¿½ï¿½ ï¿½ï¿½ï¿½
 			OutputDebugStringA((char*)errorBlob->GetBufferPointer());
 			errorBlob->Release();
 		}

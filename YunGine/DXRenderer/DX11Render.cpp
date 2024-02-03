@@ -229,14 +229,6 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 		iter->Update(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
 	}
 
-	//m_pNewCube->Update(DirectX::XMMatrixIdentity(),m_pCamera->View(),m_pCamera->Proj());
-
-	//for (auto& iter : objectVector)
-	//{
-	//	iter->ObjectUpdate(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
-	//}
-
-
 	Curr.mousePosX = Now.mousePosX;
 	Curr.mousePosY = Now.mousePosY;
 }
@@ -269,17 +261,10 @@ void DX11Render::BeginRender(float red, float green, float blue, float alpha)
 	m_p3DDeviceContext->ClearRenderTargetView(m_pRenderTargetView.Get(), color);
 	// Clear the depth buffer.
 	m_p3DDeviceContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-	//d3dDeviceContext_->OMSetRenderTargets(1, renderTargetView_.GetAddressOf(), depthStencilView_.Get());
-
 }
 
 void DX11Render::DrawObject()
 {
-	//DirectX::XMMATRIX worldMatrix = m_pNewCube->m_world;
-	//DirectX::XMMATRIX worldMatrix = XMLoadFloat4x4(&m_WorldMatrix);
-	//DirectX::XMMATRIX viewMatrix = XMLoadFloat4x4(&m_ViewMatrix);
-	//DirectX::XMMATRIX projMatrix = XMLoadFloat4x4(&m_ProjectionMatrix);
-
 	m_p3DDeviceContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
 
 	RenderAllText();
@@ -744,16 +729,16 @@ LRESULT CALLBACK DX11Render::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPA
 
 			if (x < 15 || y < 15 || x > 1585 || y > 1060)
 			{
-				RECT clientRect;
-				GetClientRect(hWnd, &clientRect);
+				//RECT clientRect;
+				//GetClientRect(hWnd, &clientRect);
 
-				int clientCenterX = (clientRect.right - clientRect.left) / 2;
-				int clientCenterY = (clientRect.bottom - clientRect.top) / 2;
+				//int clientCenterX = (clientRect.right - clientRect.left) / 2;
+				//int clientCenterY = (clientRect.bottom - clientRect.top) / 2;
 
-				POINT clientCenterPoint = { clientCenterX, clientCenterY };
-				ClientToScreen(hWnd, &clientCenterPoint);
+				//POINT clientCenterPoint = { clientCenterX, clientCenterY };
+				//ClientToScreen(hWnd, &clientCenterPoint);
 
-				SetCursorPos(clientCenterPoint.x, clientCenterPoint.y);
+				//SetCursorPos(clientCenterPoint.x, clientCenterPoint.y);
 			}
 
 			return 0;
