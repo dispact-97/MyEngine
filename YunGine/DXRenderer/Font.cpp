@@ -79,7 +79,7 @@ void Font::ObjectDebugText(RenderableBase* object)
 	m_SpriteBatch->End();
 }
 
-void Font::ObjectDebugText(ModelInterface* object)
+void Font::ObjectDebugText(NewCube* object)
 {
 	DirectX::FXMVECTOR color = DirectX::Colors::Crimson;
 
@@ -90,8 +90,10 @@ void Font::ObjectDebugText(ModelInterface* object)
 	m_SpriteBatch->Begin();
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Xpos : ", DirectX::XMFLOAT2(object->_objectScreenLocation.x, object->_objectScreenLocation.y), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), x.c_str(), DirectX::XMFLOAT2(object->_objectScreenLocation.x + 60, object->_objectScreenLocation.y), color);
+
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Ypos : ", DirectX::XMFLOAT2(object->_objectScreenLocation.x, object->_objectScreenLocation.y + 18), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), y.c_str(), DirectX::XMFLOAT2(object->_objectScreenLocation.x + 60, object->_objectScreenLocation.y + 18), color);
+
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), "Zpos : ", DirectX::XMFLOAT2(object->_objectScreenLocation.x, object->_objectScreenLocation.y + 36), color);
 	m_SpriteFont->DrawString(m_SpriteBatch.get(), z.c_str(), DirectX::XMFLOAT2(object->_objectScreenLocation.x + 60, object->_objectScreenLocation.y + 36), color);
 	m_SpriteBatch->End();

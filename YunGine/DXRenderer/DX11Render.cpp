@@ -653,14 +653,23 @@ HRESULT DX11Render::CreateCube()
 	HRESULT hr = S_OK;
 
 	m_pNewCube = new NewCube();
-	m_pNewCube->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
-	m_pNewCube->SetPosition(3.0f, 0.0f, 3.0f);
 	if (!m_pNewCube)
 	{
 		return S_FALSE;
 	}
+	m_pNewCube->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
+	m_pNewCube->SetPosition(3.0f, 0.0f, 3.0f);
 	modelVector.push_back(m_pNewCube);
 
+	NewCube* secCube = new NewCube();
+	if (!secCube)
+	{
+		return S_FALSE;
+	}
+	secCube->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
+	secCube->RotateActive(true);
+	modelVector.push_back(secCube);
+	
 	return S_OK;
 }
 
@@ -698,7 +707,6 @@ HRESULT DX11Render::CreateUI()
 {
 	HRESULT hr = S_OK;
 
-	//m_IngameImage = IngameImage::GetInstance(m_p3DDevice.Get(), m_p3DDeviceContext.Get());
 	m_IngameImage = new IngameImage(m_p3DDevice.Get(), m_p3DDeviceContext.Get());
 	if (!m_IngameImage)
 	{

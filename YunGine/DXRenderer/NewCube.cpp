@@ -8,8 +8,8 @@ NewCube::NewCube()
 	: _pDevice(nullptr),
 	_pDeviceContext(nullptr),
 	_pRasterState(nullptr),
-	_objectPosition()
-
+	_objectPosition(),
+	_rotateActive()
 {
 
 }
@@ -58,10 +58,25 @@ HRESULT NewCube::Initialize(Microsoft::WRL::ComPtr<ID3D11Device> device, Microso
 
 void NewCube::Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
-	DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
-	_world = traslation * world;
-	_view = view;
-	_proj = projection;
+	if (_rotateActive == true)
+	{
+		_rotationAngle += 0.1f;
+
+		DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
+		
+		DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationY(_rotationAngle);
+		
+		_world = rotation * traslation * world;
+		_view = view;
+		_proj = projection;
+	}
+	else
+	{
+		DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
+		_world = traslation * world;
+		_view = view;
+		_proj = projection;
+	}
 
 	Calculate2DLocation();
 }
@@ -110,6 +125,16 @@ void NewCube::Render()
 }
 
 void NewCube::Finalzie()
+{
+
+}
+
+void NewCube::RotateActive(bool isActive)
+{
+	_rotateActive = isActive;
+}
+
+void NewCube::SetTexture(const char& textureFilePath)
 {
 
 }

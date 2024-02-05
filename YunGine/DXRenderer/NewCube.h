@@ -13,6 +13,8 @@ public:
 	virtual void Render() override;
 	virtual void Finalzie() override;
 
+	void RotateActive(bool isActive);
+	void SetTexture(const char& textureFilePath);
 	void Move(float x, float, float z);
 	void SetPosition(float x, float y, float z);
 	DirectX::XMFLOAT3 GetPosition();
@@ -42,9 +44,11 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> _indexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> _constantBuffer;
 
-
 	Microsoft::WRL::ComPtr <ID3D11VertexShader> _vertexShader;
 	Microsoft::WRL::ComPtr <ID3D11PixelShader> _pixelShader;
+
+	float _rotationAngle = 1.0f;
+	bool _rotateActive;
 
 	// Transform Matrix
 	DirectX::XMMATRIX _world;
