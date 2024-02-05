@@ -53,6 +53,12 @@ HRESULT NewCube::Initialize(Microsoft::WRL::ComPtr<ID3D11Device> device, Microso
 		return hr;
 	}
 
+	hr = SetBoundingBox(this);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+	
 	return hr;
 }
 

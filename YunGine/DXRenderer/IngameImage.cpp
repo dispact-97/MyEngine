@@ -7,6 +7,7 @@
 
 IngameImage* IngameImage::m_pInstance = nullptr;
 
+// comptr로 받았어도 좋았을거 같다
 IngameImage::IngameImage(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: m_pDevice(pDevice),
 	m_pDeviceContext(pDeviceContext)

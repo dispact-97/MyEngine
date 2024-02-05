@@ -81,7 +81,7 @@ void Font::ObjectDebugText(RenderableBase* object)
 
 void Font::ObjectDebugText(NewCube* object)
 {
-	DirectX::FXMVECTOR color = DirectX::Colors::Crimson;
+	DirectX::FXMVECTOR color = DirectX::Colors::Aquamarine;
 
 	std::string x = std::to_string(object->GetPosition().x);
 	std::string y = std::to_string(object->GetPosition().y);

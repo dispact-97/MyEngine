@@ -1,8 +1,9 @@
 #pragma once
 
 #include "ModelInterface.h"
+#include "ModelBB.h"
 
-class NewCube final : public ModelInterface
+class NewCube final : public ModelInterface, public ModelBB
 {
 public:
 	NewCube();
