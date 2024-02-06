@@ -161,6 +161,11 @@ void NewCube::SetTexture(const char& textureFilePath)
 
 }
 
+DirectX::XMFLOAT3 NewCube::GetPosition()
+{
+	return _objectPosition;
+}
+
 void NewCube::Move(float x, float y, float z)
 {
 	_objectPosition.x += x;
@@ -175,10 +180,7 @@ void NewCube::SetPosition(float x, float y, float z)
 	_objectPosition.z = z;
 }
 
-DirectX::XMFLOAT3 NewCube::GetPosition()
-{
-	return _objectPosition;
-}
+
 
 std::vector<DirectX::XMFLOAT3> NewCube::GetLocalSpaceVertices()
 {

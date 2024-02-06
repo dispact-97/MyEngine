@@ -106,6 +106,11 @@ void Grid::Finalzie()
 
 }
 
+DirectX::XMFLOAT3 Grid::GetPosition()
+{
+	return _objectPosition;
+}
+
 HRESULT Grid::SetDevice(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState)
 {
 	HRESULT result = S_OK;

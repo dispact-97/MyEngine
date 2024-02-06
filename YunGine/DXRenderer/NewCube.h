@@ -18,8 +18,6 @@ public:
 	void SetTexture(const char& textureFilePath);
 	void Move(float x, float, float z);
 	void SetPosition(float x, float y, float z);
-	DirectX::XMFLOAT3 GetPosition();
-	DirectX::XMFLOAT3 _objectScreenLocation;
 
 	std::vector<DirectX::XMFLOAT3> GetLocalSpaceVertices();
 	bool GetRenderActive();

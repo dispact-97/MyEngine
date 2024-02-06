@@ -13,4 +13,8 @@ public:
 	virtual void Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection) abstract;
 	virtual void Render() abstract;
 	virtual void Finalzie() abstract;
+
+	virtual DirectX::XMFLOAT3 GetPosition() abstract;
+
+	DirectX::XMFLOAT3 _objectScreenLocation;
 };
