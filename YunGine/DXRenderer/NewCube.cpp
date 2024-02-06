@@ -9,7 +9,12 @@ NewCube::NewCube()
 	_pDeviceContext(nullptr),
 	_pRasterState(nullptr),
 	_objectPosition(),
-	_rotateActive()
+	_rotateActive(),
+	_renderActive(),
+	_objectScreenLocation(),
+	_proj(),
+	_view(),
+	_world()
 {
 
 }
@@ -53,25 +58,34 @@ HRESULT NewCube::Initialize(Microsoft::WRL::ComPtr<ID3D11Device> device, Microso
 		return hr;
 	}
 
-	hr = SetBoundingBox(this);
+	hr = SetBB();
 	if (FAILED(hr))
 	{
 		return hr;
 	}
-	
+
 	return hr;
 }
 
 void NewCube::Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
+	if (IsBoxInViewFrustum(_objectBoundingBox, (view * projection)))
+	{
+		_renderActive = true;
+	}
+	else
+	{
+		_renderActive = false;
+	}
+
 	if (_rotateActive == true)
 	{
 		_rotationAngle += 0.1f;
 
 		DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
-		
+
 		DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationY(_rotationAngle);
-		
+
 		_world = rotation * traslation * world;
 		_view = view;
 		_proj = projection;
@@ -89,45 +103,47 @@ void NewCube::Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& vi
 
 void NewCube::Render()
 {
-
-	_pDeviceContext->IASetInputLayout(_inputLayout.Get());
-	_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	_pDeviceContext->VSSetShader(_vertexShader.Get(), nullptr, 0);
-	_pDeviceContext->PSSetShader(_pixelShader.Get(), nullptr, 0);
-
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	MatrixBufferType* dataPtr;
-
-	_world = DirectX::XMMatrixTranspose(_world);
-	_view = DirectX::XMMatrixTranspose(_view);
-	_proj = DirectX::XMMatrixTranspose(_proj);
-
-	_pDeviceContext->Map(_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-
-	dataPtr = (MatrixBufferType*)mappedResource.pData;
-
-	dataPtr->_world = _world;
-	dataPtr->_view = _view;
-	dataPtr->_projection = _proj;
-
-	_pDeviceContext->Unmap(_constantBuffer.Get(), 0);
-
-	if (_vertexBuffer && _indexBuffer && _constantBuffer)
+	if (_renderActive)
 	{
-		_pDeviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
-		_pDeviceContext->IASetVertexBuffers(0, 1, _vertexBuffer.GetAddressOf(), &stride, &offset);
-		_pDeviceContext->IASetIndexBuffer(_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		_pDeviceContext->IASetInputLayout(_inputLayout.Get());
+		_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		_pDeviceContext->VSSetShader(_vertexShader.Get(), nullptr, 0);
+		_pDeviceContext->PSSetShader(_pixelShader.Get(), nullptr, 0);
+
+		UINT stride = sizeof(Vertex);
+		UINT offset = 0;
+
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		MatrixBufferType* dataPtr;
+
+		_world = DirectX::XMMatrixTranspose(_world);
+		_view = DirectX::XMMatrixTranspose(_view);
+		_proj = DirectX::XMMatrixTranspose(_proj);
+
+		_pDeviceContext->Map(_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+
+		dataPtr = (MatrixBufferType*)mappedResource.pData;
+
+		dataPtr->_world = _world;
+		dataPtr->_view = _view;
+		dataPtr->_projection = _proj;
+
+		_pDeviceContext->Unmap(_constantBuffer.Get(), 0);
+
+		if (_vertexBuffer && _indexBuffer && _constantBuffer)
+		{
+			_pDeviceContext->VSSetConstantBuffers(0, 1, _constantBuffer.GetAddressOf());
+			_pDeviceContext->IASetVertexBuffers(0, 1, _vertexBuffer.GetAddressOf(), &stride, &offset);
+			_pDeviceContext->IASetIndexBuffer(_indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		}
+
+		_pDeviceContext->RSSetState(_pRasterState.Get());
+
+		_pDeviceContext->DrawIndexed(indexCount, 0, 0);
+
+		Font::GetInstance()->ObjectDebugText(this);
 	}
-
-	_pDeviceContext->RSSetState(_pRasterState.Get());
-
-	_pDeviceContext->DrawIndexed(indexCount, 0, 0);
-
-	Font::GetInstance()->ObjectDebugText(this);
 }
 
 void NewCube::Finalzie()
@@ -162,6 +178,16 @@ void NewCube::SetPosition(float x, float y, float z)
 DirectX::XMFLOAT3 NewCube::GetPosition()
 {
 	return _objectPosition;
+}
+
+std::vector<DirectX::XMFLOAT3> NewCube::GetLocalSpaceVertices()
+{
+	return _localSpaceVertices;
+}
+
+bool NewCube::GetRenderActive()
+{
+	return _renderActive;
 }
 
 HRESULT NewCube::SetDevice(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState)
@@ -223,6 +249,15 @@ HRESULT NewCube::SetVertexBuffer()
 		{DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},    // 22
 		{DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f), DirectX::XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f)}   // 23
 	};
+
+	// _world행렬 초기화 때문에 값이 0,0,0 이 들어간다.
+	for (int i = 0; i < ARRAYSIZE(boxVertex); ++i)
+	{
+		DirectX::XMFLOAT4 transformedVertex;
+		DirectX::XMStoreFloat4(&transformedVertex, DirectX::XMVector4Transform(DirectX::XMLoadFloat3(&boxVertex[i].Pos), _world));
+
+		_localSpaceVertices.push_back(DirectX::XMFLOAT3(transformedVertex.x, transformedVertex.y, transformedVertex.z));
+	}
 
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.ByteWidth = ARRAYSIZE(boxVertex) * sizeof(Vertex);
@@ -397,6 +432,17 @@ HRESULT NewCube::SetShader()
 	vertexShaderBuffer->Release();
 
 	return result;
+}
+
+HRESULT NewCube::SetBB()
+{
+	HRESULT hr = S_OK;
+
+	_objectBoundingBox = new DirectX::BoundingBox();
+
+	hr = SetBoundingBox(this);
+
+	return hr;
 }
 
 HRESULT NewCube::CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut)

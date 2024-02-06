@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <SimpleMath.h>
+
 class ModelInterface;
 class ModelBB;
 

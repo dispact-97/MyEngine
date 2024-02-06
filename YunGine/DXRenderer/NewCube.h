@@ -21,15 +21,21 @@ public:
 	DirectX::XMFLOAT3 GetPosition();
 	DirectX::XMFLOAT3 _objectScreenLocation;
 
+	std::vector<DirectX::XMFLOAT3> GetLocalSpaceVertices();
+	bool GetRenderActive();
+
 private:
 	HRESULT SetDevice(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState);
 	HRESULT SetVertexBuffer();
 	HRESULT SetIndexBuffer();
 	HRESULT SetConstantBuffer();
 	HRESULT SetShader();
+	HRESULT SetBB();
 
 	HRESULT CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut);
 	void Calculate2DLocation();
+
+	std::vector<DirectX::XMFLOAT3> _localSpaceVertices;
 
 	int indexCount = 0;
 
@@ -50,6 +56,7 @@ private:
 
 	float _rotationAngle = 1.0f;
 	bool _rotateActive;
+	bool _renderActive;
 
 	// Transform Matrix
 	DirectX::XMMATRIX _world;

@@ -72,6 +72,12 @@
     <Filter Include="소스 파일\Object\NewCube">
       <UniqueIdentifier>{d896098b-1ccb-4216-9946-5547daa51923}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\BoundingBox\BBManager">
+      <UniqueIdentifier>{ec85d662-8c9a-4357-9141-c114897ecd8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\BoundingBox\ModelBB">
+      <UniqueIdentifier>{92f5ee8b-72c8-4424-befe-72d5172911d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -128,14 +134,17 @@
     <ClInclude Include="IngameImage.h">
       <Filter>소스 파일\Image</Filter>
     </ClInclude>
-    <ClInclude Include="BoundingBox.h">
-      <Filter>소스 파일\BoundingBox</Filter>
-    </ClInclude>
     <ClInclude Include="NewCube.h">
       <Filter>소스 파일\Object\NewCube</Filter>
     </ClInclude>
     <ClInclude Include="ModelInterface.h">
       <Filter>소스 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelBB.h">
+      <Filter>소스 파일\BoundingBox\ModelBB</Filter>
+    </ClInclude>
+    <ClInclude Include="BBManager.h">
+      <Filter>소스 파일\BoundingBox\BBManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -181,11 +190,14 @@
     <ClCompile Include="IngameImage.cpp">
       <Filter>소스 파일\Image</Filter>
     </ClCompile>
-    <ClCompile Include="BoundingBox.cpp">
-      <Filter>소스 파일\BoundingBox</Filter>
-    </ClCompile>
     <ClCompile Include="NewCube.cpp">
       <Filter>소스 파일\Object\NewCube</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelBB.cpp">
+      <Filter>소스 파일\BoundingBox\ModelBB</Filter>
+    </ClCompile>
+    <ClCompile Include="BBManager.cpp">
+      <Filter>소스 파일\BoundingBox\BBManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

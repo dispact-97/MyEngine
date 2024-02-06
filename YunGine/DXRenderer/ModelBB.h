@@ -26,4 +26,9 @@ private:
 	DirectX::XMFLOAT3 m_min;
 	DirectX::XMFLOAT3 m_max;
 	DirectX::BoundingFrustum _frustum;
+
+	float scale = 1.2f;
+
+	HRESULT CreateBoundingBox(DirectX::BoundingBox*, const std::vector<DirectX::XMFLOAT3>&);
+	void SetBoudingBoxScale(DirectX::BoundingBox& boundingBoxRef,float boxScale);
 };
