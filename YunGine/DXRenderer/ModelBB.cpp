@@ -52,20 +52,22 @@ HRESULT ModelBB::CreateBoundingBox(DirectX::BoundingBox* boundingBoxPtr, const s
 {
 	HRESULT hr = S_OK;
 
-	if (vertices.size() < 1)
+	if (vertices.empty())
 	{
 		return E_INVALIDARG;
 	}
-	else if (boundingBoxPtr == nullptr)
+	else if (!boundingBoxPtr)
 	{
 		return E_POINTER;
 	}
 	else
 	{
 		DirectX::BoundingBox tempBox;
-		std::vector<DirectX::XMFLOAT3> pointsArray(vertices.begin(), vertices.end());
+		//std::vector<DirectX::XMFLOAT3> pointsArray(vertices.begin(), vertices.end());
 
-		DirectX::BoundingBox::CreateFromPoints(tempBox, pointsArray.size(), pointsArray.data(), sizeof(DirectX::XMFLOAT3));
+		//DirectX::BoundingBox::CreateFromPoints(tempBox, pointsArray.size(), pointsArray.data(), sizeof(DirectX::XMFLOAT3));
+
+		DirectX::BoundingBox::CreateFromPoints(tempBox, vertices.size(), vertices.data(), sizeof(DirectX::XMFLOAT3));
 
 		*boundingBoxPtr = tempBox;
 	}
