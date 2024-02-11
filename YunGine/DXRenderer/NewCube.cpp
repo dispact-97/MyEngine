@@ -256,7 +256,7 @@ HRESULT NewCube::SetVertexBuffer()
 	for (int i = 0; i < ARRAYSIZE(boxVertex); ++i)
 	{
 		DirectX::XMFLOAT4 transformedVertex;
-		DirectX::XMStoreFloat4(&transformedVertex, DirectX::XMVector4Transform(DirectX::XMLoadFloat3(&boxVertex[i].Pos), _world));
+		DirectX::XMStoreFloat4(&transformedVertex, DirectX::XMVector4Transform(DirectX::XMLoadFloat3(&boxVertex[i].Pos), DirectX::XMMatrixIdentity()));
 
 		_localSpaceVertices.push_back(DirectX::XMFLOAT3(transformedVertex.x, transformedVertex.y, transformedVertex.z));
 	}
