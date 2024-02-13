@@ -141,6 +141,7 @@ void NewCube::Render()
 		_pDeviceContext->DrawIndexed(indexCount, 0, 0);
 
 		Font::GetInstance()->ObjectDebugText(this);
+		// Graphic debugging error int here -> commit comment
 	}
 }
 
