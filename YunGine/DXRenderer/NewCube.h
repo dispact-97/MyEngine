@@ -19,6 +19,8 @@ public:
 	void Move(float x, float, float z);
 	void SetPosition(float x, float y, float z);
 
+	virtual DirectX::XMFLOAT3 GetPosition() override;
+
 	std::vector<DirectX::XMFLOAT3> GetLocalSpaceVertices();
 	bool GetRenderActive();
 
