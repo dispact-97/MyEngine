@@ -71,9 +71,8 @@ HRESULT ModelBB::CreateBoundingBox(DirectX::BoundingBox* boundingBoxPtr, const s
 
 		*boundingBoxPtr = tempBox;
 	}
-	
-	// box Scale
-	//SetBoudingBoxScale(*boundingBoxPtr, scale);
+
+	SetBoudingBoxScale(*boundingBoxPtr, scale);
 
 	return hr;
 }

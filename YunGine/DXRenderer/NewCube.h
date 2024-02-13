@@ -14,14 +14,11 @@ public:
 	virtual void Render() override;
 	virtual void Finalzie() override;
 
-	virtual DirectX::XMFLOAT3 GetPosition() override;
-
 	void RotateActive(bool isActive);
 	void SetTexture(const char& textureFilePath);
 	void Move(float x, float, float z);
 	void SetPosition(float x, float y, float z);
 
-	
 	std::vector<DirectX::XMFLOAT3> GetLocalSpaceVertices();
 	bool GetRenderActive();
 

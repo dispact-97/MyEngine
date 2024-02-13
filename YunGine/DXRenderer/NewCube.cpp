@@ -11,6 +11,7 @@ NewCube::NewCube()
 	_objectPosition(),
 	_rotateActive(),
 	_renderActive(),
+	_objectScreenLocation(),
 	_proj(),
 	_view(),
 	_world()
@@ -178,6 +179,8 @@ void NewCube::SetPosition(float x, float y, float z)
 	_objectPosition.y = y;
 	_objectPosition.z = z;
 }
+
+
 
 std::vector<DirectX::XMFLOAT3> NewCube::GetLocalSpaceVertices()
 {
