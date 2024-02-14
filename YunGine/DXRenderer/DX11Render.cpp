@@ -227,6 +227,10 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	for (auto& iter : modelVector)
 	{
 		iter->Update(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
+		if (iter->GetRenderActive())
+		{
+			_renderCount++;
+		}
 	}
 
 	Curr.mousePosX = Now.mousePosX;
@@ -281,6 +285,9 @@ void DX11Render::DrawObject()
 void DX11Render::EndRender()
 {
 	sm_SwapChain->Present(1, 0);
+
+	// for culling check
+	_renderCount = 0;
 
 	return;
 }
@@ -776,19 +783,21 @@ void DX11Render::RenderAllText()
 	//IngameImage::GetInstance()->RenderImage(L);
 	//m_IngameImage->RenderImage("..\\Resources\\abcd.jpg", DirectX::XMFLOAT2(500.0f, 500.0f));
 
-	m_pFont->RenderString("DeltaTime : ", 0.0f, 0.0f);
-	m_pFont->RenderString(m_deltaTime, 110.0f, 0.0f);
+	Font::GetInstance()->RenderString("DeltaTime : ", 0.0f, 0.0f);
+	Font::GetInstance()->RenderString(m_deltaTime, 110.0f, 0.0f);
 
-	m_pFont->RenderString("FPS : ", 0.0f, 18.0f);
-	m_pFont->RenderString(m_fps, 48.0f, 18.0f);
+	Font::GetInstance()->RenderString("FPS : ", 0.0f, 18.0f);
+	Font::GetInstance()->RenderString(m_fps, 48.0f, 18.0f);
 
-	m_pFont->RenderString("MousePosX : ", 0.0f, 36.0f);
-	m_pFont->RenderString(static_mouseXpos, 120.0f, 36.0f);
+	Font::GetInstance()->RenderString("MousePosX : ", 0.0f, 36.0f);
+	Font::GetInstance()->RenderString(static_mouseXpos, 120.0f, 36.0f);
 
-	m_pFont->RenderString("MousePosY : ", 0.0f, 54.0f);
-	m_pFont->RenderString(static_mouseYpos, 120.0f, 54.0f);
+	Font::GetInstance()->RenderString("MousePosY : ", 0.0f, 54.0f);
+	Font::GetInstance()->RenderString(static_mouseYpos, 120.0f, 54.0f);
 
-	m_pFont->RenderString("Last Pressed Key : ", 0.0f, 72.0f);
-	m_pFont->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
+	Font::GetInstance()->RenderString("Last Pressed Key : ", 0.0f, 72.0f);
+	Font::GetInstance()->RenderString(m_pInput->GetLastPressedkey(), 165.0f, 72.0f);
 
+	Font::GetInstance()->RenderString("Rendering Object :", 0.0f, 90.0f);
+	Font::GetInstance()->RenderString(_renderCount, 175.0f, 90.0f);
 }

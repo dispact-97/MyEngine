@@ -14,6 +14,7 @@ public:
 	virtual void Finalzie() override;
 
 	virtual DirectX::XMFLOAT3 GetPosition() override;
+	virtual bool GetRenderActive()override;
 
 private:
 	HRESULT SetDevice(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState);

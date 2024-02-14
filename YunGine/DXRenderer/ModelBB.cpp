@@ -27,11 +27,11 @@ HRESULT ModelBB::SetBoundingBox(ModelInterface* object)
 	return hr;
 }
 
-HRESULT ModelBB::SetBoundingBox(NewCube* cube)
+HRESULT ModelBB::SetBoundingBox(NewCube* pCube)
 {
 	HRESULT hr = S_OK;
-	const std::vector<DirectX::XMFLOAT3>& vertices = cube->GetLocalSpaceVertices();
-	hr = CreateBoundingBox(cube->_objectBoundingBox, vertices);
+	const std::vector<DirectX::XMFLOAT3>& vertices = pCube->GetLocalSpaceVertices();
+	hr = CreateBoundingBox(pCube->_objectBoundingBox, vertices);
 	if (FAILED(hr))
 	{
 		return hr;

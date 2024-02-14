@@ -10,7 +10,6 @@ NewCube::NewCube()
 	_pRasterState(nullptr),
 	_objectPosition(),
 	_rotateActive(),
-	_renderActive(),
 	_proj(),
 	_view(),
 	_world()

@@ -15,6 +15,8 @@ public:
 	virtual void Finalzie() abstract;
 
 	virtual DirectX::XMFLOAT3 GetPosition() abstract;
+	virtual bool GetRenderActive() abstract;
 
 	DirectX::XMFLOAT3 _objectScreenLocation;
+	bool _renderActive;
 };

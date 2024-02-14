@@ -108,6 +108,11 @@ DirectX::XMFLOAT3 Axis::GetPosition()
 	return _objectPosition;
 }
 
+bool Axis::GetRenderActive()
+{
+	return _renderActive;
+}
+
 HRESULT Axis::SetDevice(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState)
 {
 	HRESULT result = S_OK;

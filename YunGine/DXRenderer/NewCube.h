@@ -22,7 +22,7 @@ public:
 	virtual DirectX::XMFLOAT3 GetPosition() override;
 
 	std::vector<DirectX::XMFLOAT3> GetLocalSpaceVertices();
-	bool GetRenderActive();
+	virtual bool GetRenderActive() override;
 
 private:
 	HRESULT SetDevice(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState);
@@ -56,7 +56,6 @@ private:
 
 	float _rotationAngle = 1.0f;
 	bool _rotateActive;
-	bool _renderActive;
 
 	// Transform Matrix
 	DirectX::XMMATRIX _world;

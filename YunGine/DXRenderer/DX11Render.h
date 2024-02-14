@@ -121,6 +121,8 @@ private:
 	// 디버그 텍스트
 	void RenderAllText();
 
+	int _renderCount = 0;
+
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> m_p3DDevice;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_p3DDeviceContext;
