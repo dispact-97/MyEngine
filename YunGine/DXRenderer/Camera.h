@@ -1,6 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
-//#include "ICamera.h"
+#include <DirectXCollision.h>
 
 class Camera final
 {
@@ -29,6 +29,11 @@ public:
 	float GetAspect() const;
 	float GetFovY() const;
 	float GetFovX() const;
+
+	// Set Frustum for Culling
+	bool SetFrustum(const DirectX::XMFLOAT4X4 view, const DirectX::XMFLOAT4X4 proj);
+	DirectX::BoundingFrustum& GetFrustum();
+	DirectX::BoundingFrustum _BBFrustum;
 
 	// 뷰 공간 좌표에서 근거리 및 원거리 평면 치수를 가져옵니다.
 	float GetNearWindowWidth() const;

@@ -67,32 +67,25 @@ HRESULT NewCube::Initialize(Microsoft::WRL::ComPtr<ID3D11Device> device, Microso
 
 void NewCube::Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
-	if (IsBoxInViewFrustum(_objectBoundingBox, (view * projection)))
+
+	if (_rotateActive == true)
 	{
-		_renderActive = true;
-		if (_rotateActive == true)
-		{
-			_rotationAngle += 0.1f;
+		_rotationAngle += 0.1f;
 
-			DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
+		DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
 
-			DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationY(_rotationAngle);
+		DirectX::XMMATRIX rotation = DirectX::XMMatrixRotationY(_rotationAngle);
 
-			_world = rotation * traslation * world;
-			_view = view;
-			_proj = projection;
-		}
-		else
-		{
-			DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
-			_world = traslation * world;
-			_view = view;
-			_proj = projection;
-		}
+		_world = rotation * traslation * world;
+		_view = view;
+		_proj = projection;
 	}
 	else
 	{
-		_renderActive = false;
+		DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
+		_world = traslation * world;
+		_view = view;
+		_proj = projection;
 	}
 
 	Calculate2DLocation();
@@ -181,6 +174,11 @@ void NewCube::SetPosition(float x, float y, float z)
 std::vector<DirectX::XMFLOAT3> NewCube::GetLocalSpaceVertices()
 {
 	return _localSpaceVertices;
+}
+
+bool NewCube::SetRenderActive(bool isActive)
+{
+	return _renderActive = isActive;
 }
 
 bool NewCube::GetRenderActive()

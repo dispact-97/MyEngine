@@ -1,9 +1,13 @@
+#include <DirectXCollision.h>
+
 #include "BBManager.h"
 #include "ModelBB.h"
 
 // Test
 #include "NewCube.h"
 #include "ModelInterface.h"
+
+BBManager* BBManager::SingleTonBBManager = nullptr;
 
 BBManager::BBManager()
 {
@@ -15,35 +19,11 @@ BBManager::~BBManager()
 
 }
 
-void BBManager::addBoxToList(ModelInterface* object)
+void BBManager::checkBoundingBox(NewCube* cube, DirectX::BoundingFrustum& _CameraFrustum)
 {
-	//object->
+	DirectX::BoundingFrustum tempFrustum;
 
+	DirectX::BoundingFrustum::CreateFromMatrix(_CameraFrustum, );
 
-}
-
-void BBManager::addBoxToListTest(NewCube* cubePtr)
-{
-	//cubePtr->_objectBoundingBox;
-
-	//_BBVector.push_back(cubePtr);
-
-
-}
-
-void BBManager::checkBoundingBox(std::vector<ModelInterface*>& objectList)
-{
-	DirectX::BoundingFrustum frustm;
-	//DirectX::BoundingFrustum::CreateFromMatrix();
-
-		//for (auto& iter : boxList)
-		//{
-			//iter->IsBoxInViewFrustum();
-		//}
-}
-
-void BBManager::checkBoundingBox(NewCube* cube, const DirectX::XMMATRIX& viewProjMatrix)
-{
-	// 나중에 vector에 넣고 돌리기
-	cube->IsBoxInViewFrustum(cube->_objectBoundingBox,viewProjMatrix);
+	return _CameraFrustum.Contains(*cube->_objectBoundingBox) != DirectX::DISJOINT;
 }

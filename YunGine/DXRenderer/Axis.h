@@ -14,6 +14,7 @@ public:
 	virtual void Finalzie() override;
 
 	virtual DirectX::XMFLOAT3 GetPosition() override;
+	virtual bool SetRenderActive(bool isActive)override;
 	virtual bool GetRenderActive()override;
 
 private:

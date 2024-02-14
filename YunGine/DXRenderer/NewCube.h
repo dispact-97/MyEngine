@@ -22,6 +22,7 @@ public:
 	virtual DirectX::XMFLOAT3 GetPosition() override;
 
 	std::vector<DirectX::XMFLOAT3> GetLocalSpaceVertices();
+	virtual bool SetRenderActive(bool isActive) override;
 	virtual bool GetRenderActive() override;
 
 private:

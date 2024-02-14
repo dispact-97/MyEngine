@@ -111,6 +111,11 @@ DirectX::XMFLOAT3 Grid::GetPosition()
 	return _objectPosition;
 }
 
+bool Grid::SetRenderActive(bool isActive)
+{
+	return _renderActive = isActive;
+}
+
 bool Grid::GetRenderActive()
 {
 	return _renderActive;

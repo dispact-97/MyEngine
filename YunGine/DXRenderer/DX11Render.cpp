@@ -18,6 +18,7 @@
 #include "MouseClass.h"
 #include "InputClass.h"
 #include "IngameImage.h"
+#include "BBManager.h"
 
 static int static_mouseXpos = 0;
 static int static_mouseYpos = 0;
@@ -227,11 +228,15 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 	for (auto& iter : modelVector)
 	{
 		iter->Update(DirectX::XMMatrixIdentity(), m_pCamera->View(), m_pCamera->Proj());
+		// culling Test
 		if (iter->GetRenderActive())
 		{
 			_renderCount++;
 		}
 	}
+
+	m_pCamera->SetFrustum(m_ViewMatrix, m_ProjectionMatrix);
+	BBManager::GetInstance()->checkBoundingBox(m_pNewCube, m_pCamera->GetFrustum());
 
 	Curr.mousePosX = Now.mousePosX;
 	Curr.mousePosY = Now.mousePosY;
@@ -275,7 +280,10 @@ void DX11Render::DrawObject()
 
 	for (auto& iter : modelVector)
 	{
-		iter->Render();
+		if (iter->GetRenderActive() == true)
+		{
+			iter->Render();
+		}
 	}
 
 	// �����Ͷ����� ���� ���� 
@@ -584,6 +592,12 @@ HRESULT DX11Render::CreateObject()
 		return hr;
 	}
 
+	hr = CreateCube();
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
 	hr = CreateAxis();
 	if (FAILED(hr))
 	{
@@ -596,11 +610,6 @@ HRESULT DX11Render::CreateObject()
 		return hr;
 	}
 
-	hr = CreateCube();
-	if (FAILED(hr))
-	{
-		return hr;
-	}
 
 	return hr;
 }
@@ -647,10 +656,12 @@ HRESULT DX11Render::CreateCamera()
 
 	// LH(Left Hand)��������
 	DirectX::XMMATRIX p = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60.0f), 1280.0f / 720.0f, 1.0f, 1000.0f);
-	DirectX::XMStoreFloat4x4(&m_ProjectionMatrix, DirectX::XMMatrixTranspose(p));
+	//DirectX::XMStoreFloat4x4(&m_ProjectionMatrix, DirectX::XMMatrixTranspose(p));
+	DirectX::XMStoreFloat4x4(&m_ProjectionMatrix, p);
 
 	// ��ó���� ���� ī�޶��� ������, �Ĵٺ��� ����,UP���� ���ϱ�
 	m_pCamera->LookAt(DirectX::XMFLOAT3(0.0f, 8.0f, -8.0f), DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0, 1.0f, 0));
+	m_pCamera->SetFrustum(m_ViewMatrix, m_ProjectionMatrix);
 
 	return S_OK;
 }

@@ -9,7 +9,8 @@
 ModelBB::ModelBB()
 	: m_min(),
 	m_max(),
-	_frustum()
+	_frustum(),
+	_objectBoundingBox()
 {
 
 }

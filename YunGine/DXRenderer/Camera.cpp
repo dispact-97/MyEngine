@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "Camera.h"
 
 Camera::Camera()
@@ -89,6 +90,22 @@ float Camera::GetFovX() const
 	#pragma warning(disable: 4244)
 	float halfWidth = 0.5f * GetNearWindowWidth();
 	return 2.0f * atan(halfWidth / m_NearZ);
+}
+
+bool Camera::SetFrustum(const DirectX::XMFLOAT4X4 view, const DirectX::XMFLOAT4X4 proj)
+{
+	DirectX::XMMATRIX viewMatrix = DirectX::XMLoadFloat4x4(&view);
+	DirectX::XMMATRIX projMatrix = DirectX::XMLoadFloat4x4(&proj);
+	DirectX::XMMATRIX tempMatrix = DirectX::XMMatrixMultiply(viewMatrix, projMatrix);
+
+	DirectX::BoundingFrustum::CreateFromMatrix(_BBFrustum, tempMatrix);
+
+	return true;
+}
+
+DirectX::BoundingFrustum& Camera::GetFrustum()
+{
+	return _BBFrustum;
 }
 
 float Camera::GetNearWindowWidth() const

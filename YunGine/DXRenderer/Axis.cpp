@@ -108,6 +108,11 @@ DirectX::XMFLOAT3 Axis::GetPosition()
 	return _objectPosition;
 }
 
+bool Axis::SetRenderActive(bool isActive)
+{
+	return _renderActive = isActive;
+}
+
 bool Axis::GetRenderActive()
 {
 	return _renderActive;

@@ -1,26 +1,39 @@
 #pragma once
 
-#include <vector>
 #include <SimpleMath.h>
 
 class ModelInterface;
 class ModelBB;
+class DirectX::BoundingFrustum;
 
 // Test
 class NewCube;
 
+
 class BBManager
 {
 public:
-	BBManager();
+
+	static BBManager* GetInstance()
+	{
+		if (!SingleTonBBManager)
+		{
+			SingleTonBBManager = new BBManager();
+		}
+		return SingleTonBBManager;
+	}
+
+	BBManager(const BBManager&) = delete;
+	BBManager& operator=(const BBManager&) = delete;
+
 	~BBManager();
 
-	void addBoxToList(ModelInterface* object);
-	void addBoxToListTest(NewCube* cubePtr);
-
-	void checkBoundingBox(std::vector<ModelInterface*>& boundingBoxList);
-	void checkBoundingBox(NewCube* cube,const DirectX::XMMATRIX& viewProjMatrix);
+	void checkBoundingBox(NewCube* cube, DirectX::BoundingFrustum& _CameraFrustum);
 
 private:
+	BBManager();
+	static BBManager* SingleTonBBManager;
+
 	std::vector<ModelInterface*> _BBVector;
+
 };
