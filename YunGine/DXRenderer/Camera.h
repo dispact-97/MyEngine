@@ -32,6 +32,7 @@ public:
 
 	// Set Frustum for Culling
 	bool SetFrustum(const DirectX::XMFLOAT4X4 view, const DirectX::XMFLOAT4X4 proj);
+	bool SetFrustum(const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj);
 	DirectX::BoundingFrustum& GetFrustum();
 	DirectX::BoundingFrustum _BBFrustum;
 

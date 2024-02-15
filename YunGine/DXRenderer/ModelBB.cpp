@@ -7,10 +7,7 @@
 #include "NewCube.h"
 
 ModelBB::ModelBB()
-	: m_min(),
-	m_max(),
-	_frustum(),
-	_objectBoundingBox()
+	: _objectBoundingBox()
 {
 
 }
@@ -73,19 +70,5 @@ HRESULT ModelBB::CreateBoundingBox(DirectX::BoundingBox* boundingBoxPtr, const s
 		*boundingBoxPtr = tempBox;
 	}
 
-	SetBoudingBoxScale(*boundingBoxPtr, scale);
-
 	return hr;
-}
-
-void ModelBB::SetBoudingBoxScale(DirectX::BoundingBox& boundingBoxRef, float boxScale)
-{
-	DirectX::XMVECTOR center = DirectX::XMLoadFloat3(&boundingBoxRef.Center);
-	DirectX::XMVECTOR extent = DirectX::XMLoadFloat3(&boundingBoxRef.Extents);
-	
-	center = DirectX::XMVectorScale(center, boxScale); // 중심을 스케일링함
-	extent = DirectX::XMVectorScale(extent, boxScale); // 확장을 스케일링함
-
-	DirectX::XMStoreFloat3(&boundingBoxRef.Center, center);
-	DirectX::XMStoreFloat3(&boundingBoxRef.Extents, extent);
 }

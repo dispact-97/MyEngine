@@ -19,11 +19,12 @@ BBManager::~BBManager()
 
 }
 
-void BBManager::checkBoundingBox(NewCube* cube, DirectX::BoundingFrustum& _CameraFrustum)
+bool BBManager::checkBoundingBox(NewCube* cube, DirectX::BoundingFrustum& _CameraFrustum)
 {
-	DirectX::BoundingFrustum tempFrustum;
-
-	DirectX::BoundingFrustum::CreateFromMatrix(_CameraFrustum, );
+	if (!cube->_objectBoundingBox)
+	{
+		return false;
+	}
 
 	return _CameraFrustum.Contains(*cube->_objectBoundingBox) != DirectX::DISJOINT;
 }

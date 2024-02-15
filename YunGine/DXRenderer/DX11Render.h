@@ -154,6 +154,7 @@ private:
 
 	// 개별 클래스
 	std::vector<ModelInterface*> modelVector;
+	std::vector<NewCube*> cubeVector;
 	Axis* m_pAxis;
 	Grid* m_pGrid;
 	Cube* m_pCube;

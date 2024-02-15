@@ -28,7 +28,7 @@ public:
 
 	~BBManager();
 
-	void checkBoundingBox(NewCube* cube, DirectX::BoundingFrustum& _CameraFrustum);
+	bool checkBoundingBox(NewCube* cube, DirectX::BoundingFrustum& _CameraFrustum);
 
 private:
 	BBManager();

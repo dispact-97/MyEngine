@@ -67,10 +67,9 @@ HRESULT NewCube::Initialize(Microsoft::WRL::ComPtr<ID3D11Device> device, Microso
 
 void NewCube::Update(const DirectX::XMMATRIX& world, const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& projection)
 {
-
 	if (_rotateActive == true)
 	{
-		_rotationAngle += 0.1f;
+		_rotationAngle += 0.05f;
 
 		DirectX::XMMATRIX traslation = DirectX::XMMatrixTranslation(_objectPosition.x, _objectPosition.y, _objectPosition.z);
 

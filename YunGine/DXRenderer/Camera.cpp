@@ -103,6 +103,15 @@ bool Camera::SetFrustum(const DirectX::XMFLOAT4X4 view, const DirectX::XMFLOAT4X
 	return true;
 }
 
+bool Camera::SetFrustum(const DirectX::XMMATRIX& view, const DirectX::XMMATRIX& proj)
+{
+	DirectX::XMMATRIX tempMatrix = DirectX::XMMatrixMultiply(view, proj);
+
+	DirectX::BoundingFrustum::CreateFromMatrix(_BBFrustum, tempMatrix);
+
+	return true;
+}
+
 DirectX::BoundingFrustum& Camera::GetFrustum()
 {
 	return _BBFrustum;

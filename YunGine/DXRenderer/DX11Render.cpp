@@ -235,8 +235,21 @@ void DX11Render::Update(float deltaTime, float fps, float mspf)
 		}
 	}
 
-	m_pCamera->SetFrustum(m_ViewMatrix, m_ProjectionMatrix);
-	BBManager::GetInstance()->checkBoundingBox(m_pNewCube, m_pCamera->GetFrustum());
+	if (!m_pCamera->SetFrustum(m_pCamera->View(), m_pCamera->Proj()))
+	{
+		Font::GetInstance()->RenderString("Frustum Failed!!", 1000.0f, 1000.0f);
+	}
+	for (const auto& iter : cubeVector)
+	{
+		if (BBManager::GetInstance()->checkBoundingBox(iter, m_pCamera->GetFrustum()) == false)
+		{
+			iter->SetRenderActive(false);
+		}
+		else
+		{
+			iter->SetRenderActive(true);
+		}
+	}
 
 	Curr.mousePosX = Now.mousePosX;
 	Curr.mousePosY = Now.mousePosY;
@@ -276,8 +289,6 @@ void DX11Render::DrawObject()
 {
 	m_p3DDeviceContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
 
-	RenderAllText();
-
 	for (auto& iter : modelVector)
 	{
 		if (iter->GetRenderActive() == true)
@@ -285,6 +296,8 @@ void DX11Render::DrawObject()
 			iter->Render();
 		}
 	}
+
+	RenderAllText();
 
 	// �����Ͷ����� ���� ���� 
 	m_p3DDeviceContext->RSSetState(0);
@@ -661,7 +674,7 @@ HRESULT DX11Render::CreateCamera()
 
 	// ��ó���� ���� ī�޶��� ������, �Ĵٺ��� ����,UP���� ���ϱ�
 	m_pCamera->LookAt(DirectX::XMFLOAT3(0.0f, 8.0f, -8.0f), DirectX::XMFLOAT3(0, 0, 0), DirectX::XMFLOAT3(0, 1.0f, 0));
-	m_pCamera->SetFrustum(m_ViewMatrix, m_ProjectionMatrix);
+	//m_pCamera->SetFrustum(m_ViewMatrix, m_ProjectionMatrix);
 
 	return S_OK;
 }
@@ -678,6 +691,7 @@ HRESULT DX11Render::CreateCube()
 	m_pNewCube->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
 	m_pNewCube->SetPosition(3.0f, 0.0f, 3.0f);
 	modelVector.push_back(m_pNewCube);
+	cubeVector.push_back(m_pNewCube);
 
 	NewCube* secCube = new NewCube();
 	if (!secCube)
@@ -687,6 +701,7 @@ HRESULT DX11Render::CreateCube()
 	secCube->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
 	secCube->RotateActive(true);
 	modelVector.push_back(secCube);
+	cubeVector.push_back(secCube);
 
 	return S_OK;
 }
