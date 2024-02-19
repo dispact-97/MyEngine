@@ -3,6 +3,10 @@
 #include <d3dcommon.h>
 #include <wrl/client.h>
 #include <d3d11.h>
+#include <DirectXMath.h>
+
+// Texture
+//#include <WICTextureLoader.h>
 
 #include "Vertex.h"
 

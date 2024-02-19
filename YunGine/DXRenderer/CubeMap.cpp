@@ -67,17 +67,17 @@ void CubeMap::Finalzie()
 
 DirectX::XMFLOAT3 CubeMap::GetPosition()
 {
-
+	return DirectX::XMFLOAT3(0,0,0);
 }
 
 bool CubeMap::SetRenderActive(bool isActive)
 {
-
+	return _renderActive = isActive;
 }
 
 bool CubeMap::GetRenderActive()
 {
-
+	return _renderActive;
 }
 
 HRESULT CubeMap::SetDevice(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr <ID3D11DeviceContext> deviceContext, Microsoft::WRL::ComPtr < ID3D11RasterizerState> rasterState)
@@ -98,17 +98,23 @@ HRESULT CubeMap::SetDevice(Microsoft::WRL::ComPtr<ID3D11Device> device, Microsof
 
 HRESULT CubeMap::SetVertexBuffer()
 {
+	HRESULT hr = S_OK;
 
+	return hr;
 }
 
 HRESULT CubeMap::SetIndexBuffer()
 {
+	HRESULT hr = S_OK;
 
+	return hr;
 }
 
 HRESULT CubeMap::SetConstantBuffer()
 {
+	HRESULT hr = S_OK;
 
+	return hr;
 }
 
 HRESULT CubeMap::SetTexture()
@@ -121,10 +127,14 @@ HRESULT CubeMap::SetTexture()
 
 HRESULT CubeMap::SetShader()
 {
+	HRESULT hr = S_OK;
 
+	return hr;
 }
 
 HRESULT CubeMap::CompileShaderFromFile(const wchar_t* filename, const char* entryPoint, const char* shaderModel, ID3DBlob** blobOut)
 {
+	HRESULT hr = S_OK;
 
+	return hr;
 }

@@ -78,6 +78,15 @@
     <Filter Include="소스 파일\BoundingBox\ModelBB">
       <UniqueIdentifier>{92f5ee8b-72c8-4424-befe-72d5172911d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Object\CubeMap">
+      <UniqueIdentifier>{a1a4d6d8-436f-4297-a8ab-da74331a0d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Texture\TextureLoader">
+      <UniqueIdentifier>{cc618e1b-ae4d-45fa-9c55-932cd3ce6275}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Texture\TextureClass">
+      <UniqueIdentifier>{026f6dcd-25b0-4d30-b532-f53382f39047}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Render.h">
@@ -100,9 +109,6 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>소스 파일\Object\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureLoader.h">
-      <Filter>소스 파일\Texture</Filter>
     </ClInclude>
     <ClInclude Include="ICamera.h">
       <Filter>소스 파일\Object\Camera</Filter>
@@ -146,6 +152,15 @@
     <ClInclude Include="BBManager.h">
       <Filter>소스 파일\BoundingBox\BBManager</Filter>
     </ClInclude>
+    <ClInclude Include="CubeMap.h">
+      <Filter>소스 파일\Object\CubeMap</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>소스 파일\Texture\TextureLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureClass.h">
+      <Filter>소스 파일\Texture\TextureClass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11Render.cpp">
@@ -162,9 +177,6 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>소스 파일\Object\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureLoader.cpp">
-      <Filter>소스 파일\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>소스 파일\Text</Filter>
@@ -199,6 +211,15 @@
     <ClCompile Include="BBManager.cpp">
       <Filter>소스 파일\BoundingBox\BBManager</Filter>
     </ClCompile>
+    <ClCompile Include="CubeMap.cpp">
+      <Filter>소스 파일\Object\CubeMap</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>소스 파일\Texture\TextureLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureClass.cpp">
+      <Filter>소스 파일\Texture\TextureClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
@@ -210,7 +231,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Texture.hlsl">
-      <Filter>Shader\Shader</Filter>
+      <Filter>Shader\HLSL</Filter>
     </None>
   </ItemGroup>
 </Project>

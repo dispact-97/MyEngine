@@ -13,7 +13,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루션 항목", "{C46A26A3-E566-4868-B93C-F7A17A7B83E2}"
 	ProjectSection(SolutionItems) = preProject
 		Shaders\PixelShader.hlsl = Shaders\PixelShader.hlsl
+		TexturePShader.hlsl = TexturePShader.hlsl
 		Shaders\VertexShader.hlsl = Shaders\VertexShader.hlsl
+		TextureVShader.hlsl = TextureVShader.hlsl
 	EndProjectSection
 EndProject
 Global

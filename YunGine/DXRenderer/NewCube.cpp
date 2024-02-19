@@ -1,6 +1,7 @@
 #include <d3dcompiler.h>
 #include <d3dcommon.h>
 
+#include "TextureLoader.h"
 #include "Font.h"
 #include "NewCube.h"
 
@@ -146,9 +147,19 @@ void NewCube::RotateActive(bool isActive)
 	_rotateActive = isActive;
 }
 
-void NewCube::SetTexture(const char& textureFilePath)
+HRESULT NewCube::SetTexture(const wchar_t* textureFilePath)
 {
+	HRESULT hr = S_OK;
 
+	Microsoft::WRL::ComPtr<ID3D11Resource> texResource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texSRV = nullptr;
+	hr = DirectX::CreateDDSTextureFromFile(_pDevice.Get(),textureFilePath,&texResource,&texSRV);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	return hr;
 }
 
 DirectX::XMFLOAT3 NewCube::GetPosition()

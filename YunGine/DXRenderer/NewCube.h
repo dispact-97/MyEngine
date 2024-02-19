@@ -15,7 +15,7 @@ public:
 	virtual void Finalzie() override;
 
 	void RotateActive(bool isActive);
-	void SetTexture(const char& textureFilePath);
+	HRESULT SetTexture(const wchar_t* textureFilePath);
 	void Move(float x, float, float z);
 	void SetPosition(float x, float y, float z);
 
@@ -54,6 +54,10 @@ private:
 
 	Microsoft::WRL::ComPtr <ID3D11VertexShader> _vertexShader;
 	Microsoft::WRL::ComPtr <ID3D11PixelShader> _pixelShader;
+
+	// For Texture
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSRV;
+
 
 	float _rotationAngle = 1.0f;
 	bool _rotateActive;

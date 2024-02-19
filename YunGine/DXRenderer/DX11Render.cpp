@@ -690,6 +690,7 @@ HRESULT DX11Render::CreateCube()
 	}
 	m_pNewCube->Initialize(m_p3DDevice, m_p3DDeviceContext, m_pSolidRasterState);
 	m_pNewCube->SetPosition(3.0f, 0.0f, 3.0f);
+	m_pNewCube->SetTexture(L"..\\Textures\\WoodCrate01.dds");
 	modelVector.push_back(m_pNewCube);
 	cubeVector.push_back(m_pNewCube);
 
