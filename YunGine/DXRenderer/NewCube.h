@@ -57,7 +57,7 @@ private:
 
 	// For Texture
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSRV;
-
+	Microsoft::WRL::ComPtr <ID3D11SamplerState> _samplerState;
 
 	float _rotationAngle = 1.0f;
 	bool _rotateActive;
