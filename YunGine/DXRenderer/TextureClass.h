@@ -4,22 +4,34 @@
 
 #include <wrl/client.h>
 #include <windows.h>
+#include <string>
 #include "TextureLoader.h"
 
 
 class TextureClass final
 {
 public:
-	TextureClass();
-	TextureClass(const TextureClass& other);
+	static TextureClass* GetInstance()
+	{
+		if (!_pInstance)
+		{
+			_pInstance = new TextureClass();
+		}
+		return _pInstance;
+	}
+
+	TextureClass(const TextureClass&) = delete;
+	TextureClass& operator=(const TextureClass&) = delete;
 	~TextureClass();
 
-	HRESULT Initalize(Microsoft::WRL::ComPtr<ID3D11Device> device, WCHAR* file);
-	void Shutdown();
-
-	ID3D11ShaderResourceView* GetTexture();
+	HRESULT SetTexture(std::string filePath,Microsoft::WRL::ComPtr<ID3D11Device> device,Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext);
 
 private:
+	TextureClass();
+	static TextureClass* _pInstance;
+
+	ID3D11ShaderResourceView* texture = nullptr;
+
 	ID3D11ShaderResourceView* _TextureResource;
 };
 
