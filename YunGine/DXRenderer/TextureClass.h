@@ -24,7 +24,7 @@ public:
 	TextureClass& operator=(const TextureClass&) = delete;
 	~TextureClass();
 
-	HRESULT SetTexture(std::string filePath,Microsoft::WRL::ComPtr<ID3D11Device> device,Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext);
+	HRESULT SetTexture(std::string filePath,ID3D11Device* device,ID3D11DeviceContext* deviceContext);
 
 private:
 	TextureClass();

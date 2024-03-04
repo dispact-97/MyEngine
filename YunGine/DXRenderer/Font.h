@@ -45,8 +45,6 @@ private:
 	std::unique_ptr<DirectX::SpriteBatch> m_SpriteBatch;
 	std::unique_ptr<DirectX::SpriteFont> m_SpriteFont;
 
-	ID3D11ShaderResourceView* texture = nullptr;
-
 	HRESULT result;
 
 	static Font* m_pInstance;

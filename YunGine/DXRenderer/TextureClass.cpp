@@ -53,7 +53,7 @@ HRESULT TextureClass::SetTexture(std::string filePath,ID3D11Device* device, ID3D
 		return hr;
 	}
 
-	hr = _pDevice->CreateVertexShader(
+	hr = device->CreateVertexShader(
 		vertexShaderBuffer->GetBufferPointer(),
 		vertexShaderBuffer->GetBufferSize(),
 		nullptr,
